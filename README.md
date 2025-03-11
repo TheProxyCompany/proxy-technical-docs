@@ -24,23 +24,31 @@ pip install mkdocs-material mkdocstrings[python] pymdown-extensions
 
 ### Running Locally
 
-To run the main documentation site:
+The `serve.sh` script has been enhanced to make local development easier:
 
 ```bash
+# To run the main documentation site (default)
 ./serve.sh
+
+# To run PSE documentation
+./serve.sh pse
+
+# To run PBA documentation
+./serve.sh pba
+
+# To run all documentation sites simultaneously
+./serve.sh all
 ```
 
-To run the PSE documentation:
+When running all sites simultaneously, they will be available at:
+- Main documentation: http://localhost:8000
+- PSE documentation: http://localhost:8001
+- PBA documentation: http://localhost:8002
+
+You can also run the serve script from within each documentation directory:
 
 ```bash
 cd pse-docs
-./serve.sh
-```
-
-To run the PBA documentation:
-
-```bash
-cd pba-docs
 ./serve.sh
 ```
 
