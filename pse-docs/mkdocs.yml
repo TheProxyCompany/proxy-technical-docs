@@ -4,6 +4,7 @@ site_author: The Proxy Company
 copyright: Copyright &copy; 2025 The Proxy Company
 
 repo_url: https://github.com/TheProxyCompany/proxy-structuring-engine
+repo_name: Proxy Structuring Engine
 edit_uri: ""
 
 theme:
@@ -70,41 +71,14 @@ nav:
   - Getting Started:
     - Installation: getting-started/installation.md
     - Quickstart: getting-started/quickstart.md
-    - Basic Concepts: getting-started/basic-concepts.md
-    - First Project: getting-started/first-project.md
   
   - Core Concepts:
     - State Machine Architecture: core-concepts/state-machine.md
     - Token Healing: core-concepts/token-healing.md
-    - Type System: core-concepts/type-system.md
-    - Parallel Paths: core-concepts/parallel-paths.md
-  
-  - Guides:
-    - JSON Schema: guides/json-schema.md
-    - Custom Grammars: guides/custom-grammars.md
-    - Framework Integration: guides/framework-integration.md
-    - Composite Engines: guides/composite-engines.md
-    - Error Handling: guides/error-handling.md
   
   - API Reference:
     - StructuringEngine: api/structuring-engine.md
     - Framework Adapters: api/framework-adapters.md
-    - Types:
-      - Basic Types: api/types/basic-types.md
-      - Object Type: api/types/object-type.md
-      - Array Type: api/types/array-type.md
-      - Advanced Types: api/types/advanced-types.md
-  
-  - Advanced:
-    - Architecture Deep Dive: advanced/architecture-deep-dive.md
-    - Performance Optimization: advanced/performance-optimization.md
-    - Custom Type Implementation: advanced/custom-type-implementation.md
-    - Debugging: advanced/debugging.md
-  
-  - Development:
-    - Contributing: development/contributing.md
-    - Building from Source: development/building.md
-    - Testing: development/testing.md
 
 plugins:
   - search

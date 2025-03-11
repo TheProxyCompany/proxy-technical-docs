@@ -152,11 +152,4 @@ print(report)
 
 ## Next Steps
 
-Now that you've created your first agents, you can:
-
-1. Learn about [Configuration Options](configuration.md) to customize your agents
-2. Explore [Core Concepts](../core-concepts/architecture.md) to understand PBA's architecture
-3. Follow tutorials to build specific types of agents:
-   - [Data Analysis Agent](../tutorials/data-analysis.md)
-   - [Customer Support Agent](../tutorials/customer-support.md)
-   - [Creative Writing Assistant](../tutorials/writing-assistant.md)
+Now that you've created your first agents, you can explore the documentation to learn more about PBA's capabilities.

@@ -4,6 +4,7 @@ site_author: The Proxy Company
 copyright: Copyright &copy; 2025 The Proxy Company
 
 repo_url: https://github.com/TheProxyCompany/proxy-base-agent
+repo_name: Proxy Base Agent
 edit_uri: ""
 
 theme:
@@ -70,39 +71,9 @@ nav:
   - Getting Started:
     - Installation: getting-started/installation.md
     - Quickstart: getting-started/quickstart.md
-    - Configuration: getting-started/configuration.md
-    - First Agent: getting-started/first-agent.md
-  
-  - Core Concepts:
-    - Agent Architecture: core-concepts/architecture.md
-    - Memory System: core-concepts/memory.md
-    - Tool Integration: core-concepts/tool-integration.md
-    - Planning & Reasoning: core-concepts/planning.md
-    - Reflexive Monitoring: core-concepts/reflexive-monitoring.md
-  
-  - Guides:
-    - Custom Tools: guides/custom-tools.md
-    - Memory Management: guides/memory-management.md
-    - Multi-Agent Systems: guides/multi-agent-systems.md
-    - Error Handling: guides/error-handling.md
-    - Security: guides/security.md
   
   - API Reference:
     - Agent: api/agent.md
-    - Tool Registry: api/tool-registry.md
-    - Memory Interface: api/memory.md
-    - System Components: api/system-components.md
-  
-  - Advanced:
-    - Cognitive Architecture: advanced/cognitive-architecture.md
-    - Performance Optimization: advanced/performance-optimization.md
-    - Custom Memory Systems: advanced/custom-memory.md
-    - Debugging: advanced/debugging.md
-  
-  - Development:
-    - Contributing: development/contributing.md
-    - Building from Source: development/building.md
-    - Testing: development/testing.md
 
 plugins:
   - search

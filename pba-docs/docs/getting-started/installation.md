@@ -117,7 +117,5 @@ logging:
 Now that you have PBA installed, you can:
 
 1. Follow the [Quickstart Guide](quickstart.md) to create your first agent
-2. Explore [Configuration Options](configuration.md) to customize PBA for your needs
-3. Learn about [Core Concepts](../core-concepts/architecture.md) to understand the architecture
 
-If you encounter any issues during installation, please check the [Troubleshooting](../resources/troubleshooting.md) page or report an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
+If you encounter any issues during installation, please report an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).

@@ -83,13 +83,11 @@ Our comprehensive documentation covers everything you need to understand and imp
 
 - [Installation](getting-started/installation.md) - Setting up PSE in your environment
 - [Quickstart](getting-started/quickstart.md) - Your first PSE implementation
-- [Basic Concepts](getting-started/basic-concepts.md) - Understanding PSE fundamentals
 
 ### Core Concepts
 
 - [State Machine Architecture](core-concepts/state-machine.md) - How PSE's state machine works
 - [Token Healing](core-concepts/token-healing.md) - Understanding PSE's error recovery
-- [Type System](core-concepts/type-system.md) - PSE's comprehensive type system
 
 ### API Reference
 

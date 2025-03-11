@@ -25,7 +25,7 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   features:
-    - navigation.instant
+    - navigation.tabs
     - navigation.sections
     - navigation.expand
     - search.suggest
@@ -46,6 +46,7 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist
   - attr_list
   - md_in_html
 
@@ -54,7 +55,7 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/TheProxyCompany
-  homepage: https://theproxycompany.com
+  homepage: https://docs.theproxycompany.com
 
 extra_css:
   - assets/stylesheets/extra.css

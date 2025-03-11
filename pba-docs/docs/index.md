@@ -73,20 +73,12 @@ Our comprehensive documentation covers everything you need to understand PBA's a
 
 - [Installation](getting-started/installation.md) - Setting up PBA in your environment
 - [Quickstart](getting-started/quickstart.md) - Your first PBA implementation
-- [Configuration](getting-started/configuration.md) - Understanding PBA configuration options
 
 ### Core Concepts
-
-- [Agent Architecture](core-concepts/architecture.md) - How PBA's cognitive architecture works
-- [Tool Integration](core-concepts/tool-integration.md) - Integrating tools safely and effectively
-- [Memory & Context](core-concepts/memory.md) - Understanding PBA's memory system
-- [Planning & Reasoning](core-concepts/planning.md) - How PBA plans and reasons about tasks
 
 ### API Reference
 
 - [Agent](api/agent.md) - Complete Agent API reference
-- [Tool Registry](api/tool-registry.md) - Tool integration API
-- [Memory Interface](api/memory.md) - Memory system API
 
 ## Open-Source
 

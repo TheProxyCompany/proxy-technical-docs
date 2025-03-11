@@ -176,8 +176,4 @@ print(result)  # Should include "blue"
 
 ## Advanced Usage
 
-For advanced usage and integration with custom components, see:
-
-- [Memory Interface](memory.md) for custom memory implementations
-- [Tool Registry](tool-registry.md) for creating custom tools
-- [Core Concepts: Architecture](../core-concepts/architecture.md) for understanding the internal architecture
+For advanced usage and integration with custom components, refer to the API documentation.
