@@ -1,5 +1,5 @@
-site_name: The Proxy Company
-site_description: The Proxy Company | Pioneering AI Research & Development
+site_name: The Proxy Company Documentation
+site_description: Technical Documentation for The Proxy Company's Technology
 site_author: The Proxy Company
 copyright: Copyright &copy; 2025 The Proxy Company
 
@@ -51,8 +51,7 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/TheProxyCompany
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/TheProxyCompany
+  homepage: https://theproxycompany.com
 
 extra_css:
   - assets/stylesheets/extra.css
@@ -65,8 +64,7 @@ nav:
   - Documentation:
     - PSE Documentation: /pse/
     - PBA Documentation: /pba/
-  - About: about.md
-  - Contact: contact.md
+  - Company Website: https://theproxycompany.com
 
 plugins:
   - search
