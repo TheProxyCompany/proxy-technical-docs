@@ -3,23 +3,36 @@ set -e
 
 echo "Starting Vercel build..."
 
+# Check available Python commands
+echo "Checking for Python..."
+which python || echo "python not found"
+which python3 || echo "python3 not found"
+ls -la /usr/bin/python* || echo "No Python found in /usr/bin"
+echo "PATH: $PATH"
+
 # Create a Python virtual environment
 echo "Creating virtual environment..."
-python -m venv .venv || python3 -m venv .venv
+python3 -m venv .venv || python -m venv .venv || mkdir -p .venv/bin && echo '#!/bin/sh' > .venv/bin/activate
 
 # Activate the virtual environment
 echo "Activating virtual environment..."
-source .venv/bin/activate
+source .venv/bin/activate || true
 
 # Verify we're using the venv Python
 echo "Using Python: $(which python)"
 
 # Install dependencies
 echo "Installing dependencies..."
-python -m pip install mkdocs==1.5.3 mkdocs-material==9.5.3 pymdown-extensions==10.3 material-extensions==1.3
+python3 -m pip install --upgrade pip || python -m pip install --upgrade pip
+python3 -m pip install mkdocs==1.5.3 mkdocs-material==9.5.3 pymdown-extensions==10.3 mkdocs-material-extensions==1.3 || 
+  python -m pip install mkdocs==1.5.3 mkdocs-material==9.5.3 pymdown-extensions==10.3 mkdocs-material-extensions==1.3
 
 # Using mkdocs from virtual environment
-MKDOCS="python -m mkdocs"
+if command -v python3 &> /dev/null; then
+  MKDOCS="python3 -m mkdocs"
+else
+  MKDOCS="python -m mkdocs"
+fi
 echo "Using mkdocs command: $MKDOCS"
 
 # Build main docs
