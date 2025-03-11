@@ -1,0 +1,13 @@
+{
+  "name": "proxy-technical-docs",
+  "version": "1.0.0",
+  "description": "The Proxy Company Technical Documentation",
+  "scripts": {
+    "dev": "mkdocs serve",
+    "build": "mkdocs build",
+    "build:pse": "cd pse-docs && mkdocs build",
+    "build:pba": "cd pba-docs && mkdocs build",
+    "build:all": "npm run build && npm run build:pse && npm run build:pba"
+  },
+  "private": true
+}

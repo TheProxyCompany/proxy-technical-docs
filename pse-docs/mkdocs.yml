@@ -1,0 +1,151 @@
+site_name: Proxy Structuring Engine Documentation
+site_description: Comprehensive technical documentation for the Proxy Structuring Engine (PSE)
+site_author: The Proxy Company
+copyright: Copyright &copy; 2025 The Proxy Company
+
+repo_url: https://github.com/TheProxyCompany/proxy-structuring-engine
+edit_uri: ""
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
+  logo: assets/proxy-p.svg
+  favicon: assets/proxy-p.svg
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.tasklist
+  - attr_list
+  - md_in_html
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/TheProxyCompany/proxy-structuring-engine
+  homepage: https://docs.theproxycompany.com
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Introduction:
+    - Overview: introduction/overview.md
+    - Key Features: introduction/key-features.md
+    - Use Cases: introduction/use-cases.md
+    - Comparison with Alternatives: introduction/comparison.md
+  
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quickstart: getting-started/quickstart.md
+    - Basic Concepts: getting-started/basic-concepts.md
+    - Your First PSE Project: getting-started/first-project.md
+  
+  - Core Concepts:
+    - State Machine Architecture: core-concepts/state-machine.md
+    - Token Processing: core-concepts/token-processing.md
+    - Parallel Path Exploration: core-concepts/parallel-paths.md
+    - Token Healing: core-concepts/token-healing.md
+    - Type System: core-concepts/type-system.md
+  
+  - User Guides:
+    - JSON Schema Integration: guides/json-schema.md
+    - Custom Grammar Creation: guides/custom-grammar.md
+    - Composite Engines: guides/composite-engines.md
+    - Thinking and Scratchpads: guides/thinking-scratchpads.md
+    - Error Handling: guides/error-handling.md
+    - Performance Optimization: guides/performance.md
+  
+  - Framework Integration:
+    - PyTorch: frameworks/pytorch.md
+    - MLX: frameworks/mlx.md
+    - TensorFlow: frameworks/tensorflow.md
+    - JAX: frameworks/jax.md
+    - Custom Frameworks: frameworks/custom.md
+  
+  - API Reference:
+    - StructuringEngine: api/structuring-engine.md
+    - Type System:
+      - Object: api/types/object.md
+      - Array: api/types/array.md
+      - String: api/types/string.md
+      - Number: api/types/number.md
+      - Integer: api/types/integer.md
+      - Boolean: api/types/boolean.md
+      - Enum: api/types/enum.md
+      - Custom Types: api/types/custom.md
+    - Framework Adapters: api/framework-adapters.md
+    - Grammar Definition: api/grammar-definition.md
+  
+  - Advanced Topics:
+    - Benchmarks and Metrics: advanced/benchmarks.md
+    - Architecture Deep Dive: advanced/architecture-deep-dive.md
+    - Non-Deterministic Algorithm: advanced/non-deterministic-algorithm.md
+    - Performance Engineering: advanced/performance-engineering.md
+    - Multi-Modal Integration: advanced/multi-modal.md
+    - Enterprise Integration: advanced/enterprise-integration.md
+  
+  - Tutorials:
+    - JSON Validation: tutorials/json-validation.md
+    - API Response Handling: tutorials/api-responses.md
+    - Interactive Fiction: tutorials/interactive-fiction.md
+    - Code Generation: tutorials/code-generation.md
+    - Data Extraction: tutorials/data-extraction.md
+  
+  - Development:
+    - Contributing Guide: development/contributing.md
+    - Testing: development/testing.md
+    - Development Setup: development/setup.md
+    - Project Architecture: development/architecture.md
+    - Release Process: development/release-process.md
+  
+  - Resources:
+    - FAQ: resources/faq.md
+    - Troubleshooting: resources/troubleshooting.md
+    - Community: resources/community.md
+    - Roadmap: resources/roadmap.md
+    - Change Log: resources/changelog.md
+  
+  - Back to Main Site: https://docs.theproxycompany.com
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: google
+
+# For Vercel deployment
+use_directory_urls: true

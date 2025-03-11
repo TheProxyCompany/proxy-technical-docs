@@ -1,0 +1,9 @@
+{
+  "buildCommand": "./build.sh",
+  "outputDirectory": "site",
+  "framework": "mkdocs",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "status": 404, "dest": "/404.html" }
+  ]
+}

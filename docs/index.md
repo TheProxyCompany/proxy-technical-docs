@@ -1,110 +1,91 @@
-# Proxy Structuring Engine
+# The Proxy Company
 
 <div class="hero-content" style="text-align: center; margin: 2em 0;">
   <p style="font-size: 1.5em; max-width: 800px; margin: 0 auto;">
-    A system for repurposing stochastic LLMs as stateful, controllable engines capable of producing reliable structured outputs
+    Bridging cutting-edge AI research with reliable production systems
   </p>
 </div>
 
-The **Proxy Structuring Engine (PSE)** transforms unpredictable language models into dependable tools for production applications, without sacrificing their creative capabilities. PSE addresses the fundamental challenge of ensuring language models produce outputs that conform to specific structural requirements, solving a critical obstacle to LLM adoption in enterprise environments.
+The **Proxy Company** develops infrastructure technology that makes large language models reliable for production use. Our mission is to bridge the gap between AI research and practical applications, enabling organizations to deploy LLM-based systems with confidence.
 
-## Key Features
+## Our Technology
 
-- **Guaranteed Structure**: Enforce JSON schema, XML, or custom grammar constraints on LLM outputs
-- **Framework Agnostic**: Compatible with PyTorch, MLX, TensorFlow, and JAX
-- **Minimal Overhead**: ~20ms per token with zero-copy tensor operations
-- **Parallel Exploration**: Handles ambiguous grammar through parallel path exploration
-- **Token Healing**: Corrects minor generation errors automatically through partial credit
-- **Composable**: Transition seamlessly between natural language and structured output
+<div class="grid cards" markdown>
 
-## How It Works
+-   :material-engine-outline: __Proxy Structuring Engine (PSE)__
 
-PSE uses a hierarchical state machine approach to guide LLM generation:
+    ---
 
-1. Define the required output structure (JSON schema, custom grammar, etc.)
-2. The engine constructs a state machine representing valid generation paths
-3. During generation, PSE masks invalid token probabilities before sampling
-4. Multiple possible interpretations are explored in parallel when ambiguity arises
-5. The result is structurally valid output that preserves the LLM's intent
+    A breakthrough technology that transforms stochastic language models into deterministic, state-driven systems for generating reliable structured outputs.
 
-This approach provides the reliability of template-based systems while maintaining the creative power of large language models.
+    [:octicons-arrow-right-24: Learn More](/technology/pse)
+    [:octicons-book-24: Documentation](/pse/)
 
-## Getting Started
+-   :material-robot-outline: __Proxy Base Agent (PBA)__
 
-```python
-from pse import StructuringEngine
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+    ---
 
-# Load model
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3-8b-instruct")
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b-instruct")
+    A foundational framework for building reliable AI agents with advanced memory management, robust reasoning capabilities, and safe tool integration.
 
-# Define JSON schema
-person_schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "age": {"type": "integer"},
-        "occupation": {"type": "string"}
-    },
-    "required": ["name", "age"]
-}
+    [:octicons-arrow-right-24: Learn More](/technology/pba)
+    [:octicons-book-24: Documentation](/pba/)
 
-# Create structuring engine
-engine = StructuringEngine.from_json_schema(person_schema)
+</div>
 
-# Generate structured output
-prompt = "Extract information about Sarah, who is 29 and works as a software engineer."
-input_ids = tokenizer.encode(prompt, return_tensors="pt")
-outputs = engine.generate(model, input_ids, max_new_tokens=100)
-result = tokenizer.decode(outputs[0])
-print(result)
-```
+## Solving Critical Challenges
 
-## Use Cases
+The Proxy Company tackles fundamental challenges in deploying LLMs to production:
 
-- **Intelligent Agents**: Build reliable agents that interact with APIs and external tools
-- **Data Extraction**: Convert unstructured text to structured information
-- **Interactive Apps**: Create dynamic experiences with consistent output formats
-- **Code Generation**: Produce syntax-constrained code with guaranteed correctness
-- **Conversational AI**: Develop chatbots with consistent, structured responses
+- **Reliability**: Ensuring consistent, predictable outputs from inherently stochastic models
+- **Structure**: Guaranteeing conformance to specific formats and schemas
+- **Performance**: Delivering production-grade solutions that balance reliability with computational efficiency
+- **Agency**: Creating AI systems that can reason effectively and interact safely with their environment
 
-## Documentation
+## Technical Documentation
 
-Our comprehensive documentation covers everything you need to get started with PSE and understand its powerful capabilities:
+Our comprehensive documentation covers everything from getting started to advanced implementation details:
 
-### Introduction
+<div class="grid cards" markdown>
 
-- [Overview](introduction/overview.md) - A complete introduction to PSE and its approach
-- [Key Features](introduction/key-features.md) - Detailed exploration of PSE's capabilities
-- [Use Cases](introduction/use-cases.md) - Real-world applications and examples
-- [Comparison with Alternatives](introduction/comparison.md) - How PSE compares to other approaches
+-   :octicons-book-24: __PSE Documentation__
 
-### Getting Started
+    ---
 
-- [Installation](getting-started/installation.md) - Setting up PSE in your environment
-- [Quickstart](getting-started/quickstart.md) - Your first PSE implementation
-- [Basic Concepts](getting-started/basic-concepts.md) - Understanding PSE fundamentals
-- [First Project](getting-started/first-project.md) - Build a complete project with PSE
+    Complete reference materials for the Proxy Structuring Engine, including installation guides, core concepts, API references, and advanced tutorials.
 
-### Core Concepts
+    [:octicons-arrow-right-24: PSE Documentation](/pse/)
 
-- [State Machine Architecture](core-concepts/state-machine.md) - How PSE guides generation
-- [Token Healing](core-concepts/token-healing.md) - Handling tokenization inconsistencies
+-   :octicons-book-24: __PBA Documentation__
 
-### User Guides
+    ---
 
-- [JSON Schema Integration](guides/json-schema.md) - Using JSON Schema with PSE
+    In-depth documentation for the Proxy Base Agent framework, covering agent architecture, tool integration, memory systems, and application development.
 
-### API Reference
+    [:octicons-arrow-right-24: PBA Documentation](/pba/)
 
-- [StructuringEngine](api/structuring-engine.md) - Complete API reference
-- [Framework Adapters](api/framework-adapters.md) - Framework-specific integration
+</div>
 
-## Open-Source
+## Open Source
 
-PSE is available under the Apache 2.0 license. We welcome contributions from the community to help improve and extend this technology.
+Our technology is available under the Apache 2.0 license. We believe in building in the open and welcome contributions from the community.
 
-[View on GitHub](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
-[Read the Docs](introduction/overview.md){: .md-button }
+<div class="grid cards" markdown>
+
+-   :fontawesome-brands-github: __GitHub Repositories__
+
+    ---
+
+    Access our source code, contribute to development, and join our community of builders.
+
+    [:octicons-arrow-right-24: Proxy Structuring Engine](https://github.com/TheProxyCompany/proxy-structuring-engine)
+    [:octicons-arrow-right-24: Proxy Base Agent](https://github.com/TheProxyCompany/proxy-base-agent)
+
+</div>
+
+## Get Started
+
+Ready to build more reliable AI applications?
+
+[Read the Docs](/pse/){: .md-button .md-button--primary }
+[Explore GitHub](https://github.com/TheProxyCompany){: .md-button }
+[Contact Us](/contact){: .md-button }
