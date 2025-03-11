@@ -19,13 +19,6 @@ For our company website and general information, please visit [theproxycompany.c
     ---
 
     Transform stochastic language models into deterministic systems for reliable structured outputs.
-    
-    __Key features:__
-    - State machine architecture
-    - Token healing technology
-    - Framework agnostic integration
-    - JSON schema support
-    - ~20ms per token overhead
 
     [:octicons-book-24: Browse PSE Documentation](/pse/){: .md-button .md-button--primary }
 
@@ -34,13 +27,6 @@ For our company website and general information, please visit [theproxycompany.c
     ---
 
     A cognitive architecture for creating reliable, robust AI agents with advanced memory management and tool integration.
-    
-    __Key features:__
-    - Hierarchical memory system
-    - Principled tool integration
-    - Structured reasoning
-    - Reflexive monitoring
-    - Safety guarantees
 
     [:octicons-book-24: Browse PBA Documentation](/pba/){: .md-button .md-button--primary }
 
@@ -64,62 +50,9 @@ Our technologies address these challenges through principled engineering approac
 
 PSE is a state-of-the-art library that guarantees LLMs will generate outputs conforming to specified structures. Using a hierarchical state machine architecture that works with the LLM's token generation process, PSE enforces structural guarantees while preserving the model's creative capabilities.
 
-```python
-from proxy_structuring_engine import StructuringEngine, Schema
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# Load model
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3-8b-instruct")
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b-instruct")
-
-# Define schema
-schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "age": {"type": "integer"},
-        "interests": {"type": "array", "items": {"type": "string"}}
-    },
-    "required": ["name", "interests"]
-}
-
-# Create engine
-engine = StructuringEngine.from_json_schema(schema)
-
-# Generate
-prompt = "Extract information about Sarah, who is 29 and works as a software engineer."
-input_ids = tokenizer.encode(prompt, return_tensors="pt")
-outputs = engine.generate(model, input_ids, max_new_tokens=200)
-result = tokenizer.decode(outputs[0])
-print(result)
-```
-
 ### Proxy Base Agent
 
 PBA is a framework for building reliable AI agents. It provides a cognitive architecture for memory management, reasoning, and tool integration that leads to more predictable and controllable agent behavior.
-
-```python
-from pba import Agent, ToolRegistry
-from pba.memory import HierarchicalMemory
-
-# Define tools
-tools = ToolRegistry()
-tools.register("calculator", Calculator())
-tools.register("web_search", WebSearch())
-
-# Create agent with hierarchical memory
-memory = HierarchicalMemory()
-agent = Agent(
-    model="meta-llama/Llama-3-8b-instruct",
-    tools=tools,
-    memory=memory
-)
-
-# Run agent on a task
-result = agent.run("Research the latest developments in quantum computing and summarize the key findings.")
-print(result)
-```
 
 ## Developer Resources
 
@@ -148,9 +81,6 @@ print(result)
     ---
 
     Technical research and benchmarks.
-
-    [:octicons-arrow-right-24: PSE Research](/research/pse)
-    [:octicons-arrow-right-24: PBA Research](/research/pba)
 
 </div>
 

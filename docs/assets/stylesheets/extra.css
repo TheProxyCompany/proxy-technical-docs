@@ -1,8 +1,87 @@
 :root {
+  /* Primary brand colors */
   --md-primary-fg-color: #024645;
   --md-primary-fg-color--light: #035a59;
   --md-primary-fg-color--dark: #013433;
+  
+  /* Accent brand colors */
   --md-accent-fg-color: #DAD0AF;
   --md-accent-fg-color--transparent: rgba(218, 208, 175, 0.1);
+  
+  /* Custom button colors */
+  --md-button-bg-color: var(--md-primary-fg-color);
+  --md-button-text-color: var(--md-accent-fg-color);
+}
+
+/* Dark mode adjustments */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #013433;
+  --md-primary-fg-color--light: #024645;
+  --md-default-bg-color: #121212;
+  --md-default-bg-color--light: #1e1e1e;
+  --md-typeset-a-color: var(--md-accent-fg-color);
+}
+
+/* Header text color */
+.md-header {
+  color: var(--md-accent-fg-color);
+}
+
+/* Navigation text color */
+.md-tabs__link {
+  color: var(--md-accent-fg-color);
+}
+
+/* Make active navigation link more visible */
+.md-tabs__link--active, 
+.md-tabs__link:hover {
+  color: var(--md-accent-fg-color);
+  opacity: 1;
+}
+
+/* Button styling - standard buttons */
+.md-button {
+  background-color: var(--md-primary-fg-color) !important;
+  color: var(--md-accent-fg-color) !important;
+  border-color: var(--md-primary-fg-color) !important;
+}
+
+.md-button:hover {
+  background-color: var(--md-primary-fg-color--light) !important;
+  color: var(--md-accent-fg-color) !important;
+  border-color: var(--md-primary-fg-color--light) !important;
+}
+
+/* Primary button styling - reversed for emphasis */
+.md-button--primary {
+  background-color: var(--md-primary-fg-color) !important;
+  color: var(--md-accent-fg-color) !important;
+  border-color: var(--md-accent-fg-color) !important;
+}
+
+.md-button--primary:hover {
+  background-color: var(--md-primary-fg-color--light) !important;
+  color: var(--md-accent-fg-color) !important;
+}
+
+/* Card enhancements */
+.md-typeset .grid.cards > :is(ul, ol) > li {
+  border-color: var(--md-accent-fg-color--transparent);
+}
+
+.md-typeset .grid.cards > :is(ul, ol) > li:hover {
+  box-shadow: 0 0 0.2rem rgba(218, 208, 175, 0.3);
+  border-color: var(--md-accent-fg-color);
+}
+
+/* Admonition styling */
+.md-typeset .admonition {
+  border-left-color: var(--md-accent-fg-color);
+}
+
+/* Table styling */
+.md-typeset table:not([class]) th {
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-accent-fg-color);
 }
 

@@ -9,15 +9,17 @@ edit_uri: ""
 theme:
   name: material
   palette:
-    # Palette toggle for light mode
-    - scheme: default
+    # Light mode (auto browser preference)
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: custom
       accent: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
-    # Palette toggle for dark mode
-    - scheme: slate
+    # Dark mode (auto browser preference)
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       primary: custom
       accent: custom
       toggle:
@@ -102,8 +104,6 @@ nav:
     - Contributing: development/contributing.md
     - Building from Source: development/building.md
     - Testing: development/testing.md
-  
-  - Back to Main Site: https://docs.theproxycompany.com
 
 plugins:
   - search
