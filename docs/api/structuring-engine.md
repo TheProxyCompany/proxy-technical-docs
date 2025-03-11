@@ -592,7 +592,7 @@ The StructuringEngine is not thread-safe by default. For multithreaded environme
 
 ## Next Steps
 
-- Explore the [Type System](types.md) for detailed type information
 - Learn about [Framework Adapters](framework-adapters.md) for framework-specific features
-- Read about [Grammar Definition](grammar-definition.md) for custom formats
-- See [Advanced Topics](../advanced/architecture-deep-dive.md) for implementation details
+- Review the [State Machine Architecture](../core-concepts/state-machine.md) 
+- Understand how [Token Healing](../core-concepts/token-healing.md) works
+- Explore the [JSON Schema Guide](../guides/json-schema.md) for practical applications

@@ -682,7 +682,7 @@ outputs = engine.generate(
 
 ## Next Steps
 
-- Explore the [StructuringEngine API](structuring-engine.md) for core functionality
-- Learn about the [Type System](types.md) that powers schema definitions
-- Try the [Framework-Specific Guides](../frameworks/pytorch.md) for detailed examples
-- See [Performance Optimization](../guides/performance.md) for tuning tips
+- Explore the [Structuring Engine API](structuring-engine.md) for core functionality
+- Review the [State Machine Architecture](../core-concepts/state-machine.md) 
+- Check out the [Token Healing](../core-concepts/token-healing.md) system
+- Explore the [JSON Schema Guide](../guides/json-schema.md) for practical applications

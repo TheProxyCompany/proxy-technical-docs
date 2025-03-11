@@ -335,7 +335,6 @@ The hierarchical state machine architecture is the core innovation that enables 
 
 ## Next Steps
 
-- Learn about [Token Processing](token-processing.md) in detail
-- Explore [Parallel Path Exploration](parallel-paths.md) techniques
 - Understand how [Token Healing](token-healing.md) recovers from errors
-- Dive into the [Type System](type-system.md) that powers schema definitions
+- Explore the [JSON Schema Guide](../guides/json-schema.md) for practical applications
+- Review the [Structuring Engine API](../api/structuring-engine.md) documentation

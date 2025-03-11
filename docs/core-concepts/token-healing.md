@@ -363,7 +363,6 @@ This capability is especially important when working with diverse models, langua
 
 ## Next Steps
 
-- Learn about [Parallel Path Exploration](parallel-paths.md) and how it works with healing
-- Understand the [Type System](type-system.md) that defines valid structures
-- Explore [Performance Optimization](../guides/performance.md) for token healing
-- Try different healing configurations in the [Advanced Configuration Guide](../guides/advanced-configuration.md)
+- Review the [State Machine Architecture](state-machine.md) to understand PSE's core design
+- Explore the [JSON Schema Guide](../guides/json-schema.md) for practical applications
+- Check out the [Structuring Engine API](../api/structuring-engine.md) documentation
