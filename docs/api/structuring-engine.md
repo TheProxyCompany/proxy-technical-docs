@@ -16,17 +16,38 @@ class StructuringEngine:
 
 ## Constructor
 
-StructuringEngine instances are typically created using factory methods rather than directly via the constructor. The internal constructor is primarily used by the factory methods.
+While StructuringEngine instances are typically created using factory methods, the constructor can be used directly when you have a tokenizer and want to configure the engine separately.
 
 ```python
-def __init__(self, state_machine, config=None):
+def __init__(
+    self,
+    tokenizer: PreTrainedTokenizerFast | PreTrainedTokenizerBase,
+    whitelist_control_tokens: list[str] | None = None,
+    multi_token_sampling: bool = False,
+    max_resample_attempts: int = 5,
+) -> None:
     """
-    Initialize a StructuringEngine with the given state machine.
+    Initialize a StructuringEngine with a tokenizer.
     
     Args:
-        state_machine: The state machine to use for guiding generation
-        config: Optional configuration dictionary
+        tokenizer: HuggingFace tokenizer for encoding/decoding
+        whitelist_control_tokens: Optional list of control tokens to exclude from masking
+        multi_token_sampling: Enable multi-token sampling for better handling of tokenization boundaries
+        max_resample_attempts: Maximum number of attempts to resample an invalid token
     """
+```
+
+**Example:**
+```python
+from pse import StructuringEngine
+from transformers import AutoTokenizer
+
+# Create engine with tokenizer
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b-instruct")
+engine = StructuringEngine(tokenizer)
+
+# Configure with schema later
+engine.configure(person_schema)
 ```
 
 ## Factory Methods
@@ -222,18 +243,34 @@ def update_state_for_generation(self, input_ids, state=None, **kwargs):
 ### configure
 
 ```python
-def configure(self, **config):
+def configure(
+    self,
+    structure: JSONSchemaSource | StateMachine,
+    **kwargs: Any,
+) -> None:
     """
-    Update the engine's configuration.
+    Configure the structuring engine with a schema or state machine.
     
     Args:
-        **config: Configuration parameters to update
+        structure: Either a JSON Schema (dict, string, or Pydantic model) or a StateMachine instance
+        **kwargs: Additional keyword arguments for schema processing
         
     Returns:
-        StructuringEngine: Self, for method chaining
+        None
         
     Examples:
-        >>> engine.configure(healing_threshold=0.8, max_parallel_paths=4)
+        >>> # Configure with JSON Schema
+        >>> engine.configure({
+        ...     "type": "object",
+        ...     "properties": {
+        ...         "name": {"type": "string"},
+        ...         "age": {"type": "integer"}
+        ...     }
+        ... })
+        >>> 
+        >>> # Configure with state machine directly
+        >>> from pse.types.json import ObjectStateMachine
+        >>> engine.configure(ObjectStateMachine())
     """
 ```
 
@@ -258,6 +295,67 @@ def with_config(self, **config):
 ```
 
 ## Utility Methods
+
+### get_structured_output
+
+```python
+def get_structured_output(
+    self,
+    output_type: type[OutputType] | None = None,
+    raise_on_error: bool = False,
+) -> OutputType | Any:
+    """
+    Parse and cast the output to the given type.
+    
+    This method is used after generation to retrieve the structured output.
+    
+    Args:
+        output_type: Optional type to cast the output to (e.g., Pydantic model)
+        raise_on_error: Whether to raise exceptions for parsing errors (default: False)
+        
+    Returns:
+        The structured output, optionally cast to the specified type
+        
+    Examples:
+        >>> # Get output as a dictionary
+        >>> result = engine.get_structured_output()
+        >>> 
+        >>> # Get output as a Pydantic model
+        >>> from pydantic import BaseModel
+        >>> class Person(BaseModel):
+        ...     name: str
+        ...     age: int
+        >>> 
+        >>> person = engine.get_structured_output(Person)
+    """
+```
+
+### get_stateful_structured_output
+
+```python
+def get_stateful_structured_output(
+    self,
+    output_type: type[OutputType] | None = None,
+    raise_on_error: bool = False,
+) -> Iterator[tuple[str, OutputType | Any]]:
+    """
+    Get each part of the output labeled with the identifier of the step that produced it.
+    
+    This is useful for composite engines with multiple sections.
+    
+    Args:
+        output_type: Optional type to cast the output to
+        raise_on_error: Whether to raise exceptions for parsing errors
+        
+    Returns:
+        Iterator of (state_identifier, output) tuples
+        
+    Examples:
+        >>> # Get stateful output
+        >>> for state_id, value in engine.get_stateful_structured_output():
+        ...     print(f"State {state_id}: {value}")
+    """
+```
 
 ### logits_processor
 
@@ -316,6 +414,31 @@ def get_healing_events(self):
     """
 ```
 
+### sample
+
+```python
+def sample(
+    self, logprobs: Array_Type, sampler: Callable[..., Array_Type]
+) -> Array_Type:
+    """
+    Sample tokens from logprobs using the provided sampler function.
+    
+    This low-level method handles the sampling logic during generation.
+    
+    Args:
+        logprobs: 2D array of shape (batch_size, sequence_length) containing log probabilities
+        sampler: Callable that implements the sampling strategy
+        
+    Returns:
+        Array of sampled token indices with same type as input logprobs
+        
+    Notes:
+        - Automatically handles device placement (CPU/GPU)
+        - Processes each batch individually
+        - Parent class expects single-batch input of shape (1, sequence_length)
+    """
+```
+
 ### is_valid_continuation
 
 ```python
@@ -343,6 +466,35 @@ def get_valid_continuation_tokens(self, sequence=None):
         
     Returns:
         list: Valid continuation tokens
+    """
+```
+
+### cast_output
+
+```python
+def cast_output(
+    self,
+    input: str,
+    output_type: type[OutputType] | None,
+    raise_on_error: bool,
+) -> OutputType | Any:
+    """
+    Cast the output string to the given type.
+    
+    This method parses JSON and optionally converts it to a specified type.
+    
+    Args:
+        input: String input to cast (typically JSON)
+        output_type: Type to cast to (None returns parsed JSON)
+        raise_on_error: Whether to raise exceptions for parsing errors
+        
+    Returns:
+        Cast output or original input if casting fails
+        
+    Notes:
+        - Supports Pydantic model validation via model_validate
+        - Handles JSON parsing errors with configurable behavior
+        - Returns parsed JSON object when output_type is None
     """
 ```
 
@@ -388,7 +540,8 @@ schema = {
 }
 
 # Create engine
-engine = StructuringEngine.from_json_schema(schema)
+engine = StructuringEngine(tokenizer)
+engine.configure(schema)
 
 # Generate
 prompt = "Extract information about Sarah, who is 29 and works as a software engineer."
@@ -399,29 +552,42 @@ outputs = engine.generate(
     max_new_tokens=200,
     temperature=0.7
 )
-result = tokenizer.decode(outputs[0])
-print(result)
+
+# Get structured result
+result = engine.get_structured_output()
+print(result)  # {'name': 'Sarah', 'age': 29, 'occupation': 'software engineer'}
 ```
 
 ### Composite Engine with Thinking
 
 ```python
-from pse import StructuringEngine, NaturalLanguageEngine
+from pse import StructuringEngine
+from transformers import AutoTokenizer
 
-# Create engines for different sections
-thinking_engine = NaturalLanguageEngine()
-json_engine = StructuringEngine.from_json_schema(schema)
+# Create tokenizer
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b-instruct")
+
+# Create JSON engine for structured output
+json_engine = StructuringEngine(tokenizer)
+json_engine.configure(schema)
 
 # Create composite engine
-composite_engine = StructuringEngine.create_composite_engine(
+# Note: In newer versions, this would use factory methods or specialized approaches
+from pse_core.state_machine import StateMachine
+from pse.types.base.wait_for import WaitFor
+
+# Create a state machine that waits for a delimiter then applies the JSON structure
+composite_sm = StateMachine(
     {
-        "thinking": thinking_engine,
-        "output": json_engine
+        "thinking": [(WaitFor("\nJSON Output:\n", json_engine.state_machine), "end")]
     },
-    delimiter_tokens={
-        "thinking_to_output": ["\nJSON Output:\n"]
-    }
+    "thinking",
+    ["end"]
 )
+
+# Create engine with composite state machine
+composite_engine = StructuringEngine(tokenizer)
+composite_engine.configure(composite_sm)
 
 # Generate with composite engine
 outputs = composite_engine.generate(
@@ -430,34 +596,47 @@ outputs = composite_engine.generate(
     max_new_tokens=500,
     temperature=0.7
 )
+
+# Get structured result
+for state_id, value in composite_engine.get_stateful_structured_output():
+    if state_id == "end":
+        structured_output = value
+        print(f"Structured output: {structured_output}")
 ```
 
 ### Advanced Configuration
 
 ```python
-# Create engine with custom configuration
-engine = StructuringEngine.from_json_schema(
-    schema,
-    config={
-        "healing_threshold": 0.8,               # More conservative healing
-        "max_parallel_paths": 6,                # Explore more paths
-        "normalize_whitespace": True,           # Handle whitespace variations
-        "case_insensitive_healing": True,       # Case-insensitive matching
-        "debug_healing": True                   # Log healing events
-    }
+from pse import StructuringEngine
+from transformers import AutoTokenizer
+
+# Create tokenizer
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b-instruct")
+
+# Create engine with custom token settings
+engine = StructuringEngine(
+    tokenizer,
+    whitelist_control_tokens=["<|im_start|>", "<|im_end|>"],  # Don't mask these tokens
+    multi_token_sampling=True,  # Better handling of token boundaries
+    max_resample_attempts=10    # Try harder to find valid tokens
 )
 
-# Update configuration later
+# Configure with schema and additional parameters
 engine.configure(
-    healing_threshold=0.7,
-    max_parallel_paths=4
+    schema,
+    delimiters=None,             # No delimiters for the schema
+    fenced_type_mapping=None     # No special fenced content handling
 )
 
-# Or create a new engine with updated config
-strict_engine = engine.with_config(
-    healing_threshold=0.9,
-    healing_mode="conservative"
+# For framework-specific configuration, use the appropriate adapter class:
+from pse.util.torch_mixin import TorchStructuringEngine
+
+# PyTorch-specific engine with custom torch settings
+torch_engine = TorchStructuringEngine(
+    tokenizer,
+    multi_token_sampling=True
 )
+torch_engine.configure(schema)
 ```
 
 ## Framework-Specific Adapters
@@ -468,44 +647,59 @@ The base `StructuringEngine` class is framework-agnostic. For better integration
 
 ```python
 from pse.util.torch_mixin import TorchStructuringEngine
+from transformers import AutoTokenizer
 
 # Create PyTorch-specific engine
-engine = TorchStructuringEngine.from_json_schema(schema)
+tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b-instruct")
+engine = TorchStructuringEngine(tokenizer)
+engine.configure(schema)
 
 # Generate with PyTorch-specific methods
 generated_ids = engine.generate(
     model,
     input_ids,
-    max_length=100,
+    max_new_tokens=100,
     do_sample=True,
     temperature=0.7
 )
+
+# Access generated structured output
+result = engine.get_structured_output()
 ```
 
 ### MLX
 
 ```python
 from pse.util.generate_mlx import MLXStructuringEngine
+from transformers import AutoTokenizer
 
 # Create MLX-specific engine
-engine = MLXStructuringEngine.from_json_schema(schema)
+tokenizer = AutoTokenizer.from_pretrained("mlx-community/Mistral-7B-v0.1-hf")
+engine = MLXStructuringEngine(tokenizer)
+engine.configure(schema)
 
 # Generate with MLX-specific methods
 generated_ids = engine.generate(
     model,
     input_ids,
-    max_length=100,
+    max_new_tokens=100,
     temperature=0.7
 )
+
+# Access generated structured output
+result = engine.get_structured_output()
 ```
 
 ### TensorFlow
 
 ```python
 from pse.util.tf_mixin import TFStructuringEngine
+from transformers import AutoTokenizer
 
 # Create TensorFlow-specific engine
-engine = TFStructuringEngine.from_json_schema(schema)
+tokenizer = AutoTokenizer.from_pretrained("google/t5-v1_1-large")
+engine = TFStructuringEngine(tokenizer)
+engine.configure(schema)
 
 # Generate with TensorFlow-specific methods
 generated_ids = engine.generate(
@@ -514,15 +708,21 @@ generated_ids = engine.generate(
     max_length=100,
     temperature=0.7
 )
+
+# Access generated structured output
+result = engine.get_structured_output()
 ```
 
 ### JAX
 
 ```python
 from pse.util.jax_mixin import JAXStructuringEngine
+from transformers import AutoTokenizer
 
 # Create JAX-specific engine
-engine = JAXStructuringEngine.from_json_schema(schema)
+tokenizer = AutoTokenizer.from_pretrained("google/t5-v1_1-large")
+engine = JAXStructuringEngine(tokenizer)
+engine.configure(schema)
 
 # Generate with JAX-specific methods
 generated_ids = engine.generate(
@@ -531,6 +731,9 @@ generated_ids = engine.generate(
     max_length=100,
     temperature=0.7
 )
+
+# Access generated structured output
+result = engine.get_structured_output()
 ```
 
 ## Error Handling
