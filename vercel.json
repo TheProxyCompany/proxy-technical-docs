@@ -1,5 +1,5 @@
 {
-  "buildCommand": "./build.sh",
+  "buildCommand": "bash ./vercel-build.sh",
   "outputDirectory": "site",
   "routes": [
     { "handle": "filesystem" },
