@@ -279,5 +279,5 @@ Now that you understand the basic concepts behind PSE, you can:
 - Try the [Quickstart](quickstart.md) examples to see PSE in action
 - Build [Your First PSE Project](first-project.md) for a complete workflow
 - Explore [Core Concepts](../core-concepts/state-machine.md) for a deeper understanding
-- Learn about specific integrations with [Framework Guides](../frameworks/pytorch.md)
-- Browse [User Guides](../guides/json-schema.md) for more advanced usage
+- Check out the [API Reference](../api/structuring-engine.md) documentation
+- Browse the [JSON Schema Guide](../guides/json-schema.md) for more advanced usage

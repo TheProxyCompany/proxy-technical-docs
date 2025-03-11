@@ -540,7 +540,7 @@ This approach combines the best of both worlds: the creative capabilities of LLM
 
 ## Next Steps
 
-- Explore [Custom Grammar Creation](custom-grammar.md) for formats beyond JSON
-- Learn about [Composite Engines](composite-engines.md) for complex workflows
-- Understand [Error Handling](error-handling.md) for robust applications
-- Dive into [Performance Optimization](performance.md) for production systems
+- Learn about the [State Machine Architecture](../core-concepts/state-machine.md) behind PSE
+- Understand how [Token Healing](../core-concepts/token-healing.md) makes generation robust
+- Explore the [Structuring Engine API](../api/structuring-engine.md) for configuration options
+- Check out the [Framework Adapters](../api/framework-adapters.md) for different ML frameworks

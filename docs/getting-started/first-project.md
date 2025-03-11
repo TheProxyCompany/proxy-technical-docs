@@ -558,6 +558,6 @@ To extend this project, you could:
 For more advanced PSE features, explore:
 
 - [JSON Schema Integration](../guides/json-schema.md) for more complex schemas
-- [Custom Grammar Creation](../guides/custom-grammar.md) for specialized formats
 - [Token Healing](../core-concepts/token-healing.md) for better error recovery
-- [Performance Optimization](../guides/performance.md) for scaling
+- [Framework Adapters](../api/framework-adapters.md) for different ML frameworks
+- [Structuring Engine API](../api/structuring-engine.md) for detailed configuration options

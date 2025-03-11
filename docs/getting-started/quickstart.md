@@ -403,5 +403,5 @@ Now that you've seen PSE in action, you can:
 - Learn about [Basic Concepts](basic-concepts.md) behind PSE
 - Work through a [complete project example](first-project.md)
 - Explore [Core Concepts](../core-concepts/state-machine.md) for a deeper understanding
-- Try out different [Framework Integrations](../frameworks/pytorch.md)
-- Browse [User Guides](../guides/json-schema.md) for more advanced usage
+- Learn about [Framework Adapters](../api/framework-adapters.md) for different ML frameworks
+- Review the [JSON Schema Guide](../guides/json-schema.md) for more advanced usage

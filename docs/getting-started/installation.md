@@ -329,7 +329,7 @@ Now that you've successfully installed PSE, you can:
 
 - Follow our [Quickstart Guide](quickstart.md) to run your first PSE project
 - Learn about [Basic Concepts](basic-concepts.md) of the PSE architecture
-- Browse [Framework Integration](../frameworks/pytorch.md) guides for your specific ML framework
+- Explore the [Framework Adapters](../api/framework-adapters.md) for integration with different ML frameworks
 
 ## Advanced Installation Options
 
