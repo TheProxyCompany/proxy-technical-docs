@@ -9,17 +9,15 @@ edit_uri: ""
 theme:
   name: material
   palette:
-    # Light mode (auto browser preference)
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
+    # Light mode
+    - scheme: default
       primary: custom
       accent: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
-    # Dark mode (auto browser preference)
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
+    # Dark mode
+    - scheme: slate
       primary: custom
       accent: custom
       toggle:

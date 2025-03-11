@@ -1,12 +1,16 @@
+/* Common variables for both light and dark modes */
 :root {
+  /* Accent brand colors - used in both modes */
+  --md-accent-fg-color: #DAD0AF;
+  --md-accent-fg-color--transparent: rgba(218, 208, 175, 0.1);
+}
+
+/* Light mode (default) */
+[data-md-color-scheme="default"] {
   /* Primary brand colors */
   --md-primary-fg-color: #024645;
   --md-primary-fg-color--light: #035a59;
   --md-primary-fg-color--dark: #013433;
-  
-  /* Accent brand colors */
-  --md-accent-fg-color: #DAD0AF;
-  --md-accent-fg-color--transparent: rgba(218, 208, 175, 0.1);
   
   /* Custom button colors */
   --md-button-bg-color: var(--md-primary-fg-color);
@@ -65,12 +69,27 @@
 }
 
 /* Sidebar navigation */
-.md-nav__title,
-.md-nav__link,
-.md-nav--primary .md-nav__link,
-.md-nav--secondary .md-nav__link,
-.md-sidebar .md-nav__link {
+/* Light mode navigation colors */
+[data-md-color-scheme="default"] {
+  --md-nav-link-color: #024645; /* Dark green for better contrast on white */
+}
+
+/* Dark mode keeps the accent color */
+[data-md-color-scheme="slate"] .md-nav__title,
+[data-md-color-scheme="slate"] .md-nav__link,
+[data-md-color-scheme="slate"] .md-nav--primary .md-nav__link,
+[data-md-color-scheme="slate"] .md-nav--secondary .md-nav__link,
+[data-md-color-scheme="slate"] .md-sidebar .md-nav__link {
   color: var(--md-accent-fg-color);
+}
+
+/* Light mode uses darker color for better contrast */
+[data-md-color-scheme="default"] .md-nav__title,
+[data-md-color-scheme="default"] .md-nav__link,
+[data-md-color-scheme="default"] .md-nav--primary .md-nav__link,
+[data-md-color-scheme="default"] .md-nav--secondary .md-nav__link,
+[data-md-color-scheme="default"] .md-sidebar .md-nav__link {
+  color: var(--md-nav-link-color);
 }
 
 /* Search results */
