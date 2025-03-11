@@ -32,7 +32,9 @@ theme:
     - navigation.expand
     - search.suggest
     - search.highlight
+    - content.code.annotate
     - content.code.copy
+    - palette.toggle
   logo: assets/proxy-p.svg
   favicon: assets/proxy-p.svg
 
