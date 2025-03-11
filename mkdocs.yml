@@ -3,7 +3,7 @@ site_description: Technical Documentation for The Proxy Company's Technology
 site_author: The Proxy Company
 copyright: Copyright &copy; 2025 The Proxy Company
 
-repo_url: https://github.com/TheProxyCompany
+repo_url: https://github.com/TheProxyCompany/proxy-technical-docs
 edit_uri: ""
 
 theme:
