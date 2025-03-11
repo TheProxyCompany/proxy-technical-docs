@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bash /proxy-technical-docs/build.sh",
+  "buildCommand": "ls -a; bash /proxy-technical-docs/build.sh",
   "outputDirectory": "site",
   "routes": [
     { "handle": "filesystem" },
