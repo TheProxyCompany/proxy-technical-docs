@@ -21,10 +21,11 @@ The **Proxy Structuring Engine** (PSE) is a state-of-the-art technology that add
 PSE uses a novel approach to constrain LLM generation:
 
 1. **Schema Definition**: You define the structure you need using JSON Schema or other formats
-2. **State Machine Creation**: PSE converts this schema into a hierarchical state machine
-3. **Guided Generation**: During generation, PSE uses the state machine to guide the LLM token-by-token
-4. **Token Healing**: If the LLM deviates slightly, PSE applies token healing to recover
-5. **Valid Output**: The result is a properly structured output that follows your schema
+2. **State Machine Creation**: PSE converts this schema into a hierarchical state machine with states and transitions
+3. **Stepper System**: During generation, the Stepper tracks the current position in the state machine and validates transitions
+4. **Token Processing**: PSE directly modifies logit distributions to enforce grammatical constraints
+5. **Token Healing**: When tokenization mismatches occur, PSE can recover by finding valid token prefixes
+6. **Valid Output**: The result is a properly structured output that follows your schema while preserving creativity
 
 This approach gives you the best of both worlds: the creative power of LLMs with the reliability of structured systems.
 

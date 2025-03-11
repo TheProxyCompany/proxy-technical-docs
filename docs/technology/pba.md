@@ -15,12 +15,12 @@ Our research aims to develop an agent architecture that addresses these challeng
 
 ## Our Approach
 
-PBA introduces a cognitive architecture with several key innovations:
+PBA introduces a state machine architecture with several key innovations:
 
-1. **Modular Reasoning Framework**: A structured approach to reasoning that combines planning, reflection, and execution in a modular architecture
-2. **Hierarchical Memory System**: A multi-tier memory system that manages working memory, episodic memory, and semantic knowledge
-3. **Principled Tool Integration**: A formalized protocol for tool interaction with rigorous safety checks and validation
-4. **Reflexive Monitoring**: Built-in systems for monitoring and correcting the agent's own behavior
+1. **State Machine Framework**: A structured approach that separates planning states (thinking, scratchpad, inner monologue) from action states (tool execution, code execution)
+2. **Event-Based Memory**: A system that maintains conversation history as events, including system, user, assistant, and tool interactions
+3. **Principled Tool Integration**: A formalized protocol for tool interaction with schema validation and controlled access to capabilities
+4. **Model Control Protocol (MCP)**: A system for connecting to remote tools and services with client/server architecture
 
 <figure markdown>
   ![PBA Architecture Diagram](/assets/pba-architecture.png)

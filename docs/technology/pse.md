@@ -17,10 +17,10 @@ Our research addresses this challenge by developing a novel approach that:
 
 PSE introduces a hierarchical state machine architecture that guides token generation while preserving the LLM's creative capabilities:
 
-1. **Grammar-Driven State Machine**: We construct a deterministic state machine from the target grammar, creating a formal model that represents all valid generation paths
-2. **Probability Guidance**: Rather than post-processing, we intervene directly in the token sampling process by masking invalid token probabilities
-3. **Parallel Path Exploration**: We handle ambiguity by exploring multiple possible interpretations simultaneously
-4. **Token Healing**: Our approach corrects minor generation errors automatically through a partial credit mechanism
+1. **StateMachine**: We construct a directed graph of states and transitions from the target grammar, creating a formal model that represents all valid generation paths
+2. **Stepper Mechanism**: Our Stepper component tracks position within the state machine, consuming tokens and advancing through valid transitions
+3. **Logit Modification**: Rather than post-processing, we intervene directly in the token sampling process by modifying logit distributions to enforce grammatical constraints
+4. **Token Healing**: Our approach automatically recovers from tokenization mismatches by identifying partially matched tokens and finding valid prefixes
 
 <figure markdown>
   ![PSE Architecture Diagram](/assets/pse-architecture.png)

@@ -18,12 +18,12 @@ The **Proxy Base Agent (PBA)** is a research-backed framework for building relia
 
 ## How It Works
 
-PBA uses a cognitive architecture inspired by research in AI, cognitive science, and formal methods:
+PBA uses a state machine architecture to structure agent behavior and interactions:
 
-1. **Planning Layer**: Explicit planning representations for reliable multi-step reasoning
-2. **Execution Layer**: Controlled tool integration with formal input/output validation
-3. **Reflection Layer**: Meta-cognitive monitoring to detect and correct failures
-4. **Memory System**: Hierarchical memory with working, episodic, and semantic components
+1. **Planning States**: Thinking, Scratchpad, and Inner Monologue states for reasoning
+2. **Action States**: Tool execution and optional Python code execution capabilities
+3. **Event-Based Memory**: Simple system that maintains conversation history as events
+4. **State Machine Control**: PSE-powered state transitions with formal validation
 
 This architecture provides a robust foundation for building agents that can handle complex tasks reliably, even in unpredictable environments.
 

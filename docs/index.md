@@ -48,11 +48,11 @@ Our technologies address these challenges through principled engineering approac
 
 ### Proxy Structuring Engine
 
-PSE is a state-of-the-art library that guarantees LLMs will generate outputs conforming to specified structures. Using a hierarchical state machine architecture that works with the LLM's token generation process, PSE enforces structural guarantees while preserving the model's creative capabilities.
+PSE is a state-of-the-art system that guarantees LLMs will generate outputs conforming to specified structures. Using a hierarchical state machine architecture with "Stepper" mechanisms and parallel path exploration, PSE works directly with the LLM's token generation process to enforce structural guarantees while preserving the model's creative capabilities. Its token healing mechanism automatically recovers from tokenization mismatches, ensuring reliability even in edge cases.
 
 ### Proxy Base Agent
 
-PBA is a framework for building reliable AI agents. It provides a cognitive architecture for memory management, reasoning, and tool integration that leads to more predictable and controllable agent behavior.
+PBA is a framework for building reliable AI agents. It implements a state machine architecture that structures agent behavior into planning states (thinking, scratchpad, inner monologue) and action states (tool usage, code execution). Its event-based memory system maintains conversation history, while its formalized tool integration protocol ensures safe and controlled interaction with external systems. PBA uses the Model Control Protocol (MCP) for connecting to remote tools and services. This comprehensive architecture leads to more predictable and controllable agent behavior, even for complex tasks.
 
 ## Developer Resources
 
