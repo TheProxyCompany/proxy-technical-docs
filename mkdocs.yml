@@ -1,9 +1,10 @@
-site_name: The Proxy Company Documentation
+site_name: The Proxy Company
 site_description: Technical Documentation for The Proxy Company's Technology
 site_author: The Proxy Company
 copyright: Copyright &copy; 2025 The Proxy Company
 
-repo_url: https://github.com/TheProxyCompany/proxy-technical-docs
+repo_url: https://github.com/TheProxyCompany
+repo_name: The Proxy Company
 edit_uri: ""
 
 theme:
@@ -57,14 +58,8 @@ extra_css:
   - assets/stylesheets/extra.css
 
 nav:
-  - Home: index.md
-  - Technology:
-    - Proxy Structuring Engine: technology/pse.md
-    - Proxy Base Agent: technology/pba.md
-  - Documentation:
-    - PSE Documentation: /pse/
-    - PBA Documentation: /pba/
-  - Company Website: https://theproxycompany.com
+  - Proxy Structuring Engine: /pse/
+  - Proxy Base Agent: /pba/
 
 plugins:
   - search

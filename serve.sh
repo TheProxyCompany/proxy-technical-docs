@@ -1,12 +1,25 @@
 #!/bin/bash
+set -e
 
-# Set default project to main
-PROJECT=${1:-main}
+# Set default project to all
+PROJECT=${1:-all}
+
+# Determine Python command
+if command -v python3 &> /dev/null; then
+    PYTHON_CMD="python3"
+else
+    PYTHON_CMD="python"
+fi
+echo "Using Python command: $PYTHON_CMD"
 
 # Check if mkdocs is installed
 if ! command -v mkdocs &> /dev/null; then
     echo "mkdocs is not installed. Installing required packages..."
-    pip install mkdocs mkdocs-material pymdown-extensions
+    $PYTHON_CMD -m pip install -r requirements.txt || {
+        echo "Failed to install dependencies from requirements.txt"
+        echo "Falling back to manual installation..."
+        $PYTHON_CMD -m pip install mkdocs mkdocs-material mkdocs-material-extensions pymdown-extensions
+    }
 fi
 
 # Define port based on project
@@ -27,25 +40,30 @@ case $PROJECT in
         PROJECT_NAME="PBA Documentation"
         ;;
     all)
-        echo "Starting all documentation servers..."
-        # Start main docs
-        $0 main &
-        MAIN_PID=$!
-        # Start PSE docs
-        $0 pse &
-        PSE_PID=$!
-        # Start PBA docs
-        $0 pba &
-        PBA_PID=$!
-        echo "All documentation servers started!"
-        echo "Main docs: http://localhost:8000"
-        echo "PSE docs: http://localhost:8001"
-        echo "PBA docs: http://localhost:8002"
-        echo "Press Ctrl+C to stop all servers"
-        
-        # Wait for any to exit, then kill all
-        wait -n $MAIN_PID $PSE_PID $PBA_PID
-        pkill -P $$
+        echo "=====================================================
+Building and serving the complete documentation site...
+=====================================================
+
+This will build all documentation sites and serve them as they would appear
+on the deployed Vercel site, with:
+- Main docs at http://localhost:8000/
+- PSE docs at http://localhost:8000/pse/
+- PBA docs at http://localhost:8000/pba/
+"
+
+        # First build everything to the combined site directory
+        echo "Building all documentation sites..."
+        ./build.sh
+
+        # Now serve the combined site directory
+        echo "
+=====================================================
+Serving the combined documentation site at http://localhost:8000
+Press Ctrl+C to stop the server
+=====================================================
+"
+        cd site
+        $PYTHON_CMD -m http.server 8000
         exit 0
         ;;
     *)
