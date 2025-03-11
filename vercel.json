@@ -1,5 +1,5 @@
 {
-  "buildCommand": "./build.sh",
+  "buildCommand": "pip install mkdocs-material mkdocstrings[python] pymdown-extensions && mkdocs build && cd pse-docs && mkdocs build && cd .. && mkdir -p site/pse && cp -r pse-docs/site/* site/pse/ && cd pba-docs && mkdocs build && cd .. && mkdir -p site/pba && cp -r pba-docs/site/* site/pba/",
   "outputDirectory": "site",
   "routes": [
     { "handle": "filesystem" },
