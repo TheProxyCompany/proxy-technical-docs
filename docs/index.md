@@ -20,9 +20,8 @@ Welcome to the technical documentation portal for The Proxy Company. This site p
     
     __Key topics:__
     - State machine architecture
-    - Token processing
-    - Parallel path exploration 
-    - JSON Schema integration
+    - Token healing
+    - Structured output generation
     - Framework adapters
 
     [:octicons-book-24: Browse PSE Documentation](/pse/)
@@ -36,9 +35,7 @@ Welcome to the technical documentation portal for The Proxy Company. This site p
     __Key topics:__
     - Agent architecture
     - Tool integration
-    - Memory & context systems
-    - Planning & reasoning
-    - Multi-agent orchestration
+    - Reliable AI systems
 
     [:octicons-book-24: Browse PBA Documentation](/pba/)
 
@@ -121,7 +118,6 @@ response = agent.run("Calculate 125 + 375 and remember the result")
     Comprehensive API documentation.
 
     [:octicons-arrow-right-24: PSE API Reference](/pse/api/structuring-engine)
-    [:octicons-arrow-right-24: PBA API Reference](/pba/api/agent)
 
 </div>
 
