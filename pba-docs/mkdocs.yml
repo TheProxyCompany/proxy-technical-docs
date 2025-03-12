@@ -83,7 +83,7 @@ extra:
 plugins:
   - search
   - social:
-      enabled: !!bool !ENV [CI, false]
+      enabled: !ENV [CI, false]
       cache: false
       cards_layout: default/only/image
       cards_layout_options:
