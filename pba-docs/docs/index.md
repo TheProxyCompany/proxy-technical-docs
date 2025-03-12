@@ -86,4 +86,4 @@ The Proxy Base Agent follows a structured, two-phase workflow:
 ---
 
 [View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
-[Read the Docs](introduction/overview.md){: .md-button }
+[Read the Docs](concepts/overview.md){: .md-button }
