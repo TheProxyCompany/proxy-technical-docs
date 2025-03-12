@@ -12,6 +12,7 @@ The **Proxy Structuring Engine** (PSE) is a state-of-the-art technology that add
 
 - **State Machine Architecture**: Uses a hierarchical state machine to guide generation according to your schema
 - **Token Healing**: Automatically recovers from minor errors to maintain structural validity
+- **Multi-Token Processing**: Efficiently handles token sequences for optimal generation
 - **Framework Agnostic**: Works seamlessly with PyTorch, MLX, TensorFlow, and JAX
 - **Minimal Overhead**: Designed for production use with ~20ms per token overhead
 - **Schema Flexibility**: Supports JSON Schema, Pydantic models, and custom grammar definitions
@@ -25,7 +26,9 @@ PSE uses a novel approach to constrain LLM generation:
 3. **Stepper System**: During generation, the Stepper tracks the current position in the state machine and validates transitions
 4. **Token Processing**: PSE directly modifies logit distributions to enforce grammatical constraints
 5. **Token Healing**: When tokenization mismatches occur, PSE can recover by finding valid token prefixes
-6. **Valid Output**: The result is a properly structured output that follows your schema while preserving creativity
+6. **Multi-Token Handling**: PSE efficiently processes token sequences for better performance
+7. **Path Selection**: Sophisticated algorithms choose the optimal continuation when multiple paths are valid
+8. **Valid Output**: The result is a properly structured output that follows your schema while preserving creativity
 
 This approach gives you the best of both worlds: the creative power of LLMs with the reliability of structured systems.
 
@@ -88,7 +91,10 @@ Our comprehensive documentation covers everything you need to understand and imp
 ### Core Concepts
 
 - [State Machine Architecture](core-concepts/state-machine.md) - How PSE's state machine works
-- [Token Healing](core-concepts/token-healing.md) - Understanding PSE's error recovery
+- [Core Architecture](core-concepts/core-architecture.md) - Under the hood of PSE's high-performance core
+- [Stepper System](core-concepts/stepper.md) - Understanding PSE's state tracking system
+- [Token Healing](core-concepts/token-healing.md) - How PSE recovers from tokenization mismatches
+- [Multi-Token Processing](core-concepts/multi-token-processing.md) - Efficient handling of token sequences
 
 ### API Reference
 

@@ -75,12 +75,16 @@ nav:
   
   - Core Concepts:
     - State Machine Architecture: core-concepts/state-machine.md
+    - Core Architecture: core-concepts/core-architecture.md
+    - State Graph Traversal Algorithm: core-concepts/state-graph-traversal.md
+    - Stepper System: core-concepts/stepper.md
+    - Token Healing: core-concepts/token-healing.md
+    - Multi-Token Processing: core-concepts/multi-token-processing.md
     - State Machine Types:
       - Base State Machines: core-concepts/state-machines/base.md
       - Data Type State Machines: core-concepts/state-machines/datatypes.md
       - Format-Specific State Machines: core-concepts/state-machines/formats.md
       - Schema Sources: core-concepts/state-machines/schema-sources.md
-    - Token Healing: core-concepts/token-healing.md
   
   - API Reference:
     - StructuringEngine: api/structuring-engine.md
