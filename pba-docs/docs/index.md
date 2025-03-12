@@ -4,6 +4,12 @@ The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Stru
 
 The base agent enables **any language model** to function effectively as an agent, capable of structured interactions, multi-step reasoning, and external tool usage. We invite researchers and developers to experiment with and build upon this foundation.
 
+## What is an Agent?
+
+> An agent is a system that takes actions in an environment.
+
+The Proxy Base Agent, in simple terms, combines state machine logic with language model inference to create a system that can reason and take actions in an environment.
+
 ---
 ## Installation & Quickstart
 
@@ -80,4 +86,3 @@ The base agent requires access to a language models tokenizer and sampling logic
 ---
 
 [View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
-[Read the Docs](concepts/overview.md){: .md-button }
