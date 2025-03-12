@@ -52,7 +52,7 @@ echo "Using mkdocs command: $MKDOCS"
 echo "Building main documentation..."
 $MKDOCS build
 
-echo "ls -la: $(ls -la)"
+echo "ls -la assets: $(ls -la assets)"
 # Create directories for sub-docs
 mkdir -p site/pse
 mkdir -p site/pba
