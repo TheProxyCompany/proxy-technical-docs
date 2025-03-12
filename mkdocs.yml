@@ -63,10 +63,8 @@ extra_css:
 
 nav:
   - Home: index.md
-  - About: about.md
-  - Technologies:
-    - Proxy Structuring Engine: /pse/
-    - Proxy Base Agent: /pba/
+  - Proxy Structuring Engine: /pse/
+  - Proxy Base Agent: /pba/
 
 plugins:
   - search
