@@ -2,9 +2,7 @@
 
 The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, and is intended to be a starting point for developers and researchers looking to build agents using language models.
 
-The base agent uses our patented **Proxy Structuring Engine** to enable **any language model** to function effectively as an agent, capable of structured interactions, multi-step reasoning, and external tool usage.
-
-The agent is designed with a local-first approach, meaning that the model and all data is stored on the machine running the agent. We do not currently provide a hosted version of the agent, or an off-the-shelf API. However, we support multiple inference frontends via the Huggingface Transformers library; with tested support for MLX, PyTorch, TensorFlow, and Jax.
+The base agent enables **any language model** to function effectively as an agent, capable of structured interactions, multi-step reasoning, and external tool usage.
 
 We invite researchers and developers to experiment with and build upon this foundation.
 
@@ -48,6 +46,38 @@ Proxy Base Agent is explicitly designed to empower developers to add custom func
 - [Defining Custom States](extending/custom-states.md): Create new cognitive or action states.
 - [Building Custom State Graphs](extending/custom-state-graphs.md): Tailor agent behavior through custom workflows.
 - [Model Context Protocol](extending/model-context-protocol.md): The base agent can act as multiple MCP Clients, connecting to multiple MCP Servers.
+
+---
+
+## Running the Agent
+
+The agent is designed vertically, meaning that the model and all data is stored on the machine running the agent.
+
+Run the agent with:
+
+```bash
+python -m agent
+```
+
+which will launch an interactive setup wizard in your terminal.
+
+---
+
+## Language Models
+
+LLMs from your local huggingface cache will be used, or you can download a model from the Huggingface Hub during setup.
+
+Ideally any model that is supported by the Huggingface Transformers library will work with the base agent; with agentic/instruct tuned models performing best.
+
+---
+
+## API Inference
+
+We do not currently provide a hosted version of the base agent, or an off-the-shelf API.
+
+The base agent currently supports multiple inference frontends via the Huggingface Transformers library; with tested support for MLX & PyTorch; with planned support for VLLM, SGLang, TensorFlow, and Jax.
+
+The base agent requires access to a language models tokenizer and sampling logic - this is currently only supported for local models.
 
 ---
 
