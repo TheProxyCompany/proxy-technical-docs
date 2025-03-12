@@ -2,6 +2,7 @@
 set -e
 
 echo "Starting Vercel build..."
+CI=true
 
 # Check available Python commands
 echo "Checking for Python..."
