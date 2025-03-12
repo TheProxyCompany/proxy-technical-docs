@@ -90,7 +90,7 @@ plugins:
       cache: false
       cards_layout: default/only/image
       cards_layout_options:
-        background_image: docs/assets/pse-logo.png
+        background_image: assets/pse-logo.png
 
 # For Vercel deployment
 use_directory_urls: true

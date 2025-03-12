@@ -71,7 +71,7 @@ plugins:
       cache: false
       cards_layout: default/only/image
       cards_layout_options:
-        background_image: docs/assets/tpc-logo.png
+        background_image: assets/tpc-logo.png
 
 # For Vercel deployment
 use_directory_urls: true
