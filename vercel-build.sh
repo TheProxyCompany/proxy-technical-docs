@@ -27,6 +27,13 @@ echo "Installing dependencies..."
 python3 -m pip install --upgrade pip || python -m pip install --upgrade pip
 python3 -m pip install -U -r requirements.txt || python -m pip install -U -r requirements.txt
 
+# Install pngquant for image optimization
+echo "Installing pngquant..."
+apt-get update && apt-get install -y pngquant || yum install -y pngquant || brew install pngquant || echo "Warning: Could not install pngquant automatically"
+
+# Verify pngquant installation
+which pngquant || echo "Warning: pngquant not found in PATH"
+
 if [ -n "$GH_TOKEN" ]; then
   INSIDERS=true
   echo "Installing mkdocs-material-insiders..."

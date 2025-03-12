@@ -77,17 +77,14 @@ extra:
 
 plugins:
   - search
-  - group:
-      enabled: !ENV INSIDERS
-      plugins:
-        - optimize
-        - privacy
-        - social:
-            enabled: !ENV [CI, false]
-            cards_layout: default/only/image
-            cards_layout_options:
-              background_image: assets/pba-logo.png
-              background_color: transparent
+  - optimize
+  - privacy
+  - social:
+      enabled: !ENV [CI, false]
+      cards_layout: default/only/image
+      cards_layout_options:
+        background_image: assets/pba-logo.png
+        background_color: transparent
 
 extra_css:
   - assets/stylesheets/extra.css
