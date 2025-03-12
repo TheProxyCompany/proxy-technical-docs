@@ -37,6 +37,7 @@ $PYTHON_CMD -m mkdocs build || {
   echo "Warning: PSE docs build had errors, but continuing..."
   mkdir -p site
 }
+echo "PSE docs build complete"
 if [ -d "site" ]; then
   echo "Copying PSE documentation to main site/pse directory..."
   cd ..
