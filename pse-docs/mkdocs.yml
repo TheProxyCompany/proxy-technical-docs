@@ -86,11 +86,11 @@ nav:
 plugins:
   - search
   - social:
+      enabled: !ENV [CI, false]
+      cache: false
+      cards_layout: default/only/image
       cards_layout_options:
-        background_image: assets/pse-logo.png
-        title: Proxy Structuring Engine
-        description: Comprehensive technical documentation for the Proxy Structuring Engine (PSE)
-        logo: assets/proxy-p.svg
+        background_image: docs/assets/pse-logo.png
 
 # For Vercel deployment
 use_directory_urls: true
