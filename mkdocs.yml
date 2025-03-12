@@ -70,7 +70,6 @@ plugins:
       enabled: !ENV [CI, false]
       cards_layout_options:
         background_image: assets/tpc-logo.png
-        background_color: transparent
 
 # For Vercel deployment
 use_directory_urls: true
