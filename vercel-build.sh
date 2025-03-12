@@ -60,12 +60,14 @@ mkdir -p site/pba
 # Build PSE docs
 echo "Building PSE documentation..."
 cd pse-docs
+echo "ls -la pse-docs: $(ls -la ../assets)"
 $MKDOCS build || echo "Warning: PSE docs build failed, continuing..."
 if [ -d "site" ]; then
   cp -r site/* ../site/pse/ || echo "Warning: PSE site copy failed"
 else
   echo "Warning: PSE site directory not found"
 fi
+echo "PSE docs build complete"
 cd ..
 
 # Build PBA docs
