@@ -9,26 +9,19 @@ We invite researchers and developers to experiment with and build upon this foun
 
 ---
 
-## Usage
+## Installation & Quickstart
+
+Get the Proxy Base Agent running quickly:
 
 ```bash
-# Start the agent with the interactive setup wizard
+# Install required dependencies
+pip install proxy-base-agent
+
+# Launch interactive setup wizard
 python -m agent
 ```
 
-### API Reference
-
-- [Agent](api/agent.md) - Complete Agent API reference
-
-[View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
-[Read the Docs](introduction/overview.md){: .md-button }
-
-
----
-
-## Quick Start
-
-To quickly begin experimenting with the Proxy Base Agent, follow these guides:
+For more detailed guides, see:
 
 - [Installation Guide](getting-started/installation.md)
 - [Quickstart Tutorial](getting-started/quickstart.md)
@@ -89,20 +82,6 @@ The Proxy Base Agent follows a structured, two-phase workflow:
 
 - **Planning Phase**: Iteratively cycles through cognitive states (`Thinking`, `Scratchpad`, `Inner Monologue`) to build reasoning.
 - **Action Phase**: Executes tasks via tools or Python code execution, transitioning seamlessly from planning to action.
-
----
-
-## Installation & Quickstart
-
-Get the Proxy Base Agent running quickly:
-
-```bash
-# Install required dependencies
-pip install proxy-base-agent
-
-# Launch interactive setup wizard
-python -m agent
-```
 
 ---
 
