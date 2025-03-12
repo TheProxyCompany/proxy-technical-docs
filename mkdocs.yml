@@ -25,9 +25,10 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   features:
-    - navigation.tabs
     - navigation.sections
     - navigation.expand
+    - navigation.indexes
+    - navigation.instant
     - search.suggest
     - search.highlight
     - content.code.annotate
@@ -63,35 +64,9 @@ extra_css:
 nav:
   - Home: index.md
   - About: about.md
-  - Technology:
-    - Proxy Structuring Engine: 
-      - Overview: technology/pse.md
-      - Detailed Documentation: /pse/
-    - Proxy Base Agent: 
-      - Overview: technology/pba.md
-      - Detailed Documentation: /pba/
-  - Research:
-    - Proxy Structuring Engine: research/pse.md
-    - Proxy Base Agent: research/pba.md
-  - Resources:
-    - Introduction:
-      - Overview: introduction/overview.md
-      - Key Features: introduction/key-features.md
-      - Use Cases: introduction/use-cases.md
-      - Comparison: introduction/comparison.md
-    - Getting Started:
-      - Installation: getting-started/installation.md
-      - Quickstart: getting-started/quickstart.md
-      - Basic Concepts: getting-started/basic-concepts.md
-      - First Project: getting-started/first-project.md
-    - Core Concepts:
-      - State Machine: core-concepts/state-machine.md
-      - Token Healing: core-concepts/token-healing.md
-    - Guides:
-      - JSON Schema: guides/json-schema.md
-    - API Reference:
-      - Structuring Engine: api/structuring-engine.md
-      - Framework Adapters: api/framework-adapters.md
+  - Technologies:
+    - Proxy Structuring Engine: /pse/
+    - Proxy Base Agent: /pba/
   - Contact: contact.md
 
 plugins:
