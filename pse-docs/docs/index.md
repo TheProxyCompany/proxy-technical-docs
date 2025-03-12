@@ -101,4 +101,3 @@ Our comprehensive documentation covers everything you need to understand and imp
 PSE is available under the Apache 2.0 license. We welcome contributions from the community to help improve and extend this technology.
 
 [View on GitHub](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
-[Read the Docs](introduction/overview.md){: .md-button }
