@@ -3,6 +3,7 @@ site_description: A stateful, tool-enabled agent built with the Proxy Structurin
 site_author: The Proxy Company
 copyright: Copyright &copy; 2025 The Proxy Company
 
+site_url: https://docs.theproxycompany.com/pba/
 repo_url: https://github.com/TheProxyCompany/proxy-base-agent
 repo_name: Proxy Base Agent
 edit_uri: ""
@@ -80,8 +81,16 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/TheProxyCompany/proxy-base-agent
-  homepage: https://docs.theproxycompany.com
+  homepage: https://docs.theproxycompany.com/pba/
   social_image: assets/pba-logo.png
+
+plugins:
+  - social:
+      cards_layout_options:
+        background_image: assets/pba-logo.png
+        title: Proxy Base Agent
+        description: Comprehensive technical documentation for the Proxy Base Agent (PBA)
+        logo: assets/proxy-p.svg
 
 extra_css:
   - assets/stylesheets/extra.css

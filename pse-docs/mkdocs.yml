@@ -3,6 +3,7 @@ site_description: Comprehensive technical documentation for the Proxy Structurin
 site_author: The Proxy Company
 copyright: Copyright &copy; 2025 The Proxy Company
 
+site_url: https://docs.theproxycompany.com/pse/
 repo_url: https://github.com/TheProxyCompany/proxy-structuring-engine
 repo_name: Proxy Structuring Engine
 edit_uri: ""
@@ -53,11 +54,7 @@ markdown_extensions:
 
 extra:
   generator: false
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/TheProxyCompany/proxy-structuring-engine
-  homepage: https://docs.theproxycompany.com
-  social_image: assets/pse-logo.png
+  homepage: https://docs.theproxycompany.com/pse/
 
 extra_css:
   - assets/stylesheets/extra.css
@@ -88,8 +85,14 @@ nav:
 
 plugins:
   - search
+  - social:
+      cards_layout_options:
+        background_image: assets/pse-logo.png
+        title: Proxy Structuring Engine
+        description: Comprehensive technical documentation for the Proxy Structuring Engine (PSE)
+        logo: assets/proxy-p.svg
   - sitemap:
-      sitemap_url: https://docs.proxy.ing/pse/
+      sitemap_url: https://docs.theproxycompany.com/pse/
 
 # For Vercel deployment
 use_directory_urls: true

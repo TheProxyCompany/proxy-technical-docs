@@ -3,6 +3,7 @@ site_description: Technical Documentation for The Proxy Company's Technology
 site_author: The Proxy Company
 copyright: Copyright &copy; 2025 The Proxy Company
 
+site_url: https://docs.theproxycompany.com/
 repo_url: https://github.com/TheProxyCompany
 repo_name: The Proxy Company
 edit_uri: ""
@@ -53,11 +54,7 @@ markdown_extensions:
 
 extra:
   generator: false
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/TheProxyCompany
   homepage: https://docs.theproxycompany.com
-  social_image: assets/tpc-logo.png
 
 extra_css:
   - assets/stylesheets/extra.css
@@ -69,8 +66,14 @@ nav:
 
 plugins:
   - search
+  - social:
+      cards_layout_options:
+        background_image: assets/tpc-logo.png
+        title: The Proxy Company
+        description: Comprehensive technical documentation for The Proxy Company's Technology
+        logo: assets/proxy-p.svg
   - sitemap:
-      sitemap_url: https://docs.proxy.ing/
-      
+      sitemap_url: https://docs.theproxycompany.com/
+
 # For Vercel deployment
 use_directory_urls: true
