@@ -1,12 +1,7 @@
 # Proxy Structuring Engine
 
-<div class="hero-content" style="text-align: center; margin: 2em 0;">
-  <p style="font-size: 1.5em; max-width: 800px; margin: 0 auto;">
-    Transform stochastic language models into deterministic systems for reliable structured outputs
-  </p>
-</div>
-
-The **Proxy Structuring Engine** (PSE) is a state-of-the-art technology that addresses a fundamental challenge in working with large language models: ensuring they produce outputs that conform to specific structures while preserving their creative capabilities.
+The **Proxy Structuring Engine** ensures that language models produce outputs that conform to specific structures while preserving their creative capabilities.
+It can be used for common uses cases including tool use, synthetic data generation, API integration, structured output, and more.
 
 ## Key Features
 

@@ -1,6 +1,7 @@
 # The Proxy Company Documentation
 
 Welcome to the technical documentation for The Proxy Company.
+We engineer cutting-edge AI technologies, transforming complex research into practical tools for developers and businesses.
 
 ## Our Technologies
 
