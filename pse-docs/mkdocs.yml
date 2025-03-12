@@ -57,6 +57,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/TheProxyCompany/proxy-structuring-engine
   homepage: https://docs.theproxycompany.com
+  social_image: assets/pse-logo.png
 
 extra_css:
   - assets/stylesheets/extra.css
@@ -87,6 +88,8 @@ nav:
 
 plugins:
   - search
+  - sitemap:
+      sitemap_url: https://docs.proxy.ing/pse/
 
 # For Vercel deployment
 use_directory_urls: true

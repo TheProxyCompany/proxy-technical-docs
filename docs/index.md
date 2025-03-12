@@ -13,7 +13,7 @@ This documentation will help you understand and utilize our technologies effecti
 -   :material-engine-outline: __Proxy Structuring Engine (PSE)__
 
     ---
-    Dynamically guide language models to produce structured outputs that strictly adhere to predefined requirements without sacrificing their creative capabilities.
+    Dynamically structure language models to produce outputs that adhere to specific requirements without sacrificing their creative capabilities.
 
     [:octicons-book-24: Browse PSE Documentation](/pse/){: .md-button .md-button--primary }
 

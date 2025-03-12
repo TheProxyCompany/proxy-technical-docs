@@ -53,6 +53,8 @@ markdown_extensions:
 
 plugins:
   - search
+  - sitemap:
+      sitemap_url: https://docs.proxy.ing/pba/
 
 nav:
   - Home: index.md
@@ -79,6 +81,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/TheProxyCompany/proxy-base-agent
   homepage: https://docs.theproxycompany.com
+  social_image: assets/pba-logo.png
 
 extra_css:
   - assets/stylesheets/extra.css

@@ -57,6 +57,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/TheProxyCompany
   homepage: https://docs.theproxycompany.com
+  social_image: assets/tpc-logo.png
 
 extra_css:
   - assets/stylesheets/extra.css
@@ -68,6 +69,8 @@ nav:
 
 plugins:
   - search
-
+  - sitemap:
+      sitemap_url: https://docs.proxy.ing/
+      
 # For Vercel deployment
 use_directory_urls: true

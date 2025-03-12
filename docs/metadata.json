@@ -1,0 +1,21 @@
+{
+  "name": "The Proxy Company Documentation",
+  "description": "Technical Documentation for The Proxy Company's Technology",
+  "products": [
+    {
+      "name": "Proxy Structuring Engine",
+      "slug": "pse",
+      "description": "A state machine-based engine for structured LLM outputs",
+      "url": "/pse/"
+    },
+    {
+      "name": "Proxy Base Agent",
+      "slug": "pba",
+      "description": "A stateful, tool-enabled agent built with the Proxy Structuring Engine",
+      "url": "/pba/"
+    }
+  ],
+  "githubOrg": "TheProxyCompany",
+  "twitterHandle": "@ProxyCompany",
+  "websiteUrl": "https://proxy.ing"
+}

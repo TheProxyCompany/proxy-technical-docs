@@ -24,8 +24,8 @@ echo "Using Python: $(which python)"
 # Install dependencies
 echo "Installing dependencies..."
 python3 -m pip install --upgrade pip || python -m pip install --upgrade pip
-python3 -m pip install mkdocs==1.5.3 mkdocs-material==9.5.3 pymdown-extensions==10.3 mkdocs-material-extensions==1.3 || 
-  python -m pip install mkdocs==1.5.3 mkdocs-material==9.5.3 pymdown-extensions==10.3 mkdocs-material-extensions==1.3
+python3 -m pip install mkdocs==1.5.3 mkdocs-material==9.5.3 pymdown-extensions==10.3 mkdocs-material-extensions==1.3 mkdocs-sitemap==1.4.2 || 
+  python -m pip install mkdocs==1.5.3 mkdocs-material==9.5.3 pymdown-extensions==10.3 mkdocs-material-extensions==1.3 mkdocs-sitemap==1.4.2
 
 # Using mkdocs from virtual environment
 if command -v python3 &> /dev/null; then
@@ -64,6 +64,12 @@ else
   echo "Warning: PBA site directory not found"
 fi
 cd ..
+
+# Ensure robots.txt is copied to the site directory
+if [ -f "robots.txt" ]; then
+  echo "Copying robots.txt to site directory..."
+  cp robots.txt site/
+fi
 
 echo "Build complete!"
 echo "Site directory contents:"

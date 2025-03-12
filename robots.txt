@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Allow: /pse/
+Allow: /pba/
+
+# Main documentation sitemap
+Sitemap: https://docs.proxy.ing/sitemap.xml
+
+# Product-specific sitemaps
+Sitemap: https://docs.proxy.ing/pse/sitemap.xml
+Sitemap: https://docs.proxy.ing/pba/sitemap.xml
+
+# Crawl-delay recommendation
+Crawl-delay: 1
