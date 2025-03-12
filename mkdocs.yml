@@ -67,7 +67,7 @@ nav:
 plugins:
   - search
   - group:
-      enabled: !ENV INSIDERS
+      enabled: !ENV [INSIDERS, false]
       plugins:
         - optimize
         - privacy
