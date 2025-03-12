@@ -91,8 +91,6 @@ plugins:
         title: Proxy Structuring Engine
         description: Comprehensive technical documentation for the Proxy Structuring Engine (PSE)
         logo: assets/proxy-p.svg
-  - sitemap:
-      sitemap_url: https://docs.theproxycompany.com/pse/
 
 # For Vercel deployment
 use_directory_urls: true

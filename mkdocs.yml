@@ -72,8 +72,6 @@ plugins:
         title: The Proxy Company
         description: Comprehensive technical documentation for The Proxy Company's Technology
         logo: assets/proxy-p.svg
-  - sitemap:
-      sitemap_url: https://docs.theproxycompany.com/
 
 # For Vercel deployment
 use_directory_urls: true
