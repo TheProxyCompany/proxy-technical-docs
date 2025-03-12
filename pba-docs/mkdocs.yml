@@ -68,10 +68,6 @@ nav:
     - Custom States: extending/custom-states.md
   - API Reference:
     - Agent: api/agent.md
-    - State Machine: api/state_machine.md
-    - Tools: api/tools.md
-  - Contributing: contributing.md
-  - License: license.md
 
 extra:
   generator: false
