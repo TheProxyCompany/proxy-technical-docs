@@ -84,6 +84,13 @@ if [ -f "robots.txt" ]; then
   cp robots.txt site/
 fi
 
+# Copy assets from root assets folder to site/assets
+if [ -d "assets" ]; then
+  echo "Copying assets from root directory to site/assets..."
+  mkdir -p site/assets
+  cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
+fi
+
 echo "Build complete!"
 echo "Site directory contents:"
 ls -la site
