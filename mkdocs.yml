@@ -67,7 +67,6 @@ nav:
   - Technologies:
     - Proxy Structuring Engine: /pse/
     - Proxy Base Agent: /pba/
-  - Contact: contact.md
 
 plugins:
   - search

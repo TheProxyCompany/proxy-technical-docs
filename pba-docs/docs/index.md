@@ -2,9 +2,7 @@
 
 The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, and is intended to be a starting point for developers and researchers looking to build agents using language models.
 
-The base agent enables **any language model** to function effectively as an agent, capable of structured interactions, multi-step reasoning, and external tool usage.
-
-We invite researchers and developers to experiment with and build upon this foundation.
+The base agent enables **any language model** to function effectively as an agent, capable of structured interactions, multi-step reasoning, and external tool usage. We invite researchers and developers to experiment with and build upon this foundation.
 
 ---
 ## Installation & Quickstart
