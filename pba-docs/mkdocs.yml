@@ -1,83 +1,87 @@
-site_name: Proxy Base Agent Documentation
-site_description: Comprehensive technical documentation for the Proxy Base Agent (PBA)
-site_author: The Proxy Company
-copyright: Copyright &copy; 2025 The Proxy Company
-
-repo_url: https://github.com/TheProxyCompany/proxy-base-agent
-repo_name: Proxy Base Agent
+site_name: Proxy Base Agent
+site_description: A stateful, tool-enabled agent built with the Proxy Structuring Engine.
+site_url: https://docs.theproxy.company/pba/ # Update with the correct URL
+repo_url: https://github.com/TheProxyCompany/agent # Assuming this is the correct repo
+repo_name: TheProxyCompany/agent
 edit_uri: ""
 
 theme:
   name: material
-  palette:
-    # Light mode
-    - scheme: default
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    # Dark mode
-    - scheme: slate
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
   features:
-    - navigation.sections
-    - navigation.expand
-    - navigation.indexes
     - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
     - search.suggest
     - search.highlight
-    - content.code.annotate
+    - content.tabs.link
+    - content.code.annotation
     - content.code.copy
-    - palette.toggle
-  logo: assets/proxy-p.svg
-  favicon: assets/proxy-p.svg
-
-markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.highlight
-  - pymdownx.inlinehilite
-  - pymdownx.tabbed
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.tasklist
-  - attr_list
-  - md_in_html
-
-extra:
-  generator: false
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/TheProxyCompany/proxy-base-agent
-  homepage: https://docs.theproxycompany.com
-
-extra_css:
-  - assets/stylesheets/extra.css
-
-nav:
-  - Home: index.md
-  - Introduction:
-    - Overview: introduction/overview.md
-    - Key Features: introduction/key-features.md
-    - Use Cases: introduction/use-cases.md
-    - Comparison: introduction/comparison.md
-  
-  - Getting Started:
-    - Installation: getting-started/installation.md
-    - Quickstart: getting-started/quickstart.md
-  
-  - API Reference:
-    - Agent: api/agent.md
+  language: en
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+      primary: indigo
+      accent: indigo
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+      primary: indigo
+      accent: indigo
+  icon:
+    repo: fontawesome/brands/github
 
 plugins:
   - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quickstart: getting-started/quickstart.md
+  - Concepts:
+    - Overview: concepts/overview.md
+    - State Machine: concepts/state-machine.md
+    - Tools: concepts/tools.md
+  - Extending the Agent:
+    - Custom Tools: extending/custom-tools.md
+    - Custom States: extending/custom-states.md
+  - API Reference:
+    - Agent: api/agent.md
+    - State Machine: api/state_machine.md
+    - Tools: api/tools.md
+  - Contributing: contributing.md
+  - License: license.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - toc:
+      permalink: true
+  - codehilite:
+      guess_lang: false
+  - footnotes
+  - meta
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/TheProxyCompany
+      name: The Proxy Company on GitHub
 
 # For Vercel deployment
 use_directory_urls: true

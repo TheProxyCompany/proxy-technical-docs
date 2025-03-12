@@ -1,6 +1,34 @@
-# Quickstart Guide
+# Quickstart
 
-This guide will help you create your first Proxy Base Agent and understand the basic workflow.
+This quickstart guide will walk you through running the Proxy Base Agent and interacting with it.
+
+1.  **Run the Agent:**
+
+    After installing the agent (see [Installation](installation.md)), you can start it using the following command:
+
+    ```bash
+    python -m agent
+    ```
+
+2.  **Interactive Setup:**
+
+    The agent will guide you through an interactive setup process. This allows you to configure the agent's initial state and parameters.
+
+3.  **Interact with the Agent:**
+
+    Once the setup is complete, you can interact with the agent. The agent will process your input, transition through its states, and potentially use tools to achieve its goal. Observe the agent's output to understand its reasoning and actions.
+
+4. **Example Interaction (Illustrative):**
+    The interaction will depend on the specific tools and configuration, but a simplified example might look like this:
+
+    ```
+    Agent: (Thinking) I need to determine the user's request.
+    Agent: (Scratchpad) User input: "What is the weather in London?"
+    Agent: (Inner Monologue) I should use the weather tool to get the current weather in London.
+    Agent: (Tool Call) Calling tool: weather_tool with input: {"location": "London"}
+    Agent: (Tool Result) {"temperature": 15, "condition": "Cloudy"}
+    Agent: The weather in London is currently 15 degrees Celsius and Cloudy.
+    ```
 
 ## Create a Simple Agent
 

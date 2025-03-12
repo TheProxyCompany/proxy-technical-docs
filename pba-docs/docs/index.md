@@ -1,12 +1,35 @@
 # Proxy Base Agent
 
-<div class="hero-content" style="text-align: center; margin: 2em 0;">
-  <p style="font-size: 1.5em; max-width: 800px; margin: 0 auto;">
-    A stateful, tool-enabled agent with structured state transitions
-  </p>
-</div>
+The Proxy Base Agent is a foundational, stateful, tool-enabled agent built using the [Proxy Structuring Engine (PSE)](https://github.com/TheProxyCompany/proxy-structuring-engine).  It serves as a robust starting point for developing custom agents tailored to specific tasks and workflows. Think of it as a "base model" – providing core functionality that can be extended and fine-tuned.
 
-The **Proxy Base Agent (PBA)** is a stateful, tool-enabled agent built with the Proxy Structuring Engine. It implements a state machine architecture that guides language models through planning and action phases, creating reliable, structured agent behavior through principled state transitions.
+## Key Features
+
+*   **State Machine Architecture:**  The agent's behavior is governed by a flexible state machine, allowing for complex, multi-step interactions.
+*   **Tool Integration:**  Easily incorporate external tools and APIs to expand the agent's capabilities.
+*   **Extensible Design:**  Designed for customization, allowing developers to create custom states, tools, and logic.
+*   **Built on PSE:** Leverages the power and flexibility of the Proxy Structuring Engine.
+
+## Getting Started
+
+To get started with the Proxy Base Agent, check out the following resources:
+
+*   [Installation](getting-started/installation.md)
+*   [Quickstart](getting-started/quickstart.md)
+
+## Concepts
+
+Understand the core concepts behind the Proxy Base Agent:
+
+*   [Overview](concepts/overview.md)
+*   [State Machine](concepts/state-machine.md)
+*   [Tools](concepts/tools.md)
+
+## Extending the Agent
+
+Learn how to customize the Proxy Base Agent to fit your needs:
+
+*   [Custom Tools](extending/custom-tools.md)
+*   [Custom States](extending/custom-states.md)
 
 ## Architecture
 

@@ -1,6 +1,28 @@
 # Installation
 
-This guide will help you install and set up the Proxy Base Agent (PBA) framework in your environment.
+The Proxy Base Agent requires Python 3.11 or higher.
+
+## Prerequisites
+
+1.  **Python 3.11+:** Ensure you have a compatible Python version installed.
+2.  **uv:** We recommend using `uv` for fast and reliable dependency management. Install it via pip:
+    ```bash
+    pip install uv
+    ```
+
+## Installation Steps
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/TheProxyCompany/agent.git  # Use the correct repository URL
+    cd agent
+    ```
+
+2.  **Install Dependencies:**
+    ```bash
+    uv pip install -e .
+    ```
+    This command installs the agent and its dependencies in editable mode (`-e .`), making it easy to modify the code and see changes immediately.
 
 ## System Requirements
 
@@ -99,14 +121,14 @@ After installation, you may need to set up API keys or other configuration for c
 # Example configuration
 models:
   default: "meta-llama/Llama-3-8b-instruct"
-  
+
 api_keys:
   openai: "YOUR_OPENAI_API_KEY"
   anthropic: "YOUR_ANTHROPIC_API_KEY"
-  
+
 memory:
   storage_path: "~/.pba/memory"
-  
+
 logging:
   level: "info"
   path: "~/.pba/logs"
