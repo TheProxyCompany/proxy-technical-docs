@@ -30,4 +30,3 @@ This documentation will help you understand and utilize our technologies effecti
 
 - [Company Website](https://theproxycompany.com)
 - [GitHub Organization](https://github.com/TheProxyCompany)
-- [Contact Us](https://theproxycompany.com/contact)
