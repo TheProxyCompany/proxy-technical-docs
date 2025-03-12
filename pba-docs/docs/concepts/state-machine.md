@@ -34,4 +34,4 @@ You can extend the state machine by:
 *   **Modifying Transitions:** Change the conditions that trigger transitions between states.
 *   **Adding Actions:** Define actions to be performed when entering or exiting a state.
 
-See [Extending the Agent](extending/custom-states.md) for more details.
+See [Extending the Agent](../extending/custom-states.md) for more details.

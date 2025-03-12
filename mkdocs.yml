@@ -66,14 +66,16 @@ nav:
 
 plugins:
   - search
-  - optimize
-  - privacy
-  - social:
+  - group:
       enabled: !ENV [CI, false]
-      cards_layout: default/only/image
-      cards_layout_options:
-        background_image: assets/tpc-logo.png
-        background_color: transparent
+      plugins:
+        - optimize
+        - privacy
+        - social:
+            cards_layout: default/only/image
+            cards_layout_options:
+              background_image: /assets/tpc-logo.png
+              background_color: transparent
 
 # For Vercel deployment
 use_directory_urls: true

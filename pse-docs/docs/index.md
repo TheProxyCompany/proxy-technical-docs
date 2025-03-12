@@ -68,16 +68,6 @@ print(result)
 - **Report Generation**: Create properly formatted reports with consistent structure
 - **Game Systems**: Define and enforce complex rules for game AI
 
-## Documentation
-
-Our comprehensive documentation covers everything you need to understand and implement PSE:
-
-### Introduction
-
-- [Overview](introduction/overview.md) - A complete introduction to PSE
-- [Key Features](introduction/key-features.md) - Detailed exploration of PSE's capabilities
-- [Use Cases](introduction/use-cases.md) - Real-world applications and examples
-
 ### Getting Started
 
 - [Installation](getting-started/installation.md) - Setting up PSE in your environment

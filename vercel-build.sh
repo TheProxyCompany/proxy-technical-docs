@@ -29,7 +29,7 @@ python3 -m pip install -U -r requirements.txt || python -m pip install -U -r req
 
 # Install pngquant for image optimization
 echo "Installing pngquant..."
-apt-get update && apt-get install -y pngquant || yum install -y pngquant || brew install pngquant || echo "Warning: Could not install pngquant automatically"
+yum install -y pngquant || brew install pngquant || echo "Warning: Could not install pngquant automatically"
 
 # Verify pngquant installation
 which pngquant || echo "Warning: pngquant not found in PATH"

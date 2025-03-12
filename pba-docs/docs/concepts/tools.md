@@ -28,4 +28,4 @@ The Proxy Base Agent comes with a set of basic tools. These may include (but are
 
 ## Extending the Agent with Tools
 
-One of the primary ways to extend the Proxy Base Agent is by adding custom tools. This allows you to tailor the agent to your specific needs and integrate it with the services and data sources relevant to your application. See [Extending the Agent](extending/custom-tools.md) for detailed instructions.
+One of the primary ways to extend the Proxy Base Agent is by adding custom tools. This allows you to tailor the agent to your specific needs and integrate it with the services and data sources relevant to your application. See [Extending the Agent](../extending/custom-tools.md) for detailed instructions.

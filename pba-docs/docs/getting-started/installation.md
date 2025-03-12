@@ -74,7 +74,7 @@ pip install -e .
 Now that you have PBA installed, you can:
 
 1. Follow the [Quickstart Guide](quickstart.md)
-2. Explore the [Concepts](concepts/overview.md)
-3. Extend the agent with [Custom Tools](extending/custom-tools.md)
+2. Explore the [Concepts](../concepts/overview.md)
+3. Extend the agent with [Custom Tools](../extending/custom-tools.md)
 
 If you encounter any issues during installation, please report an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
