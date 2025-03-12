@@ -1,18 +1,38 @@
-# StructuringEngine API
+# StructuringEngine API Reference
 
-The `StructuringEngine` class is the primary interface for the Proxy Structuring Engine (PSE). It provides a powerful but easy-to-use API for enforcing structured outputs from large language models.
+The `StructuringEngine` class is the primary interface for the Proxy Structuring Engine (PSE). It provides a powerful mechanism to enforce structured output generation from language models by using state machines to constrain token generation.
+
+## Class Definition
+
+```python
+class StructuringEngine(Engine):
+    """
+    A structuring engine that guides language models to produce structured outputs.
+    
+    The StructuringEngine uses hierarchical state machines to constrain token generation
+    while preserving the model's creative capabilities within those constraints.
+    It integrates with language model frameworks by masking invalid token logits
+    during the generation process.
+    """
+```
 
 ## Basic Usage
 
 ```python
-from pse import StructuringEngine
+from pse.structuring_engine import StructuringEngine
+from pse.util.torch_mixin import PSETorchMixin
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+# Define model class with PSE integration
+class PSE_Torch(PSETorchMixin, AutoModelForCausalLM):
+    pass
 
 # Load model and tokenizer
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3-8b-instruct")
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b-instruct")
+model = PSE_Torch.from_pretrained("meta-llama/Llama-3-8b-instruct")
 
-# Define a JSON schema
+# Define a JSON schema for structured output
 person_schema = {
     "type": "object",
     "properties": {
@@ -23,17 +43,17 @@ person_schema = {
     "required": ["name", "age"]
 }
 
-# Create an engine from the schema
-engine = StructuringEngine(tokenizer)
-engine.configure(person_schema)
+# Create and configure the structuring engine
+model.engine = StructuringEngine(tokenizer)
+model.engine.configure(person_schema)
 
 # Generate structured output
 prompt = "Extract information about Alice who is 28 years old and works at example.com"
 input_ids = tokenizer.encode(prompt, return_tensors="pt")
-output_ids = engine.generate(model, input_ids, max_new_tokens=100)
+output_ids = model.generate(input_ids, max_new_tokens=100)
 
 # Get the structured result
-result = engine.get_structured_output()
+result = model.engine.get_structured_output()
 print(result)  # {"name": "Alice", "age": 28, "email": "alice@example.com"}
 ```
 

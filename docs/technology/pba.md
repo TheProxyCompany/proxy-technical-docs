@@ -1,6 +1,6 @@
 # Proxy Base Agent
 
-The **Proxy Base Agent (PBA)** is our research initiative focused on developing the foundational architecture for reliable, robust AI agency. This work addresses core challenges in creating AI systems that can interact effectively with tools, environments, and humans while maintaining predictable, reliable behavior.
+The **Proxy Base Agent (PBA)** is a stateful, tool-enabled agent built with the Proxy Structuring Engine. It implements a state machine architecture that guides language models through planning and action phases, creating reliable, structured agent behavior through principled state transitions.
 
 ## Research Challenge
 
@@ -13,14 +13,39 @@ Current approaches to building AI agents face several critical limitations:
 
 Our research aims to develop an agent architecture that addresses these challenges through a novel cognitive framework that emphasizes reliability, safety, and scalability.
 
-## Our Approach
+## Architecture
 
-PBA introduces a state machine architecture with several key innovations:
+PBA implements a state machine that guides language models through a structured workflow:
 
-1. **State Machine Framework**: A structured approach that separates planning states (thinking, scratchpad, inner monologue) from action states (tool execution, code execution)
-2. **Event-Based Memory**: A system that maintains conversation history as events, including system, user, assistant, and tool interactions
-3. **Principled Tool Integration**: A formalized protocol for tool interaction with schema validation and controlled access to capabilities
-4. **Model Control Protocol (MCP)**: A system for connecting to remote tools and services with client/server architecture
+```
+                    ┌───────────────────┐
+                    │                   │
+                    ▼                   │
+        ┌──────────────────────────────────────────────┐
+        │                   PLAN                       │ ◀─ loops (min=x, max=y)
+        │ ┌─────────┐  ┌──────────┐  ┌───────────────┐ │
+        │ │THINKING │  │SCRATCHPAD│  │INNER MONOLOGUE│ │
+        │ └─────────┘  └──────────┘  └───────────────┘ │
+        └────────────────────┬─────────────────────────┘
+                             │
+                             ▼
+            ┌───────────────────────────────┐
+            │           TAKE ACTION         │
+            │ ┌─────────┐        ┌────────┐ │
+            │ │  TOOLS  │        │ PYTHON │ │
+            │ └─────────┘        └────────┘ │
+            └───────────────────────────────┘
+                              │
+                              ▼
+                        ┌─────────┐
+                        │  DONE   │
+                        └─────────┘
+```
+
+The agent transitions between two main phases:
+
+1. **Planning states** (Thinking, Scratchpad, Inner Monologue)
+2. **Action states** (Tool calls, Python code execution)
 
 <figure markdown>
   ![PBA Architecture Diagram](/assets/pba-architecture.png)
@@ -47,7 +72,7 @@ While our work is primarily foundational research, it enables advances in severa
 
 ## Technical Implementation
 
-The reference implementation of our research is available as an open-source framework, documented in detail in our [technical documentation](https://docs.theproxycompany.com/agent/).
+The reference implementation of our research is available as an open-source agent architecture, documented in detail in our [PBA documentation portal](/pba/).
 
 ## Research Publications
 

@@ -2,53 +2,74 @@
 
 <div class="hero-content" style="text-align: center; margin: 2em 0;">
   <p style="font-size: 1.5em; max-width: 800px; margin: 0 auto;">
-    A cognitive architecture for creating reliable, robust AI agents
+    A stateful, tool-enabled agent with structured state transitions
   </p>
 </div>
 
-The **Proxy Base Agent (PBA)** is a research-backed framework for building reliable AI agents that can reason effectively, interact with tools, and maintain coherent context across complex tasks. PBA addresses the critical challenges of agent reliability, safety, and scalability through a novel cognitive architecture designed from first principles.
+The **Proxy Base Agent (PBA)** is a stateful, tool-enabled agent built with the Proxy Structuring Engine. It implements a state machine architecture that guides language models through planning and action phases, creating reliable, structured agent behavior through principled state transitions.
 
-## Key Features
+## Architecture
 
-- **Modular Reasoning Framework**: Structured approach to planning, reflection, and execution
-- **Hierarchical Memory System**: Multi-tier memory for managing different types of knowledge
-- **Principled Tool Integration**: Formalized protocol for safe tool interaction
-- **Reflexive Monitoring**: Built-in mechanisms for monitoring and correcting agent behavior
-- **Framework Agnostic**: Compatible with major LLM frameworks (PyTorch, MLX, TensorFlow, JAX)
+PBA implements a state machine that guides language models through a structured workflow:
 
-## How It Works
+```
+                    ┌───────────────────┐
+                    │                   │
+                    ▼                   │
+        ┌──────────────────────────────────────────────┐
+        │                   PLAN                       │ ◀─ loops (min=x, max=y)
+        │ ┌─────────┐  ┌──────────┐  ┌───────────────┐ │
+        │ │THINKING │  │SCRATCHPAD│  │INNER MONOLOGUE│ │
+        │ └─────────┘  └──────────┘  └───────────────┘ │
+        └────────────────────┬─────────────────────────┘
+                             │
+                             ▼
+            ┌───────────────────────────────┐
+            │           TAKE ACTION         │
+            │ ┌─────────┐        ┌────────┐ │
+            │ │  TOOLS  │        │ PYTHON │ │
+            │ └─────────┘        └────────┘ │
+            └───────────────────────────────┘
+                              │
+                              ▼
+                        ┌─────────┐
+                        │  DONE   │
+                        └─────────┘
+```
 
-PBA uses a state machine architecture to structure agent behavior and interactions:
+The agent transitions between two main phases:
 
-1. **Planning States**: Thinking, Scratchpad, and Inner Monologue states for reasoning
-2. **Action States**: Tool execution and optional Python code execution capabilities
-3. **Event-Based Memory**: Simple system that maintains conversation history as events
-4. **State Machine Control**: PSE-powered state transitions with formal validation
+1. **Planning states** (Thinking, Scratchpad, Inner Monologue)
+2. **Action states** (Tool calls, Python code execution)
 
-This architecture provides a robust foundation for building agents that can handle complex tasks reliably, even in unpredictable environments.
+## Features
 
-## Getting Started
+The Proxy Base Agent provides:
 
-```python
-from pba import Agent, ToolRegistry
-from pba.memory import HierarchicalMemory
+1. **State Machine Architecture**: Guides language models through structured planning and action phases
+2. **Stateful Processing**: Maintains conversation history and agent state through multiple interactions
+3. **Tool Integration**: Enables safe and controlled use of external tools with schema validation
+4. **Python Execution**: Optional ability to execute Python code for complex operations
+5. **Pause/Resume**: Ability to pause and resume agent execution for better control
 
-# Define tools
-tools = ToolRegistry()
-tools.register("calculator", Calculator())
-tools.register("web_search", WebSearch())
+This implementation makes it easy to create reliable, predictable agents capable of handling complex tasks through structured state transitions.
 
-# Create agent with hierarchical memory
-memory = HierarchicalMemory()
-agent = Agent(
-    model="meta-llama/Llama-3-8b-instruct",
-    tools=tools,
-    memory=memory
-)
+## Installation
 
-# Run agent on a task
-result = agent.run("Research the latest developments in quantum computing and summarize the key findings.")
-print(result)
+```bash
+# Clone the repository
+git clone https://github.com/TheProxyCompany/agent.git
+cd agent
+
+# Install using uv
+uv pip install -e .
+```
+
+## Usage
+
+```bash
+# Start the agent with the interactive setup wizard
+python -m agent
 ```
 
 ## Use Cases

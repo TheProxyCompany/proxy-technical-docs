@@ -44,15 +44,15 @@ Language models have incredible generative capabilities, but their inherent stoc
 
 Our technologies address these challenges through principled engineering approaches that preserve the creative power of LLMs while providing the reliability guarantees needed for critical applications.
 
-## Technology Stack
+## Technology Solutions
 
-### Proxy Structuring Engine
+### [Proxy Structuring Engine](/pse/)
 
-PSE is a state-of-the-art system that guarantees LLMs will generate outputs conforming to specified structures. Using a hierarchical state machine architecture with "Stepper" mechanisms and parallel path exploration, PSE works directly with the LLM's token generation process to enforce structural guarantees while preserving the model's creative capabilities. Its token healing mechanism automatically recovers from tokenization mismatches, ensuring reliability even in edge cases.
+PSE is a state-of-the-art system that guarantees LLMs will generate outputs conforming to specified structures. Using an innovative architecture that works directly with the LLM's token generation process, PSE provides robust structural guarantees while preserving the model's creative capabilities. For detailed information, please visit the [PSE documentation](/pse/).
 
-### Proxy Base Agent
+### [Proxy Base Agent](/pba/)
 
-PBA is a framework for building reliable AI agents. It implements a state machine architecture that structures agent behavior into planning states (thinking, scratchpad, inner monologue) and action states (tool usage, code execution). Its event-based memory system maintains conversation history, while its formalized tool integration protocol ensures safe and controlled interaction with external systems. PBA uses the Model Control Protocol (MCP) for connecting to remote tools and services. This comprehensive architecture leads to more predictable and controllable agent behavior, even for complex tasks.
+PBA is a stateful, tool-enabled agent built with the Proxy Structuring Engine. It implements a state machine architecture that guides language models through planning states (Thinking, Scratchpad, Inner Monologue) and action states (Tool calls, Python code), creating reliable, structured agent behavior. For detailed information, please visit the [PBA documentation](/pba/).
 
 ## Developer Resources
 

@@ -47,7 +47,7 @@ While our research is fundamental in nature, it has immediate applications in se
 
 ## Technical Implementation
 
-The technical implementation of our research is available as an open-source library, documented in detail in our [technical documentation](https://docs.theproxycompany.com/pse/).
+The technical implementation of our research is available as an open-source library, documented in detail in our [PSE documentation portal](/pse/).
 
 ## Research Publications
 
