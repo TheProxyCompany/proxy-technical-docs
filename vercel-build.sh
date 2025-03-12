@@ -27,6 +27,12 @@ echo "Installing dependencies..."
 python3 -m pip install --upgrade pip || python -m pip install --upgrade pip
 python3 -m pip install -U -r requirements.txt || python -m pip install -U -r requirements.txt
 
+if [ -n "$GH_TOKEN" ]; then
+  INSIDERS=true
+  echo "Installing mkdocs-material-insiders..."
+  python3 -m pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
+fi
+
 # Using mkdocs from virtual environment
 if command -v python3 &> /dev/null; then
   MKDOCS="python3 -m mkdocs"

@@ -52,11 +52,6 @@ markdown_extensions:
   - attr_list
   - md_in_html
 
-plugins:
-  - search
-  - sitemap:
-      sitemap_url: https://docs.proxy.ing/pba/
-
 nav:
   - Home: index.md
   - Getting Started:
@@ -82,11 +77,17 @@ extra:
 
 plugins:
   - search
-  - social:
-      enabled: !ENV [CI, false]
-      cards_layout: default/only/image
-      cards_layout_options:
-        background_image: assets/pba-logo.png
+  - group:
+      enabled: !ENV INSIDERS
+      plugins:
+        - optimize
+        - privacy
+        - social:
+            enabled: !ENV [CI, false]
+            cards_layout: default/only/image
+            cards_layout_options:
+              background_image: assets/pba-logo.png
+              background_color: transparent
 
 extra_css:
   - assets/stylesheets/extra.css
