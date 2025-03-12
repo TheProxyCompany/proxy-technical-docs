@@ -67,7 +67,7 @@ nav:
 plugins:
   - search
   - social:
-      enabled: !ENV [CI, false]
+      enabled: !ENV [CI, false] == 'true'
       cache: false
       cards_layout: default/only/image
       cards_layout_options:
