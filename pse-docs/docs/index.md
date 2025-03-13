@@ -1,35 +1,88 @@
 # Proxy Structuring Engine
 
-The **Proxy Structuring Engine** ensures that language models produce outputs that conform to specific structures while preserving their creative capabilities.
+The **Proxy Structuring Engine** (PSE) is a system for dynamically constrained natural language generation. It compiles rules and schemas into efficient hierarchical state machines that dynamically filter token probabilities during generation, guaranteeing structurally valid outputs while preserving natural language fluency. Think of it as laying down train tracks for the language model to follow as it generates text.
 
-It can be used for common uses cases including tool use, synthetic data generation, API integration, structured output, and more.
+## Use Cases
+- **Tool Calling** - Generate precise, validated parameters for function calls
+- **Synthetic Data** - Create diverse, schema-conformant datasets for training
+- **API Integration** - Guarantee well-formed outputs for seamless system interoperability
+- **Structured Output** - Enforce type-safe results for reliable downstream processing
+- **Agent Frameworks** - Constrain agent actions and reasoning (see [Proxy Base Agent](https://github.com/TheProxyCompany/proxy-base-agent))
 
-## Key Features
+## Key Advantages
+- **Dynamic Validation** - A hierarchical state machine validates each token generated, ensuring structural correctness during generation
+- **Token Healing** - Intelligently recovers from tokenization mismatches, maintaining structural integrity
+- **Parallel Generation** - Explores multiple potential output paths concurrently, maximizing quality within constraints
+- **Framework Agnostic** - Integrates seamlessly with PyTorch, MLX, TensorFlow, and JAX
+- **Minimal Overhead** - Adds less than 20ms per token, making it suitable for latency-sensitive applications
+- **Schema Versatility** - Supports JSON Schema, Pydantic models, custom grammars, and custom state machines for maximum flexibility
 
-- **State Machine Architecture**: Uses a hierarchical state machine to guide generation according to your schema
-- **Token Healing**: Automatically recovers from minor errors to maintain structural validity
-- **Multi-Token Processing**: Efficiently handles token sequences for optimal generation
-- **Framework Agnostic**: Works seamlessly with PyTorch, MLX, TensorFlow, and JAX
-- **Minimal Overhead**: Designed for production use with ~20ms per token overhead
-- **Schema Flexibility**: Supports JSON Schema, Pydantic models, and custom grammar definitions
+## Architectural Overview
 
-## How It Works
+```mermaid
+graph TD
+    A[Schema] --> B(State Machine Compiler)
+    B --> C{Generation Loop}
+    C --> D[Stepper Pool]
+    D --> E[Logit Filter]
+    E --> F[Token Sampler]
+    F --> G[Token Ranker]
+    G --> C
+    G --> H[Structured Output]
+    style H fill:#f9f,stroke:#333,stroke-width:2px
+```
 
-PSE uses a novel approach to constrain LLM generation:
+1. **Schema Compilation** - Your defined structure (e.g., JSON Schema) is compiled into an efficient, hierarchical state machine
+2. **Constrained Generation** - During text generation, the state machine guides the process:
+    - **Stepper Pool** - Manages multiple potential generation paths (hypotheses)
+    - **Logit Filtering** - Masks invalid tokens based on the current state, enforcing constraints
+    - **Token Sampling** - Selects the next token from the filtered distribution
+    - **Token Ranker** - Prunes invalid or low-probability branches, selecting the most promising continuation
+3. **Structured Output** - The final, validated output is guaranteed to conform to the provided schema
 
-1. **Schema Definition**: You define the structure you need using JSON Schema or other formats
-2. **State Machine Creation**: PSE converts this schema into a hierarchical state machine with states and transitions
-3. **Stepper System**: During generation, the Stepper tracks the current position in the state machine and validates transitions
-4. **Token Processing**: PSE directly modifies logit distributions to enforce grammatical constraints
-5. **Token Healing**: When tokenization mismatches occur, PSE can recover by finding valid token prefixes
-6. **Multi-Token Handling**: PSE efficiently processes token sequences for better performance
-7. **Path Selection**: Sophisticated algorithms choose the optimal continuation when multiple paths are valid
-8. **Valid Output**: The result is a properly structured output that follows your schema while preserving creativity
+This architecture provides:
+- **Guaranteed Validity** - Outputs are always structurally correct
+- **Creative Flexibility** - The model retains its generative power within the defined constraints
+- **Robust Error Handling** - Automatic correction of tokenization issues ensures resilience
 
-This approach gives you the best of both worlds: the creative power of LLMs with the reliability of structured systems.
+## Getting Started
 
-## Open-Source
+```python
+from pse import StructuringEngine
+from pydantic import BaseModel
+from transformers import AutoTokenizer
 
-PSE is available under the Apache 2.0 license. We welcome contributions from the community to help improve this library.
+# 1. Define your desired output structure
+class User(BaseModel):
+    name: str
+    age: int
 
-[View on GitHub](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
+# 2. Initialize the tokenizer and engine
+tokenizer = AutoTokenizer.from_pretrained("your-model-name")
+engine = StructuringEngine(tokenizer)
+
+# 3. Configure the engine with your schema
+engine.configure(User.schema())
+
+# 4. Integrate with your generation loop
+# (Example using Hugging Face Transformers)
+output = model.generate(
+    ...,
+    logits_processor=[engine.process_logits],
+    sampler=engine.sample, # Use the engine's sampling method for multi-token generation
+)
+
+# 5. Extract the structured output
+structured_user = engine.get_structured_output(User, raise_on_error=True)
+print(structured_user)
+
+```
+
+## Open Source
+PSE is released under the Apache 2.0 license.
+
+We enthusiastically welcome community contributions and collaborations.
+
+[Explore the Code](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
+[Report an Issue](https://github.com/TheProxyCompany/proxy-structuring-engine/issues){: .md-button }
+[Contribute](https://github.com/TheProxyCompany/proxy-structuring-engine/blob/main/CONTRIBUTING.md){: .md-button }
