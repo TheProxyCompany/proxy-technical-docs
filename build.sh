@@ -12,6 +12,12 @@ else
 fi
 echo "Using Python command: $PYTHON_CMD"
 
+# Copy assets from root assets folder to site/assets
+echo "Copying assets from root directory to site/assets..."
+mkdir -p site/assets
+cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
+
+
 # Install dependencies directly from requirements.txt
 echo "Installing dependencies from requirements.txt..."
 $PYTHON_CMD -m pip install -r requirements.txt || {
@@ -33,6 +39,7 @@ mkdir -p site
 # Build PSE documentation
 echo "Building PSE documentation..."
 cd pse-docs
+echo "ls -la pse-docs: $(ls -la ../site/assets)"
 $PYTHON_CMD -m mkdocs build || {
   echo "Warning: PSE docs build had errors, but continuing..."
   mkdir -p site
@@ -66,11 +73,6 @@ else
   cd ..
   echo "Warning: PBA site directory not found, skipping copy"
 fi
-
-# Copy assets from root assets folder to site/assets
-echo "Copying assets from root directory to site/assets..."
-mkdir -p site/assets
-cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
 
 echo "Documentation build complete."
 echo "Listing final site directory:"
