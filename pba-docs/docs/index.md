@@ -1,14 +1,14 @@
 # Proxy Base Agent (Research Preview)
 
-The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, and is intended to be a starting point for developers and researchers looking to build agents using language models.
+The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
 
-The base agent enables **any language model** to function effectively as an agent, capable of structured interactions, multi-step reasoning, and external tool usage. We invite researchers and developers to experiment with and build upon this foundation.
+The base agent is designed to **rapidly prototype and develop LLM-powered agents** with a focus on **local execution, stateful interactions, and extensibility**. We invite researchers and developers to experiment with and build upon this foundation.
+
+The **PSE** augments **language models** at runtime, allowing them to function effectively as agents - capable of goal-oriented interactions, multi-step reasoning, and external tool usage.
 
 ## What is an Agent?
 
 > An agent is a system that takes actions in an environment.
-
-The Proxy Base Agent, in simple terms, combines state machine logic with language model inference to create a system that can reason and take actions in an environment.
 
 ---
 ## Installation & Quickstart
@@ -49,7 +49,7 @@ Proxy Base Agent is explicitly designed to empower developers to add custom func
 - [Creating Custom Tools](extending/custom-tools.md): Integrate external APIs or specialized operations.
 - [Defining Custom States](extending/custom-states.md): Create new cognitive or action states.
 - [Building Custom State Graphs](extending/custom-state-graphs.md): Tailor agent behavior through custom workflows.
-- [Model Context Protocol](extending/model-context-protocol.md): The base agent can act as multiple MCP Clients, connecting to multiple MCP Servers.
+- [Model Context Protocol](extending/model-context-protocol.md): The base agent can act as multiple MCP Clients, connecting to multiple MCP Servers. **The Model Context Protocol (MCP) allows your agent to seamlessly connect to and utilize external services, expanding its capabilities beyond local resources.**
 
 ---
 
