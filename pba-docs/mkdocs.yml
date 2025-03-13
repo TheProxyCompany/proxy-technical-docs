@@ -88,7 +88,7 @@ plugins:
         - social:
             cards_layout: default/only/image
             cards_layout_options:
-              background_image: ../../assets/pba-logo.png
+              background_image: ../assets/pba-logo.png
               background_color: transparent
 
 extra_css:
