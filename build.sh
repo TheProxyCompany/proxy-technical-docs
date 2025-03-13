@@ -12,10 +12,16 @@ else
 fi
 echo "Using Python command: $PYTHON_CMD"
 
+# Clean up any existing site directory
+echo "Cleaning up existing site directory..."
+rm -rf site
+
 # Copy assets from root assets folder to site/assets
-echo "Copying assets from root directory to site/assets..."
-mkdir -p site/assets
-cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
+if [ -d "assets" ]; then
+  echo "Copying assets from root directory to site/assets..."
+  mkdir -p site/assets
+  cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
+fi
 
 
 # Install dependencies directly from requirements.txt
@@ -24,10 +30,6 @@ $PYTHON_CMD -m pip install -r requirements.txt || {
     echo "Failed to install from requirements.txt, falling back to manual installation..."
     $PYTHON_CMD -m pip install mkdocs mkdocs-material mkdocs-material-extensions pymdown-extensions
 }
-
-# Clean up any existing site directory
-echo "Cleaning up existing site directory..."
-rm -rf site
 
 # Build main documentation
 echo "Building main documentation..."
@@ -39,12 +41,10 @@ mkdir -p site
 # Build PSE documentation
 echo "Building PSE documentation..."
 cd pse-docs
-echo "ls -la pse-docs: $(ls -la ../site/assets)"
 $PYTHON_CMD -m mkdocs build || {
   echo "Warning: PSE docs build had errors, but continuing..."
   mkdir -p site
 }
-echo "PSE docs build complete"
 if [ -d "site" ]; then
   echo "Copying PSE documentation to main site/pse directory..."
   cd ..

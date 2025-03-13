@@ -64,11 +64,11 @@ nav:
   - Proxy Base Agent: /pba/
 
 plugins:
-  - projects
   - search
   - group:
       enabled: !ENV [CI, false]
       plugins:
+        - projects
         - optimize
         - privacy
         - social:
