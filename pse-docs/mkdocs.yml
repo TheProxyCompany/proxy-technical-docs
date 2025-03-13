@@ -33,11 +33,19 @@ theme:
     - navigation.sections
     - navigation.expand
     - navigation.indexes
+    - navigation.indexes.preload
     - navigation.instant
+    - navigation.instant.progress
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.tracking
     - search.suggest
     - search.highlight
+    - search.share
     - content.code.annotate
     - content.code.copy
+    - content.tabs.link
+    - content.tooltips
     - palette.toggle
   logo: ../assets/proxy-p.svg
   favicon: ../assets/proxy-p.svg
@@ -87,6 +95,9 @@ nav:
 
 plugins:
   - search
+  - git-revision-date-localized:
+      enable_creation_date: false
+      type: date
   - group:
       enabled: !ENV [CI, false]
       plugins:
