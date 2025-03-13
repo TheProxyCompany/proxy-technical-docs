@@ -31,8 +31,8 @@ theme:
     - content.code.annotate
     - content.code.copy
     - palette.toggle
-  logo: assets/proxy-p.svg
-  favicon: assets/proxy-p.svg
+  logo: ../assets/proxy-p.svg
+  favicon: ../assets/proxy-p.svg
 
 markdown_extensions:
   - admonition
