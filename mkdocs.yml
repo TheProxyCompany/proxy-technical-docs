@@ -30,8 +30,8 @@ theme:
         name: Switch to system preference
 
   features:
-    # - navigation.sections
-    # - navigation.expand
+    - navigation.sections
+    - navigation.expand
     - navigation.indexes
     - navigation.instant
     - navigation.instant.prefetch
