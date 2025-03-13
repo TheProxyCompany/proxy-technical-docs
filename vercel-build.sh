@@ -40,6 +40,11 @@ if [ -n "$GH_TOKEN" ]; then
   python3 -m pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
 fi
 
+# Copy assets from root assets folder to site/assets
+echo "Copying assets from root directory to site/assets..."
+mkdir -p site/assets
+cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
+
 # Using mkdocs from virtual environment
 if command -v python3 &> /dev/null; then
   MKDOCS="python3 -m mkdocs"
@@ -52,7 +57,6 @@ echo "Using mkdocs command: $MKDOCS"
 echo "Building main documentation..."
 $MKDOCS build
 
-echo "ls -la assets: $(ls -la assets)"
 # Create directories for sub-docs
 mkdir -p site/pse
 mkdir -p site/pba
@@ -60,7 +64,6 @@ mkdir -p site/pba
 # Build PSE docs
 echo "Building PSE documentation..."
 cd pse-docs
-echo "ls -la pse-docs: $(ls -la ../assets)"
 $MKDOCS build || echo "Warning: PSE docs build failed, continuing..."
 if [ -d "site" ]; then
   cp -r site/* ../site/pse/ || echo "Warning: PSE site copy failed"
