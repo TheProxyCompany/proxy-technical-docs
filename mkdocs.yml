@@ -73,7 +73,6 @@ plugins:
         - optimize
         - privacy
         - social:
-            # cards_layout: default/only/image
             cards_layout_dir: layouts
             cards_layout: custom
             cards_layout_options:
@@ -83,7 +82,6 @@ plugins:
               title: The Proxy Company
               description: The Proxy Company's Technical Documentation
               color: "#035a59"
-
 
 # For Vercel deployment
 use_directory_urls: true

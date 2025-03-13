@@ -29,6 +29,23 @@ definitions:
   - &background_image >-
     {{ layout.background_image }}
 
+
+  # Background color (default: indigo)
+  - &background_color >-
+    {%- if layout.background_color -%}
+      {{ layout.background_color }}
+    {%- else -%}
+      {{ "#035a59" | x }}
+    {%- endif -%}
+
+  # Color
+  - &color >-
+    {%- if layout.color -%}
+      {{ layout.color }}
+    {%- else -%}
+      {{ "#DAD0AF" | x }}
+    {%- endif -%}
+
   # Page title with site name
   - &page_title_with_site_name >-
     {{ layout.title }}
