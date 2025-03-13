@@ -16,14 +16,6 @@ echo "Using Python command: $PYTHON_CMD"
 echo "Cleaning up existing site directory..."
 rm -rf site
 
-# Copy assets from root assets folder to site/assets
-if [ -d "assets" ]; then
-  echo "Copying assets from root directory to site/assets..."
-  mkdir -p site/assets
-  cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
-fi
-
-
 # Install dependencies directly from requirements.txt
 echo "Installing dependencies from requirements.txt..."
 $PYTHON_CMD -m pip install -r requirements.txt || {
@@ -31,12 +23,15 @@ $PYTHON_CMD -m pip install -r requirements.txt || {
     $PYTHON_CMD -m pip install mkdocs mkdocs-material mkdocs-material-extensions pymdown-extensions
 }
 
+# Copy assets from root assets folder to site/assets
+echo "Copying assets from root directory to site/assets..."
+mkdir -p site/assets
+cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
+
+echo "ls -la site/assets/stylesheets: $(ls -la site/assets/stylesheets)"
 # Build main documentation
 echo "Building main documentation..."
 $PYTHON_CMD -m mkdocs build
-
-# Create site directory if it doesn't exist
-mkdir -p site
 
 # Build PSE documentation
 echo "Building PSE documentation..."

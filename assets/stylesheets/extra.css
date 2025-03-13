@@ -25,7 +25,7 @@
 
 /* Dark mode adjustments */
 [data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #013433;
+  --md-primary-fg-color: #024645;
   --md-primary-fg-color--light: #024645;
   --md-default-bg-color: #121212;
   --md-default-bg-color--light: #1e1e1e;
@@ -108,6 +108,7 @@
   background-color: var(--md-primary-fg-color--light) !important;
   color: var(--md-accent-fg-color) !important;
   border-color: var(--md-primary-fg-color--light) !important;
+  text-decoration: underline;
 }
 
 /* Primary button styling - reversed for emphasis */
