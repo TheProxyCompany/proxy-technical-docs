@@ -64,7 +64,6 @@ extra_css:
   - assets/stylesheets/extra.css
 
 nav:
-  - Home: index.md
   - Proxy Structuring Engine: /pse/
   - Proxy Base Agent: /pba/
 
