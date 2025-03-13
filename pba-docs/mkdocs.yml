@@ -89,7 +89,7 @@ plugins:
               background_color: transparent
               title: Proxy Base Agent
               description: Technical Documentation for the Proxy Base Agent
-              color: "#035a59"
+              color: "#024645"
 
 extra_css:
   - assets/stylesheets/extra.css

@@ -79,7 +79,7 @@ plugins:
               background_color: transparent
               title: The Proxy Company
               description: The Proxy Company's Technical Documentation
-              color: "#035a59"
+              color: "#024645"
 
 # For Vercel deployment
 use_directory_urls: true

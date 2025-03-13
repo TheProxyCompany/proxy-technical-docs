@@ -96,7 +96,7 @@ plugins:
               background_color: transparent
               title: Proxy Structuring Engine
               description: Technical Documentation for the Proxy Structuring Engine
-              color: "#035a59"
+              color: "#024645"
 
 # For Vercel deployment
 use_directory_urls: true
