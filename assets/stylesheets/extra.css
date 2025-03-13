@@ -59,13 +59,13 @@
 
 /* Tab navigation */
 .md-tabs__link {
-  color: var(--md-accent-fg-color);
+  color: var(--md-accent-fg-color) !important;
 }
 
 /* Make active navigation link more visible */
 .md-tabs__link--active,
 .md-tabs__link:hover {
-  color: var(--md-accent-fg-color);
+  color: var(--md-accent-fg-color) !important;
   opacity: 1;
 }
 

@@ -30,12 +30,13 @@ theme:
         name: Switch to system preference
 
   features:
-    - navigation.sections
-    - navigation.expand
+    # - navigation.sections
+    # - navigation.expand
     - navigation.indexes
-    - navigation.indexes.preload
     - navigation.instant
+    - navigation.instant.prefetch
     - navigation.instant.progress
+    - navigation.prune
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.tracking
