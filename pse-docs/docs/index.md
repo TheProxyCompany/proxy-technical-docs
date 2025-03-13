@@ -1,6 +1,7 @@
 # Proxy Structuring Engine
 
 The **Proxy Structuring Engine** ensures that language models produce outputs that conform to specific structures while preserving their creative capabilities.
+
 It can be used for common uses cases including tool use, synthetic data generation, API integration, structured output, and more.
 
 ## Key Features
@@ -27,67 +28,8 @@ PSE uses a novel approach to constrain LLM generation:
 
 This approach gives you the best of both worlds: the creative power of LLMs with the reliability of structured systems.
 
-## Quick Example
-
-```python
-from proxy_structuring_engine import StructuringEngine, Schema
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# Load model
-model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3-8b-instruct")
-tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8b-instruct")
-
-# Define schema
-schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "age": {"type": "integer"},
-        "interests": {"type": "array", "items": {"type": "string"}}
-    },
-    "required": ["name", "interests"]
-}
-
-# Create engine
-engine = StructuringEngine.from_json_schema(schema)
-
-# Generate
-prompt = "Extract information about Sarah, who is 29 and works as a software engineer."
-input_ids = tokenizer.encode(prompt, return_tensors="pt")
-outputs = engine.generate(model, input_ids, max_new_tokens=200)
-result = tokenizer.decode(outputs[0])
-print(result)
-```
-
-## Use Cases
-
-- **API Integration**: Ensure agents produce valid API calls with correct parameters
-- **Data Extraction**: Convert unstructured text to validated structured formats
-- **Code Generation**: Generate syntactically valid code in any programming language
-- **Report Generation**: Create properly formatted reports with consistent structure
-- **Game Systems**: Define and enforce complex rules for game AI
-
-### Getting Started
-
-- [Installation](getting-started/installation.md) - Setting up PSE in your environment
-- [Quickstart](getting-started/quickstart.md) - Your first PSE implementation
-
-### Core Concepts
-
-- [State Machine Architecture](core-concepts/state-machine.md) - How PSE's state machine works
-- [Core Architecture](core-concepts/core-architecture.md) - Under the hood of PSE's high-performance core
-- [Stepper System](core-concepts/stepper.md) - Understanding PSE's state tracking system
-- [Token Healing](core-concepts/token-healing.md) - How PSE recovers from tokenization mismatches
-- [Multi-Token Processing](core-concepts/multi-token-processing.md) - Efficient handling of token sequences
-
-### API Reference
-
-- [StructuringEngine](api/structuring-engine.md) - Complete StructuringEngine API reference
-- [Framework Adapters](api/framework-adapters.md) - Framework-specific adapters
-
 ## Open-Source
 
-PSE is available under the Apache 2.0 license. We welcome contributions from the community to help improve and extend this technology.
+PSE is available under the Apache 2.0 license. We welcome contributions from the community to help improve this library.
 
 [View on GitHub](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
