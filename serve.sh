@@ -12,16 +12,6 @@ else
 fi
 echo "Using Python command: $PYTHON_CMD"
 
-# Check if mkdocs is installed
-if ! command -v mkdocs &> /dev/null; then
-    echo "mkdocs is not installed. Installing required packages..."
-    $PYTHON_CMD -m pip install -r requirements.txt || {
-        echo "Failed to install dependencies from requirements.txt"
-        echo "Falling back to manual installation..."
-        $PYTHON_CMD -m pip install mkdocs mkdocs-material mkdocs-material-extensions pymdown-extensions
-    }
-fi
-
 # Define port based on project
 case $PROJECT in
     main)
@@ -53,14 +43,14 @@ on the deployed Vercel site, with:
 
         # First build everything to the combined site directory
         echo "Building all documentation sites..."
-        
+
         # Ensure assets are available for build
         if [ -d "assets" ]; then
           echo "Assets directory found, will be included in the build"
         else
           echo "Warning: assets directory not found. Some images may be missing in the documentation."
         fi
-        
+
         ./build.sh
 
         # Now serve the combined site directory
@@ -99,14 +89,6 @@ fi
 
 # Change to project directory if not main
 cd $PROJECT_DIR
-
-# For individual projects, ensure they can access the root assets if needed
-if [ "$PROJECT_DIR" != "." ] && [ -d "../assets" ]; then
-    echo "Creating assets symlink for $PROJECT_NAME..."
-    mkdir -p assets
-    # Copy assets from root directory for individual project build
-    cp -r ../assets/* assets/ || echo "Warning: Assets copy failed for $PROJECT_NAME"
-fi
 
 # Serve the documentation
 echo "Starting $PROJECT_NAME server at http://localhost:$PORT"
