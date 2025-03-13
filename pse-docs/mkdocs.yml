@@ -55,7 +55,7 @@ extra:
   homepage: https://docs.theproxycompany.com/pse/
 
 extra_css:
-  - assets/stylesheets/extra.css
+  - ../assets/stylesheets/extra.css
 
 nav:
   - Home: index.md
