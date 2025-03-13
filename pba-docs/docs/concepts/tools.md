@@ -1,6 +1,7 @@
 # Tools
 
-Tools are a crucial part of the Proxy Base Agent's capabilities. They allow the agent to interact with the external world, access information, and perform actions beyond its core logic.
+Tools are a crucial part of the Proxy Base Agent's capabilities.
+They allow the agent to interact with the external world, access information, and perform actions beyond its core logic.
 
 ## What are Tools?
 
