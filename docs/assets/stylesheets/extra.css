@@ -18,7 +18,7 @@
 
   /* Footer colors */
   --md-footer-bg-color: var(--md-primary-fg-color);
-  --md-footer-bg-color--dark: var(--md-primary-fg-color--dark);
+  --md-footer-bg-color--dark: var(--md-primary-fg-color);
   --md-footer-fg-color: var(--md-accent-fg-color);
   --md-footer-fg-color--light: var(--md-accent-fg-color);
 }
@@ -32,8 +32,8 @@
   --md-typeset-a-color: var(--md-accent-fg-color);
 
   /* Footer dark mode */
-  --md-footer-bg-color: #002423;
-  --md-footer-bg-color--dark: #001a19;
+  --md-footer-bg-color: var(--md-primary-fg-color--light);
+  --md-footer-bg-color--dark: var(--md-primary-fg-color--light);
   --md-footer-fg-color: var(--md-accent-fg-color);
   --md-footer-fg-color--light: var(--md-accent-fg-color);
 }
