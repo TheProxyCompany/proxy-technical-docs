@@ -11,14 +11,6 @@ which python3 || echo "python3 not found"
 ls -la /usr/bin/python* || echo "No Python found in /usr/bin"
 echo "PATH: $PATH"
 
-# Copy assets from root assets folder to site/assets
-if [ -d "assets" ]; then
-  echo "Copying assets from root directory to site/assets..."
-  mkdir -p site/assets
-  cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
-fi
-
-
 # Create a Python virtual environment
 echo "Creating virtual environment..."
 python3 -m venv .venv || python -m venv .venv || mkdir -p .venv/bin && echo '#!/bin/sh' > .venv/bin/activate
@@ -68,7 +60,7 @@ mkdir -p site/pba
 # Build PSE docs
 echo "Building PSE documentation..."
 cd pse-docs
-echo "ls -la pse-docs: $(ls -la /site/assets)"
+echo "ls -la pse-docs: $(ls -la assets)"
 $MKDOCS build || echo "Warning: PSE docs build failed, continuing..."
 if [ -d "site" ]; then
   cp -r site/* ../site/pse/ || echo "Warning: PSE site copy failed"
