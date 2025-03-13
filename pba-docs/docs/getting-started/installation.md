@@ -4,7 +4,9 @@ The Proxy Base Agent requires Python 3.11 or higher.
 
 ## Prerequisites
 
-1.  **Python 3.11+:** Ensure you have a compatible Python version installed.
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
 
 ## Installation Steps
 
@@ -26,12 +28,6 @@ The Proxy Base Agent requires Python 3.11 or higher.
     ```bash
     pip install -e .
     ```
-
-## System Requirements
-
-- Python 3.10 or higher
-- Compatible with Linux, macOS, and Windows
-- Hardware requirements vary depending on the language model you are using.
 
 ## Installation Methods
 

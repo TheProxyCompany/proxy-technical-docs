@@ -13,6 +13,12 @@ The **PSE** augments **language models** at runtime, allowing them to function e
 ---
 ## Installation & Quickstart
 
+Prerequisites:
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
 Get the Proxy Base Agent running quickly:
 
 ```bash
@@ -71,7 +77,7 @@ which will launch an interactive setup wizard in your terminal.
 
 LLMs from your local huggingface cache will be used, or you can download a model from the Huggingface Hub during setup.
 
-Ideally any model that is supported by the Huggingface Transformers library will work with the base agent; with agentic/instruct tuned models performing best.
+Ideally any model that is supported by the Huggingface Transformers library will work with the base agent; with instruct tuned models performing best.
 
 ---
 
@@ -82,6 +88,25 @@ We do not currently provide a hosted version of the base agent, or an off-the-sh
 The base agent currently supports multiple inference frontends via the Huggingface Transformers library; with tested support for MLX & PyTorch; with planned support for VLLM, SGLang, TensorFlow, and Jax.
 
 The base agent requires access to a language models tokenizer and sampling logic - this is currently only supported for local models.
+
+---
+
+## Research Preview
+
+We are sharing the base agent in its current state for research purposes.
+
+It will be maintained as a research project, and is not intended for direct production use.
+
+Those interested in using the base agent commercially can purchase a license from us.
+*This supports the open source nature of the project*.
+
+---
+
+## License
+
+We offer personal and commercial licenses for those interested in using the base agent in their own projects.
+
+We invite meaningful contributions to the project, and afford free commercial licenses to those who contribute to the project.
 
 ---
 
