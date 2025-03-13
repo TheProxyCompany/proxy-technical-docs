@@ -36,7 +36,7 @@ graph TD
 2. **Constrained Generation** - During text generation, the state machine guides the process:
     - **Stepper Pool** - Manages multiple potential generation paths (hypotheses)
     - **Logit Filtering** - Masks invalid tokens based on the current state, enforcing constraints
-    - **Token Sampling** - Selects the next token from the filtered distribution
+    - **Token Sampling** - Selects one or more next tokens from the filtered distribution
     - **Token Ranker** - Prunes invalid or low-probability branches, selecting the most promising continuation
 3. **Structured Output** - The final, validated output is guaranteed to conform to the provided schema
 
