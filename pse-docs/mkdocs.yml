@@ -95,6 +95,10 @@ plugins:
             cards_layout_options:
               background_image: ../assets/pse-logo.png
               background_color: transparent
+              logo: ../assets/proxy-p.svg
+              title: Proxy Structuring Engine
+              description: Technical Documentation for the Proxy Structuring Engine
+              color: "#035a59"
 
 # For Vercel deployment
 use_directory_urls: true

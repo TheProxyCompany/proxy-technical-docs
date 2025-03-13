@@ -65,6 +65,7 @@ nav:
   - Proxy Base Agent: /pba/
 
 plugins:
+  - projects
   - search
   - group:
       enabled: !ENV [CI, false]
@@ -76,6 +77,11 @@ plugins:
             cards_layout_options:
               background_image: assets/tpc-logo.png
               background_color: transparent
+              logo: assets/proxy-p.svg
+              title: The Proxy Company
+              description: The Proxy Company's Technical Documentation
+              color: "#035a59"
+
 
 # For Vercel deployment
 use_directory_urls: true
