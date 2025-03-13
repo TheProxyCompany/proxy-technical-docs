@@ -29,7 +29,6 @@ theme:
         icon: material/brightness-4
         name: Switch to system preference
   features:
-    - navigation.sections
     - navigation.expand
     - navigation.indexes
     - navigation.instant
@@ -47,6 +46,7 @@ theme:
     - content.tabs.link
     - content.tooltips
     - palette.toggle
+    - toc.integrate
   logo: ../assets/proxy-p.svg
   favicon: ../assets/proxy-p.svg
 
