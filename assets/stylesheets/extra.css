@@ -27,6 +27,7 @@
 [data-md-color-scheme="slate"] {
   --md-primary-fg-color: #024645;
   --md-primary-fg-color--light: #024645;
+  --md-primary-fg-color--dark: #013433;
   --md-default-bg-color: #121212;
   --md-default-bg-color--light: #1e1e1e;
   --md-typeset-a-color: var(--md-accent-fg-color);
@@ -68,12 +69,6 @@
   opacity: 1;
 }
 
-/* Sidebar navigation */
-/* Light mode navigation colors */
-[data-md-color-scheme="default"] {
-  --md-nav-link-color: #024645; /* Dark green for better contrast on white */
-}
-
 /* Dark mode keeps the accent color */
 [data-md-color-scheme="slate"] .md-nav__title,
 [data-md-color-scheme="slate"] .md-nav__link,
@@ -89,7 +84,7 @@
 [data-md-color-scheme="default"] .md-nav--primary .md-nav__link,
 [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link,
 [data-md-color-scheme="default"] .md-sidebar .md-nav__link {
-  color: var(--md-nav-link-color);
+  color: var(--md-primary-fg-color--dark);
 }
 
 /* Search results */

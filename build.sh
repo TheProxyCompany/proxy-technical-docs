@@ -28,10 +28,10 @@ echo "Copying assets from root directory to site/assets..."
 mkdir -p site/assets
 cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
 
-echo "ls -la site/assets/stylesheets: $(ls -la site/assets/stylesheets)"
 # Build main documentation
 echo "Building main documentation..."
 $PYTHON_CMD -m mkdocs build
+cp -r assets/stylesheets/extra.css site/assets/stylesheets/ || echo "Warning: Assets copy failed"
 
 # Build PSE documentation
 echo "Building PSE documentation..."
