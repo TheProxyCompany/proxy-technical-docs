@@ -78,7 +78,7 @@ nav:
 
 extra:
   generator: false
-  homepage: https://docs.theproxycompany.com/pba/
+  homepage: https://docs.theproxycompany.com/
 
 plugins:
   - search
