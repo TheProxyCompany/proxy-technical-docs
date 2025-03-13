@@ -21,12 +21,6 @@
   --md-footer-bg-color--dark: var(--md-primary-fg-color--dark);
   --md-footer-fg-color: var(--md-accent-fg-color);
   --md-footer-fg-color--light: var(--md-accent-fg-color);
-
-  html {
-    background-color: var(--md-primary-fg-color);
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
 }
 
 /* Dark mode adjustments */
@@ -42,12 +36,6 @@
   --md-footer-bg-color--dark: #001a19;
   --md-footer-fg-color: var(--md-accent-fg-color);
   --md-footer-fg-color--light: var(--md-accent-fg-color);
-
-  html {
-    background-color: var(--md-primary-fg-color);
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
 }
 
 /* Header and navigation text color */
@@ -153,4 +141,10 @@
 .md-typeset table:not([class]) th {
   background-color: var(--md-primary-fg-color);
   color: var(--md-accent-fg-color);
+}
+
+html {
+  background-color: #024645;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
