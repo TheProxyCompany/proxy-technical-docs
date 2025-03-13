@@ -91,7 +91,8 @@ plugins:
         - optimize
         - privacy
         - social:
-            cards_layout: default/only/image
+            cards_layout_dir: ../layouts
+            cards_layout: custom
             cards_layout_options:
               background_image: ../assets/pse-logo.png
               background_color: transparent

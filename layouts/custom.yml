@@ -104,8 +104,8 @@ layers:
       image: *background_image
 
   # Logo
-  - size: { width: 64, height: 64 }
-    offset: { x: 64, y: 64 }
+  - size: { width: 144, height: 144 }
+    offset: { x: 992, y: 64 }
     background:
       image: *logo
     icon:
