@@ -10,6 +10,7 @@ edit_uri: ""
 
 theme:
   name: material
+  color_mode: auto
   palette:
     # Light mode
     - media: "(prefers-color-scheme: light)"
