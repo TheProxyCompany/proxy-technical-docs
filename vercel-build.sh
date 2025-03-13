@@ -11,6 +11,14 @@ which python3 || echo "python3 not found"
 ls -la /usr/bin/python* || echo "No Python found in /usr/bin"
 echo "PATH: $PATH"
 
+# Copy assets from root assets folder to site/assets
+if [ -d "assets" ]; then
+  echo "Copying assets from root directory to site/assets..."
+  mkdir -p site/assets
+  cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
+fi
+
+
 # Create a Python virtual environment
 echo "Creating virtual environment..."
 python3 -m venv .venv || python -m venv .venv || mkdir -p .venv/bin && echo '#!/bin/sh' > .venv/bin/activate
@@ -85,13 +93,6 @@ cd ..
 if [ -f "robots.txt" ]; then
   echo "Copying robots.txt to site directory..."
   cp robots.txt site/
-fi
-
-# Copy assets from root assets folder to site/assets
-if [ -d "assets" ]; then
-  echo "Copying assets from root directory to site/assets..."
-  mkdir -p site/assets
-  cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
 fi
 
 echo "Build complete!"
