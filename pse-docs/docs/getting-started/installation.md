@@ -4,20 +4,17 @@ This guide will help you install the Proxy Structuring Engine (PSE) and set up y
 
 ## Standard Installation
 
-You can install PSE using pip:
+We recommend using uv to install PSE:
+```bash
+uv pip install pse
+```
+
+You can also install PSE using pip:
 
 ```bash
 pip install pse
 ```
 
-We recommend using uv to install PSE:
-```bash
-uv add pse
-```
-or
-```bash
-uv pip install pse
-```
 
 ## Development Installation
 
