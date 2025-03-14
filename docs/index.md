@@ -2,8 +2,6 @@
 
 Welcome to the technical documentation for The Proxy Company.
 
-We develop novel AI technologies that empower developers, businesses, and researchers to build more intelligent systems.
-
 This documentation will help you understand and utilize our technologies effectively.
 
 ## Our Technologies
@@ -28,5 +26,5 @@ This documentation will help you understand and utilize our technologies effecti
 
 ## Additional Resources
 
-- [Company Website](https://theproxycompany.com) 
+- [Company Website](https://theproxycompany.com)
 - [GitHub Organization](https://github.com/TheProxyCompany)
