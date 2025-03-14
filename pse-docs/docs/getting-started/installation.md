@@ -79,7 +79,7 @@ pip install jax jaxlib pse
 - **Hardware**:
   - Any system capable of running your selected LLM (the PSE only works with local models)
 
-### Getting Help
+## Getting Help
 
 If you continue to experience issues:
 
