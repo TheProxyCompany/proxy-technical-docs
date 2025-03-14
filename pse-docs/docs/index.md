@@ -9,7 +9,7 @@ The **Proxy Structuring Engine** (PSE) is a system for dynamically constrained n
 - **Structured Output** - Enforce type-safe results for reliable downstream processing
 - **Agent Frameworks** - Constrain agent actions and reasoning (see [Proxy Base Agent](https://github.com/TheProxyCompany/proxy-base-agent))
 
-## Key Advantages
+## Key Points
 - **Dynamic Validation** - A hierarchical state machine validates each token generated, ensuring correctness during generation
 - **Token Healing** - Automatically recovers from tokenization mismatches, maintaining structural integrity
 - **Parallel Generation** - Explores multiple potential output paths concurrently, maximizing quality within constraints
@@ -57,4 +57,3 @@ We enthusiastically welcome community contributions and collaborations.
 
 [Explore the Code](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
 [Report an Issue](https://github.com/TheProxyCompany/proxy-structuring-engine/issues){: .md-button }
-[Contribute](https://github.com/TheProxyCompany/proxy-structuring-engine/blob/main/CONTRIBUTING.md){: .md-button }

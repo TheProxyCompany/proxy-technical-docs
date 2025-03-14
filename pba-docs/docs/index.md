@@ -55,7 +55,8 @@ Proxy Base Agent is explicitly designed to empower developers to add custom func
 - [Creating Custom Tools](extending/custom-tools.md): Integrate external APIs or specialized operations.
 - [Defining Custom States](extending/custom-states.md): Create new cognitive or action states.
 - [Building Custom State Graphs](extending/custom-state-graphs.md): Tailor agent behavior through custom workflows.
-- [Model Context Protocol](extending/model-context-protocol.md): The base agent can act as multiple MCP Clients, connecting to multiple MCP Servers. **The Model Context Protocol (MCP) allows your agent to seamlessly connect to and utilize external services, expanding its capabilities beyond local resources.**
+- [Model Context Protocol](extending/model-context-protocol.md): The base agent can act as multiple MCP Clients, connecting to multiple MCP Servers.
+    **The Model Context Protocol (MCP) allows your agent to connect to external services and dynamically add new tools.**
 
 ---
 
