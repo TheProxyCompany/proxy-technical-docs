@@ -77,7 +77,8 @@ extra_css:
   - ../assets/stylesheets/extra.css
 
 nav:
-  - Getting Started:
+  - Proxy Structuring Engine:
+    - index.md
     - Installation: getting-started/installation.md
     - Quickstart: getting-started/quickstart.md
 
