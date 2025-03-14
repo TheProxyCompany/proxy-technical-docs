@@ -10,7 +10,6 @@ The **PSE** augments **language models** at runtime, allowing them to function e
 
 > An agent is a system that takes actions in an environment.
 
----
 ## Installation & Quickstart
 
 Prerequisites:
@@ -34,7 +33,6 @@ For more detailed guides, see:
 - [Installation Guide](getting-started/installation.md)
 - [Quickstart Tutorial](getting-started/quickstart.md)
 
----
 
 ## Core Concepts
 
@@ -46,7 +44,6 @@ Dive into key ideas behind the Proxy Base Agent to fully harness its capabilitie
 - [States](concepts/states.md): Individual components of agent reasoning and actions.
 - [Tools](concepts/tools.md): Extendable external interactions and APIs.
 
----
 
 ## Extending the Agent
 
@@ -57,8 +54,6 @@ Proxy Base Agent is explicitly designed to empower developers to add custom func
 - [Building Custom State Graphs](extending/custom-state-graphs.md): Tailor agent behavior through custom workflows.
 - [Model Context Protocol](extending/model-context-protocol.md): The base agent can act as multiple MCP Clients, connecting to multiple MCP Servers.
     **The Model Context Protocol (MCP) allows your agent to connect to external services and dynamically add new tools.**
-
----
 
 ## Running the Agent
 
@@ -72,15 +67,11 @@ python -m agent
 
 which will launch an interactive setup wizard in your terminal.
 
----
-
 ## Language Models
 
 LLMs from your local huggingface cache will be used, or you can download a model from the Huggingface Hub during setup.
 
 Ideally any model that is supported by the Huggingface Transformers library will work with the base agent; with instruct tuned models performing best.
-
----
 
 ## API Inference
 
@@ -90,8 +81,6 @@ The base agent currently supports multiple inference frontends via the Huggingfa
 
 The base agent requires access to a language models tokenizer and sampling logic - this is currently only supported for local models.
 
----
-
 ## Research Preview
 
 We are sharing the base agent in its current state for research purposes.
@@ -100,8 +89,6 @@ It will be maintained as a research project, and is not intended for direct prod
 
 Those interested in using the base agent commercially can purchase a license from us.
 *This supports the open source nature of the project*.
-
----
 
 ## License
 
