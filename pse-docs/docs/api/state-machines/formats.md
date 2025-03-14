@@ -169,7 +169,7 @@ bounded_array_sm = ArraySchemaStateMachine(
 - Parameters:
   - `schema`: JSON Schema dictionary for array validation
   - `context`: Context for schema resolution containing refs and path information
-  
+
 - State graph structure:
   - State 0: Initial state accepting '[' to start the array
   - State 1: Whitespace handling after opening bracket or decision if empty array is valid
@@ -260,36 +260,22 @@ nested_sm = ObjectSchemaStateMachine(nested_schema, {})
 ```python
 from pse.types.json.any_json_schema import AnySchemaStateMachine
 
-# Define a complex schema with different types using oneOf
-complex_schema = {
-    "oneOf": [
-        {"type": "string"},
-        {"type": "number"},
-        {
-            "type": "object",
-            "properties": {
-                "status": {"type": "string", "enum": ["success", "error"]},
-                "data": {"type": "object"}
-            },
-            "required": ["status"]
-        }
-    ]
-}
+complex_schemas = [
+    {"type": "string"},
+    {"type": "number"},
+    {
+        "type": "object",
+        "properties": {
+            "status": {"type": "string", "enum": ["success", "error"]},
+            "data": {"type": "object"}
+        },
+        "required": ["status"]
+    }
+]
 
 # Create a state machine for the complex schema
 complex_sm = AnySchemaStateMachine(
-    schemas=[  # Usually derived from the oneOf array
-        {"type": "string"},
-        {"type": "number"},
-        {
-            "type": "object",
-            "properties": {
-                "status": {"type": "string", "enum": ["success", "error"]},
-                "data": {"type": "object"}
-            },
-            "required": ["status"]
-        }
-    ],
+    schemas=complex_schemas,
     context={}
 )
 ```
@@ -298,7 +284,7 @@ complex_sm = AnySchemaStateMachine(
 - Parameters:
   - `schemas`: List of JSON Schema objects to validate against
   - `context`: Context for schema resolution containing refs and path information
-  
+
 - State machine structure:
   - Creates individual state machines for each schema
   - Constructs transitions from the initial state to each schema state machine
@@ -404,14 +390,14 @@ person_closing_tag_sm = XMLTagStateMachine(tag_name="person", closing_tag=True)
 - Parameters:
   - `tag_name`: The name of the XML tag to match (required)
   - `closing_tag`: Boolean flag to indicate if it's a closing tag (default: False)
-  
+
 - Internal structure:
   - Inherits from `ChainStateMachine`
   - Creates a chain of `PhraseStateMachine` instances that match parts of the tag:
     1. Opening delimiter: `<` for normal tags, `</` for closing tags
     2. The tag name itself
     3. Closing delimiter: `>`
-  
+
 - Custom stepper behavior:
   - Implements `XMLTagStepper` that extends `ChainStepper`
   - Overrides `get_valid_continuations()` to return the complete tag as a single valid continuation
@@ -456,12 +442,12 @@ text_element_sm = XMLEncapsulatedStateMachine(
   - `state_machine`: The inner state machine that processes content between tags (required)
   - `min_buffer_length`: Minimum buffer length before attempting to match (default: -1)
   - `is_optional`: Whether the element is optional (default: False)
-  
+
 - State graph structure:
   - State 0: Uses `WaitFor` with `XMLTagStateMachine` to find opening tag
   - State 1: Processes content using the provided inner state machine
   - State 2: Looks for closing tag using `XMLTagStateMachine` with closing_tag=True
-  
+
 - Custom stepper behavior:
   - Uses `EncapsulatedStepper` for tracking buffer and inner state
   - Maintains proper nesting by requiring matching opening and closing tags
@@ -521,125 +507,13 @@ optional_element_sm = XMLEncapsulatedStateMachine(
 
 PSE provides state machines for parsing according to formal grammars.
 
-### LarkGrammarStateMachine
+Currently, this approach is kind of experimental and not all grammars are supported.
 
-`LarkGrammarStateMachine` implements a character-based parser that validates input against Lark grammar definitions.
+Manual massaging of the lark grammars is required to get the best results.
 
-```python
-from pse.types.grammar.lark import LarkGrammarStateMachine, LarkGrammar
-from lark import Lark
+We've provided a few pre-configured grammars - for valid python and bash syntax - but again these are hacks and not a full solution.
 
-# Create a LarkGrammar implementation for arithmetic expressions
-class ArithmeticGrammar(LarkGrammar):
-    def __init__(self):
-        # Define a simple grammar for arithmetic expressions
-        arithmetic_parser = Lark("""
-            expr: term (op term)*
-            term: NUMBER | "(" expr ")"
-            op: "+" | "-" | "*" | "/"
-            NUMBER: /[0-9]+/
-
-            %import common.WS
-            %ignore WS
-        """)
-        
-        super().__init__(
-            name="Arithmetic",
-            lark_grammar=arithmetic_parser,
-            delimiters=None  # No special delimiters
-        )
-
-# Create a state machine from the grammar
-arithmetic_sm = LarkGrammarStateMachine(ArithmeticGrammar())
-```
-
-**Implementation details:**
-- Parameters:
-  - `grammar`: A `LarkGrammar` instance that encapsulates the Lark parser and validation logic
-  
-- Internal structure:
-  - Extends `CharacterStateMachine` with minimum character requirement of 1
-  - Uses the provided `LarkGrammar` for token validation
-  - Maintains a character buffer for incremental validation
-  
-- Custom stepper behavior:
-  - `LarkGrammarStepper` extends `CharacterStepper`
-  - Validates input incrementally using the grammar's `validate` method
-  - Handles partial inputs through non-strict validation mode
-  - Properly tracks state between token processing steps
-
-**Validation modes:**
-- Strict mode: Requires complete, syntactically valid input
-- Non-strict mode: Allows partial inputs that could potentially be completed into valid syntax
-
-**Example with delimiters:**
-```python
-from pse.types.grammar.lark import LarkGrammarStateMachine, LarkGrammar
-from lark import Lark
-
-# Create a LarkGrammar with markdown-style delimiters
-class SQLGrammar(LarkGrammar):
-    def __init__(self):
-        sql_parser = Lark("""
-            query: select_stmt
-            select_stmt: "SELECT" columns "FROM" table
-            columns: column ("," column)*
-            column: CNAME | "*"
-            table: CNAME
-            
-            %import common.CNAME
-            %import common.WS
-            %ignore WS
-        """)
-        
-        super().__init__(
-            name="SQL",
-            lark_grammar=sql_parser,
-            delimiters=("```sql\n", "\n```")  # Markdown-style delimiters
-        )
-
-# Create state machine with SQL grammar
-sql_sm = LarkGrammarStateMachine(SQLGrammar())
-
-# This will match:
-# ```sql
-# SELECT id, name FROM users
-# ```
-```
-
-**Creating custom grammar implementations:**
-```python
-from lark import Lark
-from pse.types.grammar.lark import LarkGrammar, LarkGrammarStateMachine
-
-class CustomGrammar(LarkGrammar):
-    def __init__(self):
-        # Define your custom grammar
-        my_grammar = Lark("""
-            # Your grammar rules here
-        """)
-        
-        super().__init__(
-            name="MyGrammar",
-            lark_grammar=my_grammar,
-            delimiters=None
-        )
-    
-    def validate(self, input: str, strict: bool = False, start: str | None = None) -> bool:
-        # Customize validation logic if needed
-        try:
-            self.lark_grammar.parse(input, start=start)
-            return True
-        except Exception:
-            if not strict:
-                # Custom logic for partial inputs
-                # Return True if the partial input could be valid
-                pass
-            return False
-
-# Create a state machine with the custom grammar
-custom_sm = LarkGrammarStateMachine(CustomGrammar())
-```
+In the future we want to natively support BNF grammars and have a more robust solution.
 
 **Integration with other state machines:**
 ```python
@@ -827,7 +701,7 @@ engine = StructuringEngine().configure(bash_block)
 
 # Generate shell script with LLM
 response = engine.generate(
-    "Write a Bash script to find the largest files in a directory", 
+    "Write a Bash script to find the largest files in a directory",
     model="claude-3-sonnet-20240229"
 )
 ```
@@ -887,31 +761,19 @@ custom_block_sm = FencedFreeformStateMachine(
   - `char_max`: Maximum number of characters allowed (default: None)
   - `buffer_length`: Controls character buffer size during processing (default: 32768)
   - `is_optional`: Whether the content is optional (default: False)
-  
+
 - Internal structure:
   - Extends `EncapsulatedStateMachine` with freeform character acceptance
   - Uses `CharacterStateMachine` internally with a whitelist containing all characters
   - Maintains character counting to enforce min/max constraints
   - Provides a `FencedFreeformStepper` for controlling character processing
-  
+
 - Fence behavior:
   - With identifier: Uses markdown-style code fences (```<identifier>\n and \n```)
   - With delimiters: Uses the provided custom delimiters
   - Both can be set to customize fence appearance
 
 **Usage examples:**
-
-**Example: Empty opening delimiter (capture immediately)**
-```python
-from pse.types.misc.fenced_freeform import FencedFreeformStateMachine
-
-# Create a state machine that accepts arbitrary content until a specific pattern
-until_marker_sm = FencedFreeformStateMachine(
-    delimiters=("", "END_OF_CONTENT"),  # Start capturing right away, end at marker
-)
-
-# This will match any text until "END_OF_CONTENT" is encountered
-```
 
 **Example: Character limits**
 ```python
@@ -925,30 +787,6 @@ description_sm = FencedFreeformStateMachine(
 )
 
 # This enforces both minimum and maximum length constraints
-```
-
-**Example: Integration with other state machines**
-```python
-from pse import StructuringEngine
-from pse.types.misc.fenced_freeform import FencedFreeformStateMachine
-
-# Create a markdown state machine for code blocks
-code_block_sm = FencedFreeformStateMachine(identifier="python")
-
-# Configure a document with both structure and freeform content
-engine = StructuringEngine().configure(
-    {
-        "type": "object",
-        "properties": {
-            "title": {"type": "string"},
-            "description": {"type": "string"},
-            "code_example": {"type": "string", "contentMediaType": "text/x-python"}
-        }
-    },
-    fenced_type_mapping={"text/x-python": code_block_sm}
-)
-
-# The result will be a document with structured fields and a fenced code block
 ```
 
 **Common applications:**

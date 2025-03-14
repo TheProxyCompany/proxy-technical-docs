@@ -86,7 +86,7 @@ numbers_list = LoopStateMachine(
     NumberStateMachine(),
     min_loop_count=1,  # At least one number
     max_loop_count=5,  # Maximum five numbers
-    whitespace_seperator=True  # Allow whitespace between numbers
+    whitespace_seperator=True  # Allow whitespace between elements
 )
 ```
 

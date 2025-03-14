@@ -33,7 +33,7 @@ person_schema = {
 }
 
 # Create a structuring engine from the schema
-engine = StructuringEngine.from_json_schema(person_schema)
+engine = StructuringEngine.configure(person_schema)
 ```
 
 **Key features:**
@@ -64,7 +64,7 @@ class Person(BaseModel):
     hobbies: List[str] = []
 
 # Create a structuring engine from the Pydantic model
-engine = StructuringEngine.from_pydantic(Person)
+engine = StructuringEngine.configure(Person)
 ```
 
 **Key features:**
@@ -79,30 +79,26 @@ PSE can extract schema information from function signatures, enabling generation
 
 ```python
 from pse import StructuringEngine
-from typing import List, Dict, Optional
 
 def search_database(
     query: str,
     max_results: int = 10,
-    filters: Optional[Dict[str, str]] = None,
-    sort_by: List[str] = ["relevance"]
-) -> List[Dict]:
+    filters: dict[str, str] | None = None,
+    sort_by: list[str] = ["relevance"]
+) -> list[dict]:
     """
     Search the database with the given parameters.
-    
+
     Args:
         query: The search query string
         max_results: Maximum number of results to return
         filters: Optional dictionary of field/value filters
         sort_by: Fields to sort results by
-    
-    Returns:
-        List of matching records
     """
     pass
 
 # Create a structuring engine from the function signature
-engine = StructuringEngine.from_function(search_database)
+engine = StructuringEngine.configure(search_database)
 ```
 
 **Key features:**
@@ -110,44 +106,3 @@ engine = StructuringEngine.from_function(search_database)
 - Supports default values and optional parameters
 - Handles complex nested types with type annotations
 - Enables generation of valid function calls with proper arguments
-
-## Custom Grammar Definitions
-
-For highly specialized formats, PSE supports custom grammar definitions using the Lark grammar format.
-
-```python
-from pse import StructuringEngine
-
-# Define a custom grammar in Lark EBNF format
-sql_grammar = """
-    query: select_stmt
-
-    select_stmt: "SELECT" columns "FROM" table_name ["WHERE" condition]
-    
-    columns: column ("," column)*
-    column: IDENT | "*"
-    
-    table_name: IDENT
-    
-    condition: expr
-    expr: IDENT comparison_op value
-    comparison_op: "=" | "<" | ">" | "<=" | ">=" | "!="
-    value: STRING | NUMBER
-    
-    IDENT: /[a-zA-Z_][a-zA-Z0-9_]*/
-    STRING: /"[^"]*"/
-    NUMBER: /[0-9]+/
-    
-    %import common.WS
-    %ignore WS
-"""
-
-# Create a structuring engine from the grammar
-engine = StructuringEngine.from_grammar(sql_grammar, start="query")
-```
-
-**Key features:**
-- Support for complex language definitions
-- EBNF grammar format for precise structural control
-- Flexible parsing for domain-specific languages
-- Perfect for specialized output formats

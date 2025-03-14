@@ -30,7 +30,7 @@ constrained_string_sm = StringStateMachine(
   - Standard JSON escape sequences: \", \\, \/, \b, \f, \n, \r, \t
   - Unicode escape sequences: \uXXXX (4 hex digits)
   - Automatically rejects invalid escape sequences
-  
+
 - Character handling:
   - Properly validates all string content
   - Automatically rejects control characters that must be escaped
@@ -129,7 +129,7 @@ from pse.types.json.json_number import NumberSchemaStateMachine
 # Create a number state machine with JSON Schema constraints
 constrained_number_sm = NumberSchemaStateMachine(
     schema={
-        "type": "number", 
+        "type": "number",
         "minimum": 0,
         "maximum": 100,
         "exclusiveMaximum": True
@@ -354,7 +354,7 @@ from pse.types.json.json_array import ArraySchemaStateMachine
 # Create a typed array state machine for arrays of strings
 string_array_sm = ArraySchemaStateMachine(
     schema={
-        "type": "array", 
+        "type": "array",
         "items": {"type": "string"}
     },
     context={}
@@ -519,7 +519,7 @@ for char in input_str:
 # Get the parsed object from the first valid stepper
 if steppers:
     parsed_object = steppers[0].value  # {"a": 1, "b": True, "c": "hello"}
-    
+
     # Access individual properties
     value_a = parsed_object["a"]  # 1
 ```
