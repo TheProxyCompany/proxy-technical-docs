@@ -74,18 +74,18 @@ nav:
     - Installation: getting-started/installation.md
   - Concepts:
     - Overview: concepts/overview.md
-    - State Graph: concepts/state-graph.md
+    # - State Graph: concepts/state-graph.md
     - States: concepts/states.md
     - Tools: concepts/tools.md
-    - State Machine: concepts/state-machine.md
+    # - State Machine: concepts/state-machine.md
   - Extending the Agent:
     - Custom Tools: extending/custom-tools.md
     - Custom States: extending/custom-states.md
-    - Custom State Graphs: extending/custom-state-graphs.md
+    # - Custom State Graphs: extending/custom-state-graphs.md
     - Model Context Protocol: extending/model-context-protocol.md
-  - Running the Agent:
-    - MLX: frontends/mlx.md
-    - PyTorch: frontends/pytorch.md
+  # - Running the Agent:
+  #   - MLX: frontends/mlx.md
+  #   - PyTorch: frontends/pytorch.md
   - API Reference:
     - Agent: api/agent.md
 
