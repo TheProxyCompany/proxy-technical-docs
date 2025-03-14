@@ -10,6 +10,52 @@ The **PSE** augments **language models** at runtime, allowing them to function e
 
 > An agent is a system that takes actions in an environment.
 
+## PBA Architecture
+
+The agent operates through a structured workflow defined by a **state graph**, transitioning between clearly defined **planning** and **action** phases:
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Plan
+
+    subgraph Plan["Planning Phase"]
+        PlanStates["Thinking, Scratchpad, Inner Monologue"]
+        PlanLoop{"More planning needed?"}
+
+        PlanStates --> PlanLoop
+        PlanLoop -- "Yes" --> PlanStates
+        PlanLoop -- "No" --> Action
+    end
+
+    Plan --> Action
+
+    subgraph Action["Action Phase"]
+        ActionChoice{"Choose action type"}
+        ToolAction["Tool Call"]
+        CodeAction["Python Code"]
+
+        ActionChoice -- "Tool" --> ToolAction
+        ActionChoice -- "Code" --> CodeAction
+    end
+
+    Action --> Done([Done])
+    Done --> StepCheck{"More steps?"}
+    StepCheck -- "Yes" --> Action
+    StepCheck -- "No" --> End([End])
+
+    classDef phase fill:#d1ecf1,stroke:#0c5460
+    classDef decision fill:#fff3cd,stroke:#856404,shape:diamond
+    classDef state fill:#e2f0cb,stroke:#4b6a2d
+    classDef terminal fill:#e2e3e5,stroke:#495057,shape:stadium
+
+    class Plan,Action phase
+    class PlanLoop,ActionChoice,StepCheck decision
+    class PlanStates,ToolAction,CodeAction state
+    class Start,Done,End terminal
+```
+
+This state graph can be easily modified and extended, allowing for a wide range of agentic behaviors.
+
 ## Installation & Quickstart
 
 Prerequisites:
