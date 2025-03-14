@@ -1,6 +1,6 @@
 # PSE Core Architecture
 
-The Proxy Structuring Engine is built on a high-performance core that implements a sophisticated non-deterministic state machine system for grammar-based constraints. This page provides a detailed look at the internal architecture of PSE's core implementation, which is distributed as a precompiled binary via PyPI.
+The Proxy Structuring Engine is built on a high-performance C++ core that implements a non-deterministic parser. This page provides a detailed look at the internal architecture of PSE's core implementation, which is distributed as a precompiled binary via PyPI.
 
 ## Architectural Foundation
 
@@ -49,7 +49,7 @@ Key functionalities include:
 - Processing tokens and advancing through states
 - Creating multiple branches to explore different paths
 - Determining valid token continuations from the current position
-- Checking for acceptance states 
+- Checking for acceptance states
 - Supporting hierarchical traversal with sub-steppers
 
 ### StepperDelta
