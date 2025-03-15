@@ -40,6 +40,13 @@ if [ -n "$GH_TOKEN" ]; then
   python3 -m pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
 fi
 
+# Install files-to-prompt for documentation scraping
+echo "Installing files-to-prompt for LLM-friendly documentation..."
+python3 -m pip install files-to-prompt || {
+    echo "Failed to install files-to-prompt, documentation scraping will be skipped"
+    SKIP_SCRAPING=true
+}
+
 # Copy assets from root assets folder to site/assets
 echo "Copying assets from root directory to site/assets..."
 mkdir -p site/assets
@@ -83,6 +90,21 @@ else
   echo "Warning: PBA site directory not found"
 fi
 cd ..
+
+# Generate LLM-friendly documentation
+if [ -z "$SKIP_SCRAPING" ]; then
+  echo "Generating LLM-friendly documentation..."
+  $PYTHON_CMD -m files_to_prompt docs/index.md pba-docs/docs pse-docs/docs > llm.txt
+  if [ -f "llm.txt" ]; then
+    echo "Moving LLM-friendly documentation to site/assets..."
+    mv llm.txt site/assets
+    echo "LLM-friendly documentation generated successfully"
+  else
+    echo "Warning: LLM-friendly documentation generation failed"
+  fi
+else
+  echo "Skipping LLM-friendly documentation generation due to missing dependencies"
+fi
 
 # Ensure robots.txt is copied to the site directory
 if [ -f "robots.txt" ]; then
