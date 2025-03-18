@@ -38,14 +38,9 @@ if [ -n "$GH_TOKEN" ]; then
   $PYTHON_CMD -m pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
 fi
 
-# Generate LLM-friendly documentation
-if [ -z "$SKIP_SCRAPING" ]; then
-  echo "Generating LLM-friendly documentation..."
-  files-to-prompt docs/index.md pba-docs/docs pse-docs/docs > assets/llm.txt
-  echo "LLM-friendly documentation generated successfully"
-else
-  echo "Skipping LLM-friendly documentation generation due to missing dependencies"
-fi
+echo "Generating LLM-friendly documentation..."
+files-to-prompt docs/index.md pba-docs/docs pse-docs/docs > assets/llm.txt
+echo "LLM-friendly documentation generated successfully"
 
 # Copy assets from root assets folder to site/assets
 echo "Copying assets from root directory to site/assets..."
