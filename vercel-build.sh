@@ -94,6 +94,11 @@ cd ..
 # Generate LLM-friendly documentation
 if [ -z "$SKIP_SCRAPING" ]; then
   echo "Generating LLM-friendly documentation..."
+  if command -v python3 &> /dev/null; then
+    PYTHON_CMD="python3"
+  else
+    PYTHON_CMD="python"
+  fi
   $PYTHON_CMD -m files_to_prompt docs/index.md pba-docs/docs pse-docs/docs > llm.txt
   if [ -f "llm.txt" ]; then
     echo "Moving LLM-friendly documentation to site/assets..."
