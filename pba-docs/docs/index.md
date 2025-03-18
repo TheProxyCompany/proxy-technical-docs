@@ -45,16 +45,18 @@ flowchart TD
 
     Action --> Finish([Finish])
 
-    classDef phase fill:#DAD0AF,stroke:#0c5460
-    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
-    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
-    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
+    classDef phase fill:#DAD0AF,stroke:#0c5460,border-color:#024645
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:diamond
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:stadium
 
     class Plan,Action phase
     class PlanLoop,ActionChoice,StepCheck decision
     class PlanningChoice,Thinking,Scratchpad,InnerMonologue state
     class ToolAction,CodeAction state
     class Start,Finish terminal
+
+    linkStyle default stroke:#024645
 ```
 
 ### Planning Phase
