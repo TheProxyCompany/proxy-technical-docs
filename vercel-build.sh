@@ -41,7 +41,7 @@ fi
 # Generate LLM-friendly documentation
 if [ -z "$SKIP_SCRAPING" ]; then
   echo "Generating LLM-friendly documentation..."
-  $PYTHON_CMD -m files_to_prompt docs/index.md pba-docs/docs pse-docs/docs > assets/llm.txt
+  files-to-prompt docs/index.md pba-docs/docs pse-docs/docs > assets/llm.txt
   echo "LLM-friendly documentation generated successfully"
 else
   echo "Skipping LLM-friendly documentation generation due to missing dependencies"
