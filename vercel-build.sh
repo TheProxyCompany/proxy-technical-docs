@@ -21,11 +21,12 @@ source .venv/bin/activate || true
 
 # Verify we're using the venv Python
 echo "Using Python: $(which python)"
+PYTHON_CMD=$(which python)
 
 # Install dependencies
 echo "Installing dependencies..."
-python3 -m pip install --upgrade pip || python -m pip install --upgrade pip
-python3 -m pip install -U -r requirements.txt || python -m pip install -U -r requirements.txt
+$PYTHON_CMD -m pip install --upgrade pip
+$PYTHON_CMD -m pip install -U -r requirements.txt
 
 # Install pngquant for image optimization
 echo "Installing pngquant..."
@@ -37,13 +38,13 @@ which pngquant || echo "Warning: pngquant not found in PATH"
 if [ -n "$GH_TOKEN" ]; then
   INSIDERS=true
   echo "Installing mkdocs-material-insiders..."
-  python3 -m pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
+  $PYTHON_CMD -m pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
 fi
 
 # Generate LLM-friendly documentation
 if [ -z "$SKIP_SCRAPING" ]; then
   echo "Generating LLM-friendly documentation..."
-  python3 -m files_to_prompt docs/index.md pba-docs/docs pse-docs/docs > assets/llm.txt
+  $PYTHON_CMD -m files_to_prompt docs/index.md pba-docs/docs pse-docs/docs > assets/llm.txt
   echo "LLM-friendly documentation generated successfully"
 else
   echo "Skipping LLM-friendly documentation generation due to missing dependencies"
@@ -54,17 +55,9 @@ echo "Copying assets from root directory to site/assets..."
 mkdir -p site/assets
 cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
 
-# Using mkdocs from virtual environment
-if command -v python3 &> /dev/null; then
-  MKDOCS="python3 -m mkdocs"
-else
-  MKDOCS="python -m mkdocs"
-fi
-echo "Using mkdocs command: $MKDOCS"
-
 # Build main docs
 echo "Building main documentation..."
-$MKDOCS build
+$PYTHON_CMD -m mkdocs build
 
 # Create directories for sub-docs
 mkdir -p site/pse
