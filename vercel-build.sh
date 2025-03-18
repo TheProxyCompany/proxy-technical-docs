@@ -46,6 +46,16 @@ python3 -m pip install files-to-prompt || {
     echo "Failed to install files-to-prompt, documentation scraping will be skipped"
     SKIP_SCRAPING=true
 }
+echo "Files-to-prompt installed"
+
+# Generate LLM-friendly documentation
+if [ -z "$SKIP_SCRAPING" ]; then
+  echo "Generating LLM-friendly documentation..."
+  python3 -m files_to_prompt docs/index.md pba-docs/docs pse-docs/docs > assets/llm.txt
+  echo "LLM-friendly documentation generated successfully"
+else
+  echo "Skipping LLM-friendly documentation generation due to missing dependencies"
+fi
 
 # Copy assets from root assets folder to site/assets
 echo "Copying assets from root directory to site/assets..."
@@ -90,26 +100,6 @@ else
   echo "Warning: PBA site directory not found"
 fi
 cd ..
-
-# Generate LLM-friendly documentation
-if [ -z "$SKIP_SCRAPING" ]; then
-  echo "Generating LLM-friendly documentation..."
-  if command -v python3 &> /dev/null; then
-    PYTHON_CMD="python3"
-  else
-    PYTHON_CMD="python"
-  fi
-  $PYTHON_CMD -m files_to_prompt docs/index.md pba-docs/docs pse-docs/docs > llm.txt
-  if [ -f "llm.txt" ]; then
-    echo "Moving LLM-friendly documentation to site/assets..."
-    mv llm.txt site/assets
-    echo "LLM-friendly documentation generated successfully"
-  else
-    echo "Warning: LLM-friendly documentation generation failed"
-  fi
-else
-  echo "Skipping LLM-friendly documentation generation due to missing dependencies"
-fi
 
 # Ensure robots.txt is copied to the site directory
 if [ -f "robots.txt" ]; then
