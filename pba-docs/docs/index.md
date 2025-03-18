@@ -10,24 +10,25 @@ The **PSE** augments **language models** at runtime, allowing them to function e
 
 > An agent is a system that takes actions in an environment.
 
-## PBA Architecture
+## Proxy Base Agent
 
-The agent operates through a structured workflow defined by a **state graph**, transitioning between clearly defined **planning** and **action** phases:
+The Proxy Base Agent operates through a structured workflow defined by a **state graph**, transitioning through clearly defined **planning** and **action** phases:
 
 ```mermaid
 flowchart TD
     Start([Start]) --> Plan
+    Start -. force_planning = false .-> Action
 
     subgraph Plan["Planning Phase"]
-        PlanStates["Thinking, Scratchpad, Inner Monologue"]
-        PlanLoop{"More planning needed?"}
+        PlanningChoice{"Choose planning type"}
+        Thinking["Thinking"]
+        Scratchpad["Scratchpad"]
+        InnerMonologue["Inner Monologue"]
 
-        PlanStates --> PlanLoop
-        PlanLoop -- "Yes" --> PlanStates
-        PlanLoop -- "No" --> Action
+        PlanningChoice --> Thinking
+        PlanningChoice --> Scratchpad
+        PlanningChoice --> InnerMonologue
     end
-
-    Plan --> Action
 
     subgraph Action["Action Phase"]
         ActionChoice{"Choose action type"}
@@ -38,23 +39,44 @@ flowchart TD
         ActionChoice -- "Code" --> CodeAction
     end
 
-    Action --> Done([Done])
-    Done --> StepCheck{"More steps?"}
-    StepCheck -- "Yes" --> Action
-    StepCheck -- "No" --> End([End])
+    Plan --> PlanLoop{"More planning needed?"}
+    PlanLoop -- "Yes" --> Plan
+    PlanLoop -- "No" --> Action
 
-    classDef phase fill:#d1ecf1,stroke:#0c5460
-    classDef decision fill:#fff3cd,stroke:#856404,shape:diamond
-    classDef state fill:#e2f0cb,stroke:#4b6a2d
-    classDef terminal fill:#e2e3e5,stroke:#495057,shape:stadium
+    Action --> Finish([Finish])
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
 
     class Plan,Action phase
     class PlanLoop,ActionChoice,StepCheck decision
-    class PlanStates,ToolAction,CodeAction state
-    class Start,Done,End terminal
+    class PlanningChoice,Thinking,Scratchpad,InnerMonologue state
+    class ToolAction,CodeAction state
+    class Start,Finish terminal
 ```
 
-This state graph can be easily modified and extended, allowing for a wide range of agentic behaviors.
+### Planning Phase
+
+The agent engages in iterative reasoning through multiple cognitive states:
+
+- **Thinking**: High-level reasoning and goal setting.
+- **Scratchpad**: Intermediate notes and working memory.
+- **Inner Monologue**: Reflective reasoning and self-assessment.
+
+### Action Phase
+
+After sufficient planning, the agent transitions to executing actions:
+
+- **Tool Calls**: Interaction with external APIs or custom tools.
+- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+
+### State Graph
+
+This state graph describes the base behavior of the agent.
+It can be extended and modified to support more complex agentic behaviors.
+
 
 ## Installation & Quickstart
 
@@ -74,72 +96,16 @@ pip install proxy-base-agent
 python -m agent
 ```
 
+# More Information
+
 For more detailed guides, see:
 
 - [Installation Guide](getting-started/installation.md)
 - [Quickstart Tutorial](getting-started/quickstart.md)
 
-
-## Core Concepts
-
-Dive into key ideas behind the Proxy Base Agent to fully harness its capabilities:
-
-- [Overview](concepts/overview.md): High-level introduction to the agent.
-- [State Graph](concepts/state-graph.md): Directed graph defining agent states and transitions.
-- [State Machine](concepts/state-machine.md): Structured workflow governing agent behavior.
-- [States](concepts/states.md): Individual components of agent reasoning and actions.
-- [Tools](concepts/tools.md): Extendable external interactions and APIs.
-
-
-## Extending the Agent
-
-Proxy Base Agent is explicitly designed to empower developers to add custom functionality and behaviors:
-
-- [Creating Custom Tools](extending/custom-tools.md): Integrate external APIs or specialized operations.
-- [Defining Custom States](extending/custom-states.md): Create new cognitive or action states.
-- [Building Custom State Graphs](extending/custom-state-graphs.md): Tailor agent behavior through custom workflows.
-- [Model Context Protocol](extending/model-context-protocol.md): The base agent can connect to multiple MCP Servers and add new tools dynamically.
-
-## Running the Agent
-
-The agent is designed vertically, meaning that the model and all data is stored on the machine running the agent.
-
-Run the agent with:
-
-```bash
-python -m agent
-```
-
-which will launch an interactive setup wizard in your terminal.
-
-## Language Models
-
-LLMs from your local huggingface cache will be used, or you can download a model from the Huggingface Hub during setup.
-
-Ideally any model that is supported by the Huggingface Transformers library will work with the base agent; with instruct tuned models performing best.
-
-## API Inference
-
-We do not currently provide a hosted version of the base agent, or an off-the-shelf API.
-
-The base agent currently supports multiple inference frontends via the Huggingface Transformers library; with tested support for MLX & PyTorch; with planned support for VLLM, SGLang, TensorFlow, and Jax.
-
-The base agent requires access to a language models tokenizer and sampling logic - this is currently only supported for local models.
-
-## Research Preview
-
-We are sharing the base agent in its current state for research purposes.
-
-It will be maintained as a research project, and is not intended for direct production use.
-
-Those interested in using the base agent commercially can purchase a license from us.
-*This supports the open source nature of the project*.
-
-## License
-
-We offer personal and commercial licenses for those interested in using the base agent in their own projects.
-
-We invite meaningful contributions to the project, and afford free commercial licenses to those who contribute to the project.
+- [Core Concepts](concepts/index.md)
+- [Extending the Agent](extending/index.md)
+- [Frontends](frontends/index.md)
 
 ---
 
