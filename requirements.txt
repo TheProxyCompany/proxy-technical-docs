@@ -5,3 +5,4 @@ mkdocstrings-python
 pymdown-extensions
 mkdocs-material[imaging]
 mkdocs-git-revision-date-localized-plugin
+files-to-prompt

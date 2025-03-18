@@ -40,14 +40,6 @@ if [ -n "$GH_TOKEN" ]; then
   python3 -m pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
 fi
 
-# Install files-to-prompt for documentation scraping
-echo "Installing files-to-prompt for LLM-friendly documentation..."
-python3 -m pip install files-to-prompt || {
-    echo "Failed to install files-to-prompt, documentation scraping will be skipped"
-    SKIP_SCRAPING=true
-}
-echo "Files-to-prompt installed"
-
 # Generate LLM-friendly documentation
 if [ -z "$SKIP_SCRAPING" ]; then
   echo "Generating LLM-friendly documentation..."
