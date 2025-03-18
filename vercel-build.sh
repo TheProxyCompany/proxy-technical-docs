@@ -42,6 +42,7 @@ fi
 echo "Copying assets from root directory to site/assets..."
 mkdir -p site/assets
 cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
+cp llm.txt site/
 
 # Build main docs
 echo "Building main documentation..."
