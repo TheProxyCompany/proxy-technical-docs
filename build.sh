@@ -23,13 +23,6 @@ $PYTHON_CMD -m pip install -r requirements.txt || {
     $PYTHON_CMD -m pip install mkdocs mkdocs-material mkdocs-material-extensions pymdown-extensions
 }
 
-# Install files-to-prompt for documentation scraping
-echo "Installing files-to-prompt for LLM-friendly documentation..."
-$PYTHON_CMD -m pip install files-to-prompt || {
-    echo "Failed to install files-to-prompt, documentation scraping will be skipped"
-    SKIP_SCRAPING=true
-}
-
 # Copy assets from root assets folder to site/assets
 echo "Copying assets from root directory to site/assets..."
 mkdir -p site/assets
@@ -40,8 +33,14 @@ echo "Building main documentation..."
 $PYTHON_CMD -m mkdocs build
 cp -r assets/stylesheets/extra.css site/assets/stylesheets/ || echo "Warning: Assets copy failed"
 
+echo "Generating LLM-friendly documentation..."
+files-to-prompt docs/index.md pba-docs/docs pse-docs/docs > llm.txt
+cp llm.txt site/
+echo "LLM-friendly documentation generated successfully"
+
 # Build PSE documentation
 echo "Building PSE documentation..."
+files-to-prompt pse-docs/docs > pse-docs/docs/llm.txt
 cd pse-docs
 $PYTHON_CMD -m mkdocs build || {
   echo "Warning: PSE docs build had errors, but continuing..."
@@ -60,6 +59,7 @@ fi
 
 # Build PBA documentation
 echo "Building PBA documentation..."
+files-to-prompt pba-docs/docs > pba-docs/docs/llm.txt
 cd pba-docs
 $PYTHON_CMD -m mkdocs build || {
   echo "Warning: PBA docs build had errors, but continuing..."
@@ -74,21 +74,6 @@ if [ -d "site" ]; then
 else
   cd ..
   echo "Warning: PBA site directory not found, skipping copy"
-fi
-
-# Generate LLM-friendly documentation
-if [ -z "$SKIP_SCRAPING" ]; then
-  echo "Generating LLM-friendly documentation..."
-  $PYTHON_CMD -m files_to_prompt docs/index.md pba-docs/docs pse-docs/docs > llm.txt
-  if [ -f "llm.txt" ]; then
-    echo "Moving LLM-friendly documentation to site/assets..."
-    mv llm.txt site/assets
-    echo "LLM-friendly documentation generated successfully"
-  else
-    echo "Warning: LLM-friendly documentation generation failed"
-  fi
-else
-  echo "Skipping LLM-friendly documentation generation due to missing dependencies"
 fi
 
 echo "Documentation build complete."

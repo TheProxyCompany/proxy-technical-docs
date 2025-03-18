@@ -1,0 +1,494 @@
+pba-docs/docs/index.md
+---
+# Proxy Base Agent
+
+The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
+
+The base agent is designed to **rapidly prototype and develop LLM-powered agents** with a focus on **local execution, stateful interactions, and extensibility**.
+
+The **PSE** augments **language models** at runtime, allowing them to function effectively as agents - capable of adhering to predefined workflows, multi-step reasoning, and external tool usage.
+
+## What is an Agent?
+
+> An agent is a system that takes actions in an environment.
+
+## Proxy Base Agent
+
+The Proxy Base Agent operates through a structured workflow defined by a **state graph**, transitioning through clearly defined **planning** and **action** phases:
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Plan
+    Start -. force_planning = false .-> Action
+
+    subgraph Plan["Planning Phase"]
+        PlanningChoice{"Choose planning type"}
+        Thinking["Thinking"]
+        Scratchpad["Scratchpad"]
+        InnerMonologue["Inner Monologue"]
+
+        PlanningChoice --> Thinking
+        PlanningChoice --> Scratchpad
+        PlanningChoice --> InnerMonologue
+    end
+
+    subgraph Action["Action Phase"]
+        ActionChoice{"Choose action type"}
+        ToolAction["Tool Call"]
+        CodeAction["Python Code"]
+
+        ActionChoice -- "Tool" --> ToolAction
+        ActionChoice -- "Code" --> CodeAction
+    end
+
+    Plan --> PlanLoop{"More planning needed?"}
+    PlanLoop -- "Yes" --> Plan
+    PlanLoop -- "No" --> Action
+
+    Action --> Finish([Finish])
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
+
+    class Plan,Action phase
+    class PlanLoop,ActionChoice,StepCheck decision
+    class PlanningChoice,Thinking,Scratchpad,InnerMonologue state
+    class ToolAction,CodeAction state
+    class Start,Finish terminal
+```
+
+### Planning Phase
+
+The agent engages in iterative reasoning through multiple cognitive states:
+
+- **Thinking**: High-level reasoning and goal setting.
+- **Scratchpad**: Intermediate notes and working memory.
+- **Inner Monologue**: Reflective reasoning and self-assessment.
+
+### Action Phase
+
+After sufficient planning, the agent transitions to executing actions:
+
+- **Tool Calls**: Interaction with external APIs or custom tools.
+- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+
+### State Graph
+
+This state graph describes the base behavior of the agent.
+It can be extended and modified to support more complex agentic behaviors.
+
+
+## Installation & Quickstart
+
+Prerequisites:
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
+Get the Proxy Base Agent running quickly:
+
+```bash
+# Install required dependencies
+pip install proxy-base-agent
+
+# Launch interactive setup wizard
+python -m agent
+```
+
+# More Information
+
+For more detailed guides, see:
+
+- [Installation Guide](getting-started/installation.md)
+- [Quickstart Tutorial](getting-started/quickstart.md)
+
+- [Core Concepts](concepts/index.md)
+- [Extending the Agent](extending/index.md)
+- [Frontends](frontends/index.md)
+
+---
+
+[View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
+
+
+---
+pba-docs/docs/llm.txt
+---
+pba-docs/docs/index.md
+---
+# Proxy Base Agent
+
+The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
+
+The base agent is designed to **rapidly prototype and develop LLM-powered agents** with a focus on **local execution, stateful interactions, and extensibility**.
+
+The **PSE** augments **language models** at runtime, allowing them to function effectively as agents - capable of adhering to predefined workflows, multi-step reasoning, and external tool usage.
+
+## What is an Agent?
+
+> An agent is a system that takes actions in an environment.
+
+## Proxy Base Agent
+
+The Proxy Base Agent operates through a structured workflow defined by a **state graph**, transitioning through clearly defined **planning** and **action** phases:
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Plan
+    Start -. force_planning = false .-> Action
+
+    subgraph Plan["Planning Phase"]
+        PlanningChoice{"Choose planning type"}
+        Thinking["Thinking"]
+        Scratchpad["Scratchpad"]
+        InnerMonologue["Inner Monologue"]
+
+        PlanningChoice --> Thinking
+        PlanningChoice --> Scratchpad
+        PlanningChoice --> InnerMonologue
+    end
+
+    subgraph Action["Action Phase"]
+        ActionChoice{"Choose action type"}
+        ToolAction["Tool Call"]
+        CodeAction["Python Code"]
+
+        ActionChoice -- "Tool" --> ToolAction
+        ActionChoice -- "Code" --> CodeAction
+    end
+
+    Plan --> PlanLoop{"More planning needed?"}
+    PlanLoop -- "Yes" --> Plan
+    PlanLoop -- "No" --> Action
+
+    Action --> Finish([Finish])
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
+
+    class Plan,Action phase
+    class PlanLoop,ActionChoice,StepCheck decision
+    class PlanningChoice,Thinking,Scratchpad,InnerMonologue state
+    class ToolAction,CodeAction state
+    class Start,Finish terminal
+```
+
+### Planning Phase
+
+The agent engages in iterative reasoning through multiple cognitive states:
+
+- **Thinking**: High-level reasoning and goal setting.
+- **Scratchpad**: Intermediate notes and working memory.
+- **Inner Monologue**: Reflective reasoning and self-assessment.
+
+### Action Phase
+
+After sufficient planning, the agent transitions to executing actions:
+
+- **Tool Calls**: Interaction with external APIs or custom tools.
+- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+
+### State Graph
+
+This state graph describes the base behavior of the agent.
+It can be extended and modified to support more complex agentic behaviors.
+
+
+## Installation & Quickstart
+
+Prerequisites:
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
+Get the Proxy Base Agent running quickly:
+
+```bash
+# Install required dependencies
+pip install proxy-base-agent
+
+# Launch interactive setup wizard
+python -m agent
+```
+
+# More Information
+
+For more detailed guides, see:
+
+- [Installation Guide](getting-started/installation.md)
+- [Quickstart Tutorial](getting-started/quickstart.md)
+
+- [Core Concepts](concepts/index.md)
+- [Extending the Agent](extending/index.md)
+- [Frontends](frontends/index.md)
+
+---
+
+[View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
+
+
+---
+
+
+---
+pba-docs/docs/frontends/index.md
+---
+
+
+---
+pba-docs/docs/frontends/mlx.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/frontends/pytorch.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/getting-started/installation.md
+---
+# Installation
+
+The Proxy Base Agent requires Python 3.11 or higher.
+
+## Prerequisites
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
+## Installation Steps
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/TheProxyCompany/proxy-base-agent.git
+    cd proxy-base-agent
+    ```
+
+2.  **Install Dependencies:**
+
+    We recommend using [uv](https://docs.astral.sh/uv/) for fast and reliable dependency management.
+    ```bash
+    uv pip install -e .
+    ```
+    This command installs the agent and its dependencies in editable mode (`-e .`), making it easy to modify the code and see changes immediately.
+
+    If you don't want to use uv, you can install the dependencies using pip:
+    ```bash
+    pip install -e .
+    ```
+
+## Installation Methods
+
+### Using pip (Recommended)
+
+The simplest way to install PBA is using pip:
+
+```bash
+pip install proxy-base-agent
+```
+
+For development or the latest features, you can install directly from the repository:
+
+```bash
+pip install git+https://github.com/TheProxyCompany/proxy-base-agent.git
+```
+
+### Using conda
+
+If you use conda for environment management:
+
+```bash
+conda create -n pba python=3.10
+conda activate pba
+pip install proxy-base-agent
+```
+
+### From Source
+
+For development or customization, you can install from source:
+
+```bash
+git clone https://github.com/TheProxyCompany/proxy-base-agent.git
+cd proxy-base-agent
+pip install -e .
+```
+
+## Next Steps
+
+Now that you have PBA installed, you can:
+
+1. Follow the [Quickstart Guide](quickstart.md)
+2. Explore the [Concepts](../concepts/overview.md)
+3. Extend the agent with [Custom Tools](../extending/custom-tools.md)
+
+If you encounter any issues during installation, please report an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
+
+
+---
+pba-docs/docs/getting-started/quickstart.md
+---
+# Quickstart
+
+This quickstart guide will walk you through running the Proxy Base Agent and interacting with it.
+
+1.  **Run the Agent:**
+
+    After installing the agent (see [Installation](installation.md)), you can start it using the following command:
+
+    ```bash
+    python -m agent
+    ```
+
+2.  **Interactive Setup:**
+
+    The agent will guide you through an interactive setup process. This allows you to configure the agent's parameters.
+
+3.  **Interact with the Agent:**
+
+    Once the setup is complete, you can interact with the agent. The agent will process your input, transition through its states, and potentially use tools to achieve its goal. Observe the agent's output to understand its reasoning and actions.
+
+
+---
+pba-docs/docs/concepts/index.md
+---
+# Overview
+
+The Proxy Base Agent is designed to be a flexible and extensible foundation for building intelligent agents.
+
+It achieves this through a novel state machine architecture and tool use integration, all powered by the Proxy Structuring Engine (PSE).
+
+## Core Concepts
+
+*   **State Machine:** The agent's behavior is defined by a state machine. Each state represents a specific step in the agent's processing, such as planning, or executing an action. Each state can contain sub-states, which allow for more complex behaviors. Text based delimeters are used to separate the different states, and the language model transitions between states based on these delimeters.
+
+*   **Tools:** The agent can interact with external tools and APIs. Tools are self-contained units of functionality that the agent can call upon to perform specific tasks, such as retrieving information, interacting with services, or executing code.
+
+*   **Proxy Structuring Engine (PSE):** The PSE provides the underlying framework for defining and managing the agent's state machine, tools, and overall execution. It handles the complexities of state transitions, input/output processing, and error handling.
+
+
+## Custom Agents
+
+The Proxy Base Agent is designed to be a *starting point*.
+
+It provides a basic set of states and tools, demonstrating the core capabilities of the PSE.
+
+You can extend this base agent by:
+
+*   **Adding Custom Tools:** Integrate new tools to handle specific tasks relevant to your application.
+*   **Creating Custom States:** Define new states to model more complex behaviors and workflows.
+*   **Modifying Existing Logic:** Adjust the transitions and actions within existing states to fine-tune the agent's behavior.
+*   **Adding Custom Logic:** Add custom logic to the base agent to handle specific tasks or workflows.
+*   **Use Reinforcement Learning:** Use reinforcement learning to improve the agent's performance over time.
+*   **Expirement with different language models:** Try out different language models to see which ones work best for your use case.
+
+
+---
+pba-docs/docs/concepts/state-graph.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/state-machine.md
+---
+# State Machine
+
+The Proxy Base Agent's core logic is driven by a state machine.
+
+This state machine defines the different states the agent can be in and the transitions between those states.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/states.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/tools.md
+---
+# Tools
+
+Tools are a crucial part of the Proxy Base Agent's capabilities.
+
+They allow the agent to interact with the external world, access information, and perform actions beyond its core logic.
+
+## What are Tools?
+
+Tools are self-contained modules that encapsulate specific functionality.  They can be:
+
+*   **API Wrappers:**  Provide access to external services like weather APIs, search engines, or databases.
+*   **Custom Functions:**  Perform specific computations, data manipulations, or other tasks.
+*   **Code Executors:** Execute code in different languages (e.g., Python, JavaScript).
+
+## Tool Interaction
+
+The agent interacts with tools through a standardized flow:
+
+1.  **Selects a Tool:** Based on its current state and plan, the agent chooses the appropriate tool to use.
+2.  **Provides Input:** The agent prepares the necessary input data for the tool.
+3.  **Calls the Tool:** The agent invokes the tool with the provided input.
+4.  **Receives Output:** The tool processes the input and returns the results to the agent.
+5.  **Processes Output:** The agent integrates the tool's output into its state and continues its processing.
+
+
+---
+pba-docs/docs/extending/custom-state-graphs.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/custom-states.md
+---
+# Custom States
+
+Creating custom states allows you to extend the Proxy Base Agent's behavior with new capabilities and workflows.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/custom-tools.md
+---
+# Custom Tools
+
+Adding custom tools is a powerful way to extend the Proxy Base Agent's capabilities. This guide explains how to create and integrate your own tools.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/index.md
+---
+
+
+---
+pba-docs/docs/extending/model-context-protocol.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/api/agent.md
+---
+# Agent API Reference
+
+The Agent class is the core of the Proxy Base Agent framework. It coordinates all the components and provides the main interface for interacting with the agent.
+
+More documentation coming soon.
+
+
+---

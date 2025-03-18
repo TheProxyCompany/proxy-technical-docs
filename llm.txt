@@ -1,0 +1,5415 @@
+docs/index.md
+---
+# The Proxy Company Documentation
+
+Welcome to the technical documentation for The Proxy Company.
+
+This documentation will help you understand and utilize our technologies effectively.
+
+## Our Technologies
+
+<div class="grid cards" markdown>
+
+-   :material-engine-outline: __Proxy Structuring Engine (PSE)__
+
+    ---
+    Dynamically structure language models to produce outputs that adhere to specific requirements without sacrificing their creative capabilities.
+
+    [:octicons-book-24: PSE Documentation](/pse/){: .md-button .md-button--primary }
+
+-   :material-robot-outline: __Proxy Base Agent (PBA)__
+
+    ---
+    A foundational agent built on top of the Proxy Structuring Engine. We share it as a research preview and invite developers to experiment with it.
+
+    [:octicons-book-24: PBA Documentation](/pba/){: .md-button .md-button--primary }
+
+</div>
+
+## Additional Resources
+
+- [Company Website](https://theproxycompany.com)
+- [GitHub Organization](https://github.com/TheProxyCompany)
+
+
+---
+pba-docs/docs/index.md
+---
+# Proxy Base Agent
+
+The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
+
+The base agent is designed to **rapidly prototype and develop LLM-powered agents** with a focus on **local execution, stateful interactions, and extensibility**.
+
+The **PSE** augments **language models** at runtime, allowing them to function effectively as agents - capable of adhering to predefined workflows, multi-step reasoning, and external tool usage.
+
+## What is an Agent?
+
+> An agent is a system that takes actions in an environment.
+
+## Proxy Base Agent
+
+The Proxy Base Agent operates through a structured workflow defined by a **state graph**, transitioning through clearly defined **planning** and **action** phases:
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Plan
+    Start -. force_planning = false .-> Action
+
+    subgraph Plan["Planning Phase"]
+        PlanningChoice{"Choose planning type"}
+        Thinking["Thinking"]
+        Scratchpad["Scratchpad"]
+        InnerMonologue["Inner Monologue"]
+
+        PlanningChoice --> Thinking
+        PlanningChoice --> Scratchpad
+        PlanningChoice --> InnerMonologue
+    end
+
+    subgraph Action["Action Phase"]
+        ActionChoice{"Choose action type"}
+        ToolAction["Tool Call"]
+        CodeAction["Python Code"]
+
+        ActionChoice -- "Tool" --> ToolAction
+        ActionChoice -- "Code" --> CodeAction
+    end
+
+    Plan --> PlanLoop{"More planning needed?"}
+    PlanLoop -- "Yes" --> Plan
+    PlanLoop -- "No" --> Action
+
+    Action --> Finish([Finish])
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
+
+    class Plan,Action phase
+    class PlanLoop,ActionChoice,StepCheck decision
+    class PlanningChoice,Thinking,Scratchpad,InnerMonologue state
+    class ToolAction,CodeAction state
+    class Start,Finish terminal
+```
+
+### Planning Phase
+
+The agent engages in iterative reasoning through multiple cognitive states:
+
+- **Thinking**: High-level reasoning and goal setting.
+- **Scratchpad**: Intermediate notes and working memory.
+- **Inner Monologue**: Reflective reasoning and self-assessment.
+
+### Action Phase
+
+After sufficient planning, the agent transitions to executing actions:
+
+- **Tool Calls**: Interaction with external APIs or custom tools.
+- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+
+### State Graph
+
+This state graph describes the base behavior of the agent.
+It can be extended and modified to support more complex agentic behaviors.
+
+
+## Installation & Quickstart
+
+Prerequisites:
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
+Get the Proxy Base Agent running quickly:
+
+```bash
+# Install required dependencies
+pip install proxy-base-agent
+
+# Launch interactive setup wizard
+python -m agent
+```
+
+# More Information
+
+For more detailed guides, see:
+
+- [Installation Guide](getting-started/installation.md)
+- [Quickstart Tutorial](getting-started/quickstart.md)
+
+- [Core Concepts](concepts/index.md)
+- [Extending the Agent](extending/index.md)
+- [Frontends](frontends/index.md)
+
+---
+
+[View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
+
+
+---
+pba-docs/docs/llm.txt
+---
+pba-docs/docs/index.md
+---
+# Proxy Base Agent
+
+The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
+
+The base agent is designed to **rapidly prototype and develop LLM-powered agents** with a focus on **local execution, stateful interactions, and extensibility**.
+
+The **PSE** augments **language models** at runtime, allowing them to function effectively as agents - capable of adhering to predefined workflows, multi-step reasoning, and external tool usage.
+
+## What is an Agent?
+
+> An agent is a system that takes actions in an environment.
+
+## Proxy Base Agent
+
+The Proxy Base Agent operates through a structured workflow defined by a **state graph**, transitioning through clearly defined **planning** and **action** phases:
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Plan
+    Start -. force_planning = false .-> Action
+
+    subgraph Plan["Planning Phase"]
+        PlanningChoice{"Choose planning type"}
+        Thinking["Thinking"]
+        Scratchpad["Scratchpad"]
+        InnerMonologue["Inner Monologue"]
+
+        PlanningChoice --> Thinking
+        PlanningChoice --> Scratchpad
+        PlanningChoice --> InnerMonologue
+    end
+
+    subgraph Action["Action Phase"]
+        ActionChoice{"Choose action type"}
+        ToolAction["Tool Call"]
+        CodeAction["Python Code"]
+
+        ActionChoice -- "Tool" --> ToolAction
+        ActionChoice -- "Code" --> CodeAction
+    end
+
+    Plan --> PlanLoop{"More planning needed?"}
+    PlanLoop -- "Yes" --> Plan
+    PlanLoop -- "No" --> Action
+
+    Action --> Finish([Finish])
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
+
+    class Plan,Action phase
+    class PlanLoop,ActionChoice,StepCheck decision
+    class PlanningChoice,Thinking,Scratchpad,InnerMonologue state
+    class ToolAction,CodeAction state
+    class Start,Finish terminal
+```
+
+### Planning Phase
+
+The agent engages in iterative reasoning through multiple cognitive states:
+
+- **Thinking**: High-level reasoning and goal setting.
+- **Scratchpad**: Intermediate notes and working memory.
+- **Inner Monologue**: Reflective reasoning and self-assessment.
+
+### Action Phase
+
+After sufficient planning, the agent transitions to executing actions:
+
+- **Tool Calls**: Interaction with external APIs or custom tools.
+- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+
+### State Graph
+
+This state graph describes the base behavior of the agent.
+It can be extended and modified to support more complex agentic behaviors.
+
+
+## Installation & Quickstart
+
+Prerequisites:
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
+Get the Proxy Base Agent running quickly:
+
+```bash
+# Install required dependencies
+pip install proxy-base-agent
+
+# Launch interactive setup wizard
+python -m agent
+```
+
+# More Information
+
+For more detailed guides, see:
+
+- [Installation Guide](getting-started/installation.md)
+- [Quickstart Tutorial](getting-started/quickstart.md)
+
+- [Core Concepts](concepts/index.md)
+- [Extending the Agent](extending/index.md)
+- [Frontends](frontends/index.md)
+
+---
+
+[View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
+
+
+---
+pba-docs/docs/llm.txt
+---
+pba-docs/docs/index.md
+---
+# Proxy Base Agent
+
+The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
+
+The base agent is designed to **rapidly prototype and develop LLM-powered agents** with a focus on **local execution, stateful interactions, and extensibility**.
+
+The **PSE** augments **language models** at runtime, allowing them to function effectively as agents - capable of adhering to predefined workflows, multi-step reasoning, and external tool usage.
+
+## What is an Agent?
+
+> An agent is a system that takes actions in an environment.
+
+## Proxy Base Agent
+
+The Proxy Base Agent operates through a structured workflow defined by a **state graph**, transitioning through clearly defined **planning** and **action** phases:
+
+```mermaid
+flowchart TD
+    Start([Start]) --> Plan
+    Start -. force_planning = false .-> Action
+
+    subgraph Plan["Planning Phase"]
+        PlanningChoice{"Choose planning type"}
+        Thinking["Thinking"]
+        Scratchpad["Scratchpad"]
+        InnerMonologue["Inner Monologue"]
+
+        PlanningChoice --> Thinking
+        PlanningChoice --> Scratchpad
+        PlanningChoice --> InnerMonologue
+    end
+
+    subgraph Action["Action Phase"]
+        ActionChoice{"Choose action type"}
+        ToolAction["Tool Call"]
+        CodeAction["Python Code"]
+
+        ActionChoice -- "Tool" --> ToolAction
+        ActionChoice -- "Code" --> CodeAction
+    end
+
+    Plan --> PlanLoop{"More planning needed?"}
+    PlanLoop -- "Yes" --> Plan
+    PlanLoop -- "No" --> Action
+
+    Action --> Finish([Finish])
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
+
+    class Plan,Action phase
+    class PlanLoop,ActionChoice,StepCheck decision
+    class PlanningChoice,Thinking,Scratchpad,InnerMonologue state
+    class ToolAction,CodeAction state
+    class Start,Finish terminal
+```
+
+### Planning Phase
+
+The agent engages in iterative reasoning through multiple cognitive states:
+
+- **Thinking**: High-level reasoning and goal setting.
+- **Scratchpad**: Intermediate notes and working memory.
+- **Inner Monologue**: Reflective reasoning and self-assessment.
+
+### Action Phase
+
+After sufficient planning, the agent transitions to executing actions:
+
+- **Tool Calls**: Interaction with external APIs or custom tools.
+- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+
+### State Graph
+
+This state graph describes the base behavior of the agent.
+It can be extended and modified to support more complex agentic behaviors.
+
+
+## Installation & Quickstart
+
+Prerequisites:
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
+Get the Proxy Base Agent running quickly:
+
+```bash
+# Install required dependencies
+pip install proxy-base-agent
+
+# Launch interactive setup wizard
+python -m agent
+```
+
+# More Information
+
+For more detailed guides, see:
+
+- [Installation Guide](getting-started/installation.md)
+- [Quickstart Tutorial](getting-started/quickstart.md)
+
+- [Core Concepts](concepts/index.md)
+- [Extending the Agent](extending/index.md)
+- [Frontends](frontends/index.md)
+
+---
+
+[View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
+
+
+---
+
+
+---
+pba-docs/docs/frontends/index.md
+---
+
+
+---
+pba-docs/docs/frontends/mlx.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/frontends/pytorch.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/getting-started/installation.md
+---
+# Installation
+
+The Proxy Base Agent requires Python 3.11 or higher.
+
+## Prerequisites
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
+## Installation Steps
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/TheProxyCompany/proxy-base-agent.git
+    cd proxy-base-agent
+    ```
+
+2.  **Install Dependencies:**
+
+    We recommend using [uv](https://docs.astral.sh/uv/) for fast and reliable dependency management.
+    ```bash
+    uv pip install -e .
+    ```
+    This command installs the agent and its dependencies in editable mode (`-e .`), making it easy to modify the code and see changes immediately.
+
+    If you don't want to use uv, you can install the dependencies using pip:
+    ```bash
+    pip install -e .
+    ```
+
+## Installation Methods
+
+### Using pip (Recommended)
+
+The simplest way to install PBA is using pip:
+
+```bash
+pip install proxy-base-agent
+```
+
+For development or the latest features, you can install directly from the repository:
+
+```bash
+pip install git+https://github.com/TheProxyCompany/proxy-base-agent.git
+```
+
+### Using conda
+
+If you use conda for environment management:
+
+```bash
+conda create -n pba python=3.10
+conda activate pba
+pip install proxy-base-agent
+```
+
+### From Source
+
+For development or customization, you can install from source:
+
+```bash
+git clone https://github.com/TheProxyCompany/proxy-base-agent.git
+cd proxy-base-agent
+pip install -e .
+```
+
+## Next Steps
+
+Now that you have PBA installed, you can:
+
+1. Follow the [Quickstart Guide](quickstart.md)
+2. Explore the [Concepts](../concepts/overview.md)
+3. Extend the agent with [Custom Tools](../extending/custom-tools.md)
+
+If you encounter any issues during installation, please report an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
+
+
+---
+pba-docs/docs/getting-started/quickstart.md
+---
+# Quickstart
+
+This quickstart guide will walk you through running the Proxy Base Agent and interacting with it.
+
+1.  **Run the Agent:**
+
+    After installing the agent (see [Installation](installation.md)), you can start it using the following command:
+
+    ```bash
+    python -m agent
+    ```
+
+2.  **Interactive Setup:**
+
+    The agent will guide you through an interactive setup process. This allows you to configure the agent's parameters.
+
+3.  **Interact with the Agent:**
+
+    Once the setup is complete, you can interact with the agent. The agent will process your input, transition through its states, and potentially use tools to achieve its goal. Observe the agent's output to understand its reasoning and actions.
+
+
+---
+pba-docs/docs/concepts/index.md
+---
+# Overview
+
+The Proxy Base Agent is designed to be a flexible and extensible foundation for building intelligent agents.
+
+It achieves this through a novel state machine architecture and tool use integration, all powered by the Proxy Structuring Engine (PSE).
+
+## Core Concepts
+
+*   **State Machine:** The agent's behavior is defined by a state machine. Each state represents a specific step in the agent's processing, such as planning, or executing an action. Each state can contain sub-states, which allow for more complex behaviors. Text based delimeters are used to separate the different states, and the language model transitions between states based on these delimeters.
+
+*   **Tools:** The agent can interact with external tools and APIs. Tools are self-contained units of functionality that the agent can call upon to perform specific tasks, such as retrieving information, interacting with services, or executing code.
+
+*   **Proxy Structuring Engine (PSE):** The PSE provides the underlying framework for defining and managing the agent's state machine, tools, and overall execution. It handles the complexities of state transitions, input/output processing, and error handling.
+
+
+## Custom Agents
+
+The Proxy Base Agent is designed to be a *starting point*.
+
+It provides a basic set of states and tools, demonstrating the core capabilities of the PSE.
+
+You can extend this base agent by:
+
+*   **Adding Custom Tools:** Integrate new tools to handle specific tasks relevant to your application.
+*   **Creating Custom States:** Define new states to model more complex behaviors and workflows.
+*   **Modifying Existing Logic:** Adjust the transitions and actions within existing states to fine-tune the agent's behavior.
+*   **Adding Custom Logic:** Add custom logic to the base agent to handle specific tasks or workflows.
+*   **Use Reinforcement Learning:** Use reinforcement learning to improve the agent's performance over time.
+*   **Expirement with different language models:** Try out different language models to see which ones work best for your use case.
+
+
+---
+pba-docs/docs/concepts/state-graph.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/state-machine.md
+---
+# State Machine
+
+The Proxy Base Agent's core logic is driven by a state machine.
+
+This state machine defines the different states the agent can be in and the transitions between those states.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/states.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/tools.md
+---
+# Tools
+
+Tools are a crucial part of the Proxy Base Agent's capabilities.
+
+They allow the agent to interact with the external world, access information, and perform actions beyond its core logic.
+
+## What are Tools?
+
+Tools are self-contained modules that encapsulate specific functionality.  They can be:
+
+*   **API Wrappers:**  Provide access to external services like weather APIs, search engines, or databases.
+*   **Custom Functions:**  Perform specific computations, data manipulations, or other tasks.
+*   **Code Executors:** Execute code in different languages (e.g., Python, JavaScript).
+
+## Tool Interaction
+
+The agent interacts with tools through a standardized flow:
+
+1.  **Selects a Tool:** Based on its current state and plan, the agent chooses the appropriate tool to use.
+2.  **Provides Input:** The agent prepares the necessary input data for the tool.
+3.  **Calls the Tool:** The agent invokes the tool with the provided input.
+4.  **Receives Output:** The tool processes the input and returns the results to the agent.
+5.  **Processes Output:** The agent integrates the tool's output into its state and continues its processing.
+
+
+---
+pba-docs/docs/extending/custom-state-graphs.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/custom-states.md
+---
+# Custom States
+
+Creating custom states allows you to extend the Proxy Base Agent's behavior with new capabilities and workflows.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/custom-tools.md
+---
+# Custom Tools
+
+Adding custom tools is a powerful way to extend the Proxy Base Agent's capabilities. This guide explains how to create and integrate your own tools.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/index.md
+---
+
+
+---
+pba-docs/docs/extending/model-context-protocol.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/api/agent.md
+---
+# Agent API Reference
+
+The Agent class is the core of the Proxy Base Agent framework. It coordinates all the components and provides the main interface for interacting with the agent.
+
+More documentation coming soon.
+
+
+---
+
+
+---
+pba-docs/docs/frontends/index.md
+---
+
+
+---
+pba-docs/docs/frontends/mlx.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/frontends/pytorch.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/getting-started/installation.md
+---
+# Installation
+
+The Proxy Base Agent requires Python 3.11 or higher.
+
+## Prerequisites
+
+- Python 3.10 or higher
+- Linux, macOS, or Windows
+- Hardware requirements vary depending on the underlying language model you are using.
+
+## Installation Steps
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/TheProxyCompany/proxy-base-agent.git
+    cd proxy-base-agent
+    ```
+
+2.  **Install Dependencies:**
+
+    We recommend using [uv](https://docs.astral.sh/uv/) for fast and reliable dependency management.
+    ```bash
+    uv pip install -e .
+    ```
+    This command installs the agent and its dependencies in editable mode (`-e .`), making it easy to modify the code and see changes immediately.
+
+    If you don't want to use uv, you can install the dependencies using pip:
+    ```bash
+    pip install -e .
+    ```
+
+## Installation Methods
+
+### Using pip (Recommended)
+
+The simplest way to install PBA is using pip:
+
+```bash
+pip install proxy-base-agent
+```
+
+For development or the latest features, you can install directly from the repository:
+
+```bash
+pip install git+https://github.com/TheProxyCompany/proxy-base-agent.git
+```
+
+### Using conda
+
+If you use conda for environment management:
+
+```bash
+conda create -n pba python=3.10
+conda activate pba
+pip install proxy-base-agent
+```
+
+### From Source
+
+For development or customization, you can install from source:
+
+```bash
+git clone https://github.com/TheProxyCompany/proxy-base-agent.git
+cd proxy-base-agent
+pip install -e .
+```
+
+## Next Steps
+
+Now that you have PBA installed, you can:
+
+1. Follow the [Quickstart Guide](quickstart.md)
+2. Explore the [Concepts](../concepts/overview.md)
+3. Extend the agent with [Custom Tools](../extending/custom-tools.md)
+
+If you encounter any issues during installation, please report an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
+
+
+---
+pba-docs/docs/getting-started/quickstart.md
+---
+# Quickstart
+
+This quickstart guide will walk you through running the Proxy Base Agent and interacting with it.
+
+1.  **Run the Agent:**
+
+    After installing the agent (see [Installation](installation.md)), you can start it using the following command:
+
+    ```bash
+    python -m agent
+    ```
+
+2.  **Interactive Setup:**
+
+    The agent will guide you through an interactive setup process. This allows you to configure the agent's parameters.
+
+3.  **Interact with the Agent:**
+
+    Once the setup is complete, you can interact with the agent. The agent will process your input, transition through its states, and potentially use tools to achieve its goal. Observe the agent's output to understand its reasoning and actions.
+
+
+---
+pba-docs/docs/concepts/index.md
+---
+# Overview
+
+The Proxy Base Agent is designed to be a flexible and extensible foundation for building intelligent agents.
+
+It achieves this through a novel state machine architecture and tool use integration, all powered by the Proxy Structuring Engine (PSE).
+
+## Core Concepts
+
+*   **State Machine:** The agent's behavior is defined by a state machine. Each state represents a specific step in the agent's processing, such as planning, or executing an action. Each state can contain sub-states, which allow for more complex behaviors. Text based delimeters are used to separate the different states, and the language model transitions between states based on these delimeters.
+
+*   **Tools:** The agent can interact with external tools and APIs. Tools are self-contained units of functionality that the agent can call upon to perform specific tasks, such as retrieving information, interacting with services, or executing code.
+
+*   **Proxy Structuring Engine (PSE):** The PSE provides the underlying framework for defining and managing the agent's state machine, tools, and overall execution. It handles the complexities of state transitions, input/output processing, and error handling.
+
+
+## Custom Agents
+
+The Proxy Base Agent is designed to be a *starting point*.
+
+It provides a basic set of states and tools, demonstrating the core capabilities of the PSE.
+
+You can extend this base agent by:
+
+*   **Adding Custom Tools:** Integrate new tools to handle specific tasks relevant to your application.
+*   **Creating Custom States:** Define new states to model more complex behaviors and workflows.
+*   **Modifying Existing Logic:** Adjust the transitions and actions within existing states to fine-tune the agent's behavior.
+*   **Adding Custom Logic:** Add custom logic to the base agent to handle specific tasks or workflows.
+*   **Use Reinforcement Learning:** Use reinforcement learning to improve the agent's performance over time.
+*   **Expirement with different language models:** Try out different language models to see which ones work best for your use case.
+
+
+---
+pba-docs/docs/concepts/state-graph.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/state-machine.md
+---
+# State Machine
+
+The Proxy Base Agent's core logic is driven by a state machine.
+
+This state machine defines the different states the agent can be in and the transitions between those states.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/states.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/concepts/tools.md
+---
+# Tools
+
+Tools are a crucial part of the Proxy Base Agent's capabilities.
+
+They allow the agent to interact with the external world, access information, and perform actions beyond its core logic.
+
+## What are Tools?
+
+Tools are self-contained modules that encapsulate specific functionality.  They can be:
+
+*   **API Wrappers:**  Provide access to external services like weather APIs, search engines, or databases.
+*   **Custom Functions:**  Perform specific computations, data manipulations, or other tasks.
+*   **Code Executors:** Execute code in different languages (e.g., Python, JavaScript).
+
+## Tool Interaction
+
+The agent interacts with tools through a standardized flow:
+
+1.  **Selects a Tool:** Based on its current state and plan, the agent chooses the appropriate tool to use.
+2.  **Provides Input:** The agent prepares the necessary input data for the tool.
+3.  **Calls the Tool:** The agent invokes the tool with the provided input.
+4.  **Receives Output:** The tool processes the input and returns the results to the agent.
+5.  **Processes Output:** The agent integrates the tool's output into its state and continues its processing.
+
+
+---
+pba-docs/docs/extending/custom-state-graphs.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/custom-states.md
+---
+# Custom States
+
+Creating custom states allows you to extend the Proxy Base Agent's behavior with new capabilities and workflows.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/custom-tools.md
+---
+# Custom Tools
+
+Adding custom tools is a powerful way to extend the Proxy Base Agent's capabilities. This guide explains how to create and integrate your own tools.
+
+More documentation coming soon.
+
+
+---
+pba-docs/docs/extending/index.md
+---
+
+
+---
+pba-docs/docs/extending/model-context-protocol.md
+---
+More documentation coming soon.
+
+
+---
+pba-docs/docs/api/agent.md
+---
+# Agent API Reference
+
+The Agent class is the core of the Proxy Base Agent framework. It coordinates all the components and provides the main interface for interacting with the agent.
+
+More documentation coming soon.
+
+
+---
+pse-docs/docs/index.md
+---
+# Proxy Structuring Engine
+
+The **Proxy Structuring Engine** (PSE) is a system for dynamically constrained natural language generation.
+
+It compiles rules and schemas into efficient hierarchical state machines that dynamically filter token probabilities during generation, guaranteeing structurally valid outputs while preserving natural language fluency.
+
+## Use Cases
+- **Tool Calling** - Generate precise, validated parameters for function calls
+- **API Integration** - Guarantee well-formed outputs for seamless system interoperability
+- **Synthetic Data** - Create diverse, schema-conformant datasets for training
+- **Structured Output** - Enforce type-safe results for reliable downstream processing
+- **Agent Frameworks** - Constrain agent actions and reasoning (see [Proxy Base Agent](https://github.com/TheProxyCompany/proxy-base-agent))
+
+## Key Points
+- **Dynamic Validation** - A hierarchical state machine validates each token generated, ensuring correctness during generation
+- **Token Healing** - Automatically recovers from tokenization mismatches, maintaining structural integrity
+- **Parallel Generation** - Explores multiple potential output paths concurrently, maximizing quality within constraints
+- **Minimal Overhead** - Adds less than 20ms per token, making it suitable for latency-sensitive applications
+- **Schema Versatility** - Supports JSON Schema, Pydantic models, custom grammars, and custom state machines for maximum flexibility
+- **Framework Agnostic** - Integrates with PyTorch, MLX, TensorFlow, JAX, and more
+
+## Getting Started
+
+```python
+from pse import StructuringEngine
+from pydantic import BaseModel
+from transformers import AutoTokenizer
+
+# 1. Define your desired output structure
+class User(BaseModel):
+    name: str
+    age: int
+
+# 2. Initialize the tokenizer and engine
+tokenizer = AutoTokenizer.from_pretrained("your-model-name")
+engine = StructuringEngine(tokenizer)
+
+# 3. Configure the engine with your schema
+engine.configure(User.schema())
+
+# 4. Integrate with your generation loop
+# (Example using Hugging Face Transformers)
+output = model.generate(
+    ...,
+    logits_processor=[engine.process_logits],
+    sampler=engine.sample, # Use the engine's sampling method for multi-token generation
+)
+
+# 5. Extract the structured output
+structured_user = engine.get_structured_output(User, raise_on_error=True)
+print(structured_user)
+
+```
+
+## Open Source
+PSE is released under the Apache 2.0 license.
+
+We enthusiastically welcome community contributions and collaborations.
+
+[Explore the Code](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
+
+
+---
+pse-docs/docs/llm.txt
+---
+pse-docs/docs/index.md
+---
+# Proxy Structuring Engine
+
+The **Proxy Structuring Engine** (PSE) is a system for dynamically constrained natural language generation.
+
+It compiles rules and schemas into efficient hierarchical state machines that dynamically filter token probabilities during generation, guaranteeing structurally valid outputs while preserving natural language fluency.
+
+## Use Cases
+- **Tool Calling** - Generate precise, validated parameters for function calls
+- **API Integration** - Guarantee well-formed outputs for seamless system interoperability
+- **Synthetic Data** - Create diverse, schema-conformant datasets for training
+- **Structured Output** - Enforce type-safe results for reliable downstream processing
+- **Agent Frameworks** - Constrain agent actions and reasoning (see [Proxy Base Agent](https://github.com/TheProxyCompany/proxy-base-agent))
+
+## Key Points
+- **Dynamic Validation** - A hierarchical state machine validates each token generated, ensuring correctness during generation
+- **Token Healing** - Automatically recovers from tokenization mismatches, maintaining structural integrity
+- **Parallel Generation** - Explores multiple potential output paths concurrently, maximizing quality within constraints
+- **Minimal Overhead** - Adds less than 20ms per token, making it suitable for latency-sensitive applications
+- **Schema Versatility** - Supports JSON Schema, Pydantic models, custom grammars, and custom state machines for maximum flexibility
+- **Framework Agnostic** - Integrates with PyTorch, MLX, TensorFlow, JAX, and more
+
+## Getting Started
+
+```python
+from pse import StructuringEngine
+from pydantic import BaseModel
+from transformers import AutoTokenizer
+
+# 1. Define your desired output structure
+class User(BaseModel):
+    name: str
+    age: int
+
+# 2. Initialize the tokenizer and engine
+tokenizer = AutoTokenizer.from_pretrained("your-model-name")
+engine = StructuringEngine(tokenizer)
+
+# 3. Configure the engine with your schema
+engine.configure(User.schema())
+
+# 4. Integrate with your generation loop
+# (Example using Hugging Face Transformers)
+output = model.generate(
+    ...,
+    logits_processor=[engine.process_logits],
+    sampler=engine.sample, # Use the engine's sampling method for multi-token generation
+)
+
+# 5. Extract the structured output
+structured_user = engine.get_structured_output(User, raise_on_error=True)
+print(structured_user)
+
+```
+
+## Open Source
+PSE is released under the Apache 2.0 license.
+
+We enthusiastically welcome community contributions and collaborations.
+
+[Explore the Code](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
+
+
+---
+pse-docs/docs/llm.txt
+---
+pse-docs/docs/index.md
+---
+# Proxy Structuring Engine
+
+The **Proxy Structuring Engine** (PSE) is a system for dynamically constrained natural language generation.
+
+It compiles rules and schemas into efficient hierarchical state machines that dynamically filter token probabilities during generation, guaranteeing structurally valid outputs while preserving natural language fluency.
+
+## Use Cases
+- **Tool Calling** - Generate precise, validated parameters for function calls
+- **API Integration** - Guarantee well-formed outputs for seamless system interoperability
+- **Synthetic Data** - Create diverse, schema-conformant datasets for training
+- **Structured Output** - Enforce type-safe results for reliable downstream processing
+- **Agent Frameworks** - Constrain agent actions and reasoning (see [Proxy Base Agent](https://github.com/TheProxyCompany/proxy-base-agent))
+
+## Key Points
+- **Dynamic Validation** - A hierarchical state machine validates each token generated, ensuring correctness during generation
+- **Token Healing** - Automatically recovers from tokenization mismatches, maintaining structural integrity
+- **Parallel Generation** - Explores multiple potential output paths concurrently, maximizing quality within constraints
+- **Minimal Overhead** - Adds less than 20ms per token, making it suitable for latency-sensitive applications
+- **Schema Versatility** - Supports JSON Schema, Pydantic models, custom grammars, and custom state machines for maximum flexibility
+- **Framework Agnostic** - Integrates with PyTorch, MLX, TensorFlow, JAX, and more
+
+## Getting Started
+
+```python
+from pse import StructuringEngine
+from pydantic import BaseModel
+from transformers import AutoTokenizer
+
+# 1. Define your desired output structure
+class User(BaseModel):
+    name: str
+    age: int
+
+# 2. Initialize the tokenizer and engine
+tokenizer = AutoTokenizer.from_pretrained("your-model-name")
+engine = StructuringEngine(tokenizer)
+
+# 3. Configure the engine with your schema
+engine.configure(User.schema())
+
+# 4. Integrate with your generation loop
+# (Example using Hugging Face Transformers)
+output = model.generate(
+    ...,
+    logits_processor=[engine.process_logits],
+    sampler=engine.sample, # Use the engine's sampling method for multi-token generation
+)
+
+# 5. Extract the structured output
+structured_user = engine.get_structured_output(User, raise_on_error=True)
+print(structured_user)
+
+```
+
+## Open Source
+PSE is released under the Apache 2.0 license.
+
+We enthusiastically welcome community contributions and collaborations.
+
+[Explore the Code](https://github.com/TheProxyCompany/proxy-structuring-engine){: .md-button .md-button--primary }
+
+
+---
+
+
+---
+pse-docs/docs/getting-started/installation.md
+---
+# Installation
+
+This guide will help you install the Proxy Structuring Engine (PSE) and set up your environment for development.
+
+## Standard Installation
+
+We recommend using uv to install PSE:
+```bash
+uv pip install pse
+```
+
+You can also install PSE using pip:
+
+```bash
+pip install pse
+```
+
+
+## Development Installation
+
+For development or to access the latest features, you can install from source:
+
+```bash
+# Clone the repository
+git clone https://github.com/TheProxyCompany/proxy-structuring-engine.git
+cd proxy-structuring-engine
+
+# Install in development mode
+pip install -e ".[dev]"
+```
+
+## Framework-Specific Installation
+
+PSE works with multiple ML frameworks. Install the one(s) you plan to use:
+
+### PyTorch
+
+```bash
+pip install pse[torch]
+
+# Or for a specific version
+pip install torch pse
+```
+
+### MLX (Apple Silicon)
+
+```bash
+pip install pse[mlx]
+
+# Or for a specific version
+pip install mlx pse
+```
+
+### TensorFlow
+
+```bash
+pip install pse[tensorflow]
+
+# Or for a specific version
+pip install tensorflow pse
+```
+
+### JAX
+
+```bash
+pip install pse[jax]
+
+# Or for a specific version
+pip install jax jaxlib pse
+```
+
+## System Requirements
+
+- **Python**: 3.8 or higher
+- **Operating Systems**:
+  - Linux (Ubuntu 20.04+, Debian 11+, etc.)
+  - macOS (11.0+)
+  - Windows 10/11
+- **Hardware**:
+  - Any system capable of running your selected LLM (the PSE only works with local models)
+
+## Getting Help
+
+If you continue to experience issues:
+
+- Check our [GitHub Issues](https://github.com/TheProxyCompany/proxy-structuring-engine/issues)
+
+## Next Steps
+
+Now that you've installed PSE, proceed to the [Quickstart](quickstart.md) guide to run your first example.
+
+
+---
+pse-docs/docs/getting-started/quickstart.md
+---
+# Quickstart
+
+This quickstart guide will help you get up and running with PSE in just a few minutes.
+
+We'll cover the basic workflow and show you how to generate structured outputs with your favorite language model.
+
+# Installation
+
+This quickstart assumes you have PSE installed on your machine.
+
+If you don't have PSE installed yet, follow the [installation instructions](installation.md) to get PSE installed on your machine.
+
+# Quickstart
+
+Let's walk through a basic example of how to use PSE to generate structured outputs.
+
+
+---
+pse-docs/docs/api/framework-adapters.md
+---
+# Framework Adapters
+
+PSE is designed to be framework-agnostic, supporting multiple machine learning frameworks through its adapter system. This page explains how to use PSE with different ML frameworks and how to optimize for each.
+
+## Supported Frameworks
+
+PSE officially supports the following frameworks:
+
+- [PyTorch](#pytorch-adapter)
+- [MLX](#mlx-adapter)
+- [TensorFlow](#tensorflow-adapter)
+- [JAX](#jax-adapter)
+
+More documentation coming soon.
+
+
+---
+pse-docs/docs/api/structuring-engine.md
+---
+# StructuringEngine API Reference
+
+The `StructuringEngine` class is the primary interface for the Proxy Structuring Engine (PSE).
+
+It provides a powerful mechanism to enforce structured output generation from language models by using state machines to constrain token generation.
+
+More documentation coming soon.
+
+
+---
+pse-docs/docs/api/state-machines/base.md
+---
+# Base State Machines
+
+Base state machines provide the fundamental building blocks for constructing more complex state machines in PSE. These components handle common pattern-matching tasks and can be composed together to create sophisticated parsing behaviors.
+
+## AnyStateMachine
+
+`AnyStateMachine` allows choosing between multiple state machines, effectively implementing a logical OR operation for state machine matching.
+
+```python
+from pse.types.base.any import AnyStateMachine
+from pse.types.string import StringStateMachine
+from pse.types.number import NumberStateMachine
+
+# Create a state machine that accepts either a string or a number
+any_state_machine = AnyStateMachine([
+    StringStateMachine(),
+    NumberStateMachine()
+])
+```
+
+**Key features:**
+- Accepts input if any of its child state machines accepts it
+- Creates transitions from the initial state to each alternative state machine
+- Collects steppers from all possible edges to enable parallel path exploration
+- Essential for implementing union types, optional patterns, and alternatives
+- Lightweight implementation with no additional parameters beyond the list of state machines
+
+**Implementation details:**
+- Creates a state graph where state 0 transitions directly to the end state ("$") through each provided state machine
+- Uses a simple graph structure with a single state (0) and multiple transitions
+- On input, explores all possible paths in parallel through its steppers
+- Returns a simple string representation of "Any" for debugging purposes
+
+## ChainStateMachine
+
+`ChainStateMachine` combines multiple state machines in sequence, requiring each to match in order.
+
+```python
+from pse.types.base.chain import ChainStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+from pse.types.string import StringStateMachine
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Create a state machine for parsing a key-value pair like "name: "John""
+chain_state_machine = ChainStateMachine([
+    StringStateMachine(),  # The key
+    WhitespaceStateMachine(),  # Optional whitespace
+    PhraseStateMachine(":"),  # The separator
+    WhitespaceStateMachine(),  # Optional whitespace
+    StringStateMachine()  # The value
+])
+
+# Create an optional chain
+optional_chain = ChainStateMachine([
+    PhraseStateMachine(","),
+    WhitespaceStateMachine()
+], is_optional=True)
+```
+
+**Key features:**
+- Enforces sequential matching of multiple patterns
+- Propagates state from one sub-machine to the next
+- Supports optional chains with the `is_optional` parameter
+- Essential for constructing complex sequential patterns
+- Used extensively in format-specific state machines
+
+**Implementation details:**
+- Creates a linear state graph where each state `i` transitions to state `i+1` through its corresponding state machine
+- Automatically sets the final state `len(state_machines)` as the only end state
+- Uses a specialized `ChainStepper` class to handle sequential execution
+- Minimal implementation that efficiently chains state machines together
+- Accurately tracks state transitions through the sequence
+- Handles nested chains and complex sequences within larger state machines
+
+## LoopStateMachine
+
+`LoopStateMachine` repeats a state machine a configurable number of times, enabling iteration patterns.
+
+```python
+from pse.types.base.loop import LoopStateMachine
+from pse.types.number import NumberStateMachine
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Create a state machine for a comma-separated list of numbers
+numbers_list = LoopStateMachine(
+    NumberStateMachine(),
+    min_loop_count=1,  # At least one number
+    max_loop_count=5,  # Maximum five numbers
+    whitespace_seperator=True  # Allow whitespace between elements
+)
+```
+
+**Key features:**
+- Configurable minimum and maximum repetition counts
+- Optional whitespace handling between iterations
+- Maintains loop count tracking through the specialized `LoopStepper` class
+- Implements arrays, lists, and repeated patterns
+- Supports unlimited repetition with `max_loop_count=-1` (default)
+
+**Implementation details:**
+- Creates two different state graph structures based on `whitespace_seperator`:
+  - Without separator: State 0 → State 1 (via state_machine) → back to State 0 (via state_machine again)
+  - With separator: State 0 → State 1 (via state_machine) → State 2 (via whitespace) → back to State 1 (via state_machine)
+- Uses the `is_optional` parameter internally calculated from `min_loop_count == 0`
+- Contains a typo in parameter name ("whitespace_seperator" instead of "separator")
+- Specialized `LoopStepper` tracks iteration count with `loop_count` property, incrementing in `add_to_history`
+- Whitespace separators are excluded from history and loop count calculation
+- Determines acceptance state based on the minimum loop count and sub-stepper state
+- Enforces maximum iterations by overriding `can_accept_more_input` and `should_start_step`
+- Provides special handling of final state to exclude whitespace separators
+
+## PhraseStateMachine
+
+`PhraseStateMachine` matches specific text sequences exactly, validating input against the target string.
+
+```python
+from pse.types.base.phrase import PhraseStateMachine
+
+# Create a state machine that matches only the text "Hello, World!"
+greeting = PhraseStateMachine("Hello, World!")
+
+# Create an optional phrase that may or may not appear
+optional_phrase = PhraseStateMachine("Optional text", is_optional=True)
+
+# Create a case-insensitive phrase
+case_insensitive = PhraseStateMachine("HELLO", is_case_sensitive=False)
+```
+
+**Key features:**
+- Matches exact character sequences with character-by-character validation
+- High-efficiency implementation for literal text using optimized prefix matching
+- Support for Unicode characters and multi-byte sequences
+- Case sensitivity configuration with the `is_case_sensitive` parameter
+- Can be marked as optional with the `is_optional` parameter
+- Used for keywords, delimiters, and fixed tokens throughout PSE
+
+**Implementation details:**
+- Requires a non-empty phrase string (raises `ValueError` if empty)
+- Uses a specialized `PhraseStepper` that tracks position with `consumed_character_count`
+- Sets target state directly to end state ("$") in the stepper
+- Implements prefix matching with the optimized `_get_valid_match_length` method
+- Processes partial matches by accepting as much of the input as matches the phrase
+- Returns the exact remaining portion of the phrase for valid continuations
+- String representation includes the phrase value: `Phrase('value')`
+- Completion is determined when `consumed_character_count == len(phrase)`
+- Can check for equality with other PhraseStateMachine instances
+- Essential building block for many other state machines in PSE
+
+## WaitFor
+
+`WaitFor` accumulates arbitrary text until a specific pattern is detected, enabling flexible pattern recognition in mixed content.
+
+```python
+from pse.types.base.wait_for import WaitFor
+from pse.types.base.phrase import PhraseStateMachine
+
+# Create a state machine that accumulates text until "```json" is encountered
+# Useful for finding JSON code blocks in Markdown
+json_block_start = WaitFor(
+    PhraseStateMachine("```json"),
+    buffer_length=0  # No minimum buffer required
+)
+
+# Create a state machine with strict validation
+# If the pattern starts but is interrupted, the match will fail
+strict_pattern = WaitFor(
+    PhraseStateMachine("BEGIN DATA"),
+    buffer_length=10,  # Require at least 10 characters before matching pattern
+    strict=True  # Fail if pattern is interrupted
+)
+```
+
+**Key features:**
+- Buffers text until target pattern is detected
+- Configurable minimum buffer length with `buffer_length` parameter
+- Strict mode for handling invalid inputs with the `strict` parameter
+- Perfect for delimiter-based parsing of mixed content
+- Enables flexible handling of unstructured text before structured elements
+
+**Implementation details:**
+- Uses a direct transition structure with the target pattern transitioning to end state ("$")
+- `get_transitions` creates transitions directly from the nested state machine's steppers
+- Specialized `WaitForStepper` maintains accumulated text in a `buffer` property
+- Sets `target_state = "$"` in the stepper initialization
+- Implements `accepts_any_token()` based on buffer length and sub-stepper state
+- `should_start_step()` checks:
+  - Buffer length requirements
+  - Presence of remaining input
+  - Current processing state
+- When `strict=True`, rejects entire input if the pattern is interrupted
+- When `strict=False`, allows pattern matching to restart after interruption
+- With `buffer_length=-1`, only accepts tokens that match the target pattern
+- With `buffer_length=0`, accepts any token while watching for the pattern
+- With `buffer_length>0`, requires buffer to reach minimum length before allowing match
+- Provides specialized handling of valid and invalid continuations
+- Efficiently processes tokens by finding valid prefixes using token partitioning
+
+## CharacterStateMachine
+
+`CharacterStateMachine` matches individual characters based on character sets, allowing precise control over which characters are accepted.
+
+```python
+from pse.types.base.character import CharacterStateMachine
+
+# Create a state machine that matches any character (no restrictions)
+any_char_sm = CharacterStateMachine()
+
+# Create a state machine that matches only lowercase letters a-z
+alpha_sm = CharacterStateMachine(whitelist_charset="abcdefghijklmnopqrstuvwxyz")
+
+# Create a state machine that matches any character except digits
+no_digits_sm = CharacterStateMachine(blacklist_charset="0123456789")
+
+# Create a state machine with multiple constraints
+identifier_sm = CharacterStateMachine(
+    whitelist_charset="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_",
+    char_min=1,          # At least one character
+    char_limit=64,       # Maximum of 64 characters
+    case_sensitive=True  # Case-sensitive matching
+)
+
+# Use graylist for characters that terminate a match
+word_sm = CharacterStateMachine(
+    graylist_charset=" \t\n.,:;!?"  # Space and punctuation terminate words
+)
+```
+
+**Key features:**
+- Highly flexible character-level matching with configurable character sets
+- Supports whitelist (explicitly allowed), blacklist (explicitly forbidden), and graylist (allowed but terminates sequence) character sets
+- Configurable minimum and maximum character counts
+- Case-sensitive or case-insensitive matching
+- Efficiently processes longest valid prefixes in input tokens
+
+**Implementation details:**
+- Configurable parameters with clear defaults:
+  - Empty charsets by default (empty strings)
+  - `char_min` defaults to 0 (no minimum length)
+  - `char_limit` defaults to 0 (unlimited length)
+  - `is_optional` defaults to false
+  - `case_sensitive` defaults to true
+- Three distinct character set types stored as `set` objects:
+  - `charset` (whitelist): Only these characters are allowed
+  - `blacklist_charset`: These characters are explicitly forbidden
+  - `graylist_charset`: Allowed but terminate matching when after other characters
+- Case-insensitive mode converts all characters to lowercase
+- `CharacterStepper` sets `target_state="$"` and tracks value with `_raw_value`
+- Implements `accepts_any_token()` to return true when no whitelist is defined
+- Uses `should_start_step()` to validate the first character against constraints
+- Implements efficient prefix matching in `consume()`:
+  - Checks each character in token for validity against all constraints
+  - Finds longest valid prefix that satisfies all character constraints
+  - Efficiently handles blacklist, whitelist, length limits, and graylist checks
+  - Preserves remaining input for continued processing
+- Returns the complete whitelist charset for valid continuations
+- Allows early termination of matching when graylist characters appear
+
+## EncapsulatedStateMachine
+
+`EncapsulatedStateMachine` wraps a state machine between start and end delimiters, enabling parsing of fenced or delimited content.
+
+```python
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+from pse.types.base.any import AnyStateMachine
+from pse.types.string import StringStateMachine
+from pse.types.number import NumberStateMachine
+
+# Create a state machine for parsing JSON code blocks in Markdown
+json_code_block = EncapsulatedStateMachine(
+    ObjectStateMachine(),              # Content state machine for JSON objects
+    delimiters=("```json\n", "\n```"),  # Start and end delimiters
+    buffer_length=0                     # No minimum buffer before delimiter
+)
+
+# Create a state machine for XML tags with content
+xml_content = EncapsulatedStateMachine(
+    StringStateMachine(),              # Content for the XML element
+    delimiters=("<content>", "</content>")  # XML tags
+)
+
+# Create a state machine that requires minimum buffer before finding delimiter
+delayed_content = EncapsulatedStateMachine(
+    StringStateMachine(),              # Content state machine
+    delimiters=("<START>", "<END>"),   # Delimiters
+    buffer_length=10,                  # Require at least 10 characters before matching delimiter
+    is_optional=True                   # Make the entire structure optional
+)
+```
+
+**Key features:**
+- Wraps any state machine between specified start and end delimiters
+- Configurable buffer length before matching start delimiter
+- Can be optional with the `is_optional` parameter
+- Perfect for parsing code blocks, markup elements, and delimited content
+- Provides clean token output with delimiters automatically removed
+
+**Implementation details:**
+- Implements a three-state process with a clear state graph:
+  - State 0: Uses `WaitFor` with `PhraseStateMachine` to find the start delimiter
+  - State 1: Processes the inner content using the provided state machine
+  - State 2: Matches the end delimiter using a `PhraseStateMachine`
+- Default delimiters are ("```", "```") if none are provided
+- `buffer_length` parameter is passed to the internal `WaitFor` state machine
+- Uses specialized `EncapsulatedStepper` to track state and content
+- Maintains an `inner_stepper` reference for the state machine's stepper in state 2
+- `is_within_value()` returns true when not in state 0 or when in state 0 with an active sub-stepper
+- Provides `get_invalid_continuations()` to prevent end delimiter before processing starts
+- Implements the `get_token_safe_output()` helper method which:
+  - Efficiently handles both exact and partial delimiter occurrences
+  - Optimizes removal by checking for exact matches before using strip operations
+  - Processes token IDs history for reliable delimiter removal
+- Can handle nested encapsulated content with proper tracking
+- Used extensively for parsing structured content like code blocks and XML elements
+
+
+---
+pse-docs/docs/api/state-machines/datatypes.md
+---
+# Data Type State Machines
+
+PSE provides specialized state machines for handling common data types, allowing precise control over the format and content of generated values.
+
+## StringStateMachine
+
+`StringStateMachine` handles JSON-style string parsing with double quotation marks and proper escaping of special characters.
+
+```python
+from pse.types.string import StringStateMachine
+
+# Create a basic string state machine that matches quoted strings like "hello"
+string_sm = StringStateMachine()
+
+# Create a string state machine with length constraints
+constrained_string_sm = StringStateMachine(
+    min_length=3,  # Minimum string length (excluding quotes)
+    max_length=50  # Maximum string length (excluding quotes)
+)
+```
+
+**Implementation details:**
+- State machine structure:
+  - Initial state (0): Expects opening double quote (")
+  - String contents state (1): Processes regular characters
+  - Escape sequence state (2): Handles escape sequences
+  - Unicode escape state (3): Processes \uXXXX Unicode escapes
+
+- Escape sequence handling:
+  - Standard JSON escape sequences: \", \\, \/, \b, \f, \n, \r, \t
+  - Unicode escape sequences: \uXXXX (4 hex digits)
+  - Automatically rejects invalid escape sequences
+
+- Character handling:
+  - Properly validates all string content
+  - Automatically rejects control characters that must be escaped
+  - Maintains proper JSON string compliance
+
+**StringSchemaStateMachine extension**:
+For JSON Schema integration, the StringSchemaStateMachine adds pattern and format validation:
+
+```python
+from pse.types.json.json_string import StringSchemaStateMachine
+
+# Create a string state machine with JSON Schema constraints
+email_string_sm = StringSchemaStateMachine(
+    schema={"type": "string", "format": "email"},
+    context={}
+)
+
+# Create a string state machine with pattern validation
+pattern_string_sm = StringSchemaStateMachine(
+    schema={"type": "string", "pattern": "^[A-Z]{2}-\\d{4}$"},  # Format like "AB-1234"
+    context={}
+)
+```
+
+**Example: String with escape sequences**
+```python
+from pse.types.string import StringStateMachine
+
+# Define a string state machine
+string_sm = StringStateMachine()
+
+# This will match: "Hello\nWorld" and correctly handle the newline
+# The value returned will be the string without quotes: Hello\nWorld
+```
+
+**Example: Unicode handling**
+```python
+from pse.types.string import StringStateMachine
+
+# Define a string state machine
+string_sm = StringStateMachine()
+
+# This will match: "Hello\u0057orld" and correctly interpret it as "HelloWorld"
+# This also matches: "Hello 世界" as Unicode is supported via direct inclusion or escapes
+```
+
+**Example: Length validation**
+```python
+from pse.types.string import StringStateMachine
+
+# Create a string state machine with length constraints
+username_sm = StringStateMachine(min_length=3, max_length=20)
+
+# This will match: "user123"
+# This will not match: "a" (too short)
+# This will not match: "this_username_is_way_too_long" (too long)
+```
+
+## NumberStateMachine
+
+`NumberStateMachine` parses JSON-compliant numeric values, handling integers, decimals, and scientific notation.
+
+```python
+from pse.types.number import NumberStateMachine
+
+# Create a basic number state machine for all numeric formats
+number_sm = NumberStateMachine()
+```
+
+**Implementation details:**
+- State machine structure:
+  - State 0: Starting state that optionally accepts a negative sign (-)
+  - State 1: Expects an integer part (mandatory)
+  - State 2: Accept state for integers, can also transition to decimal part
+  - State 3: Decimal part state (after the decimal point), also an accept state
+  - State 4: Exponential notation marker 'e' or 'E'
+  - State 5: Optional sign for the exponent (+ or -)
+  - Final state: Exponent integer value, if present
+
+- Decimal handling:
+  - Properly handles decimal points followed by integer part
+  - Maintains leading zeros after decimal point (e.g., 0.001)
+  - Validates full decimal number structure
+
+- Scientific notation:
+  - Supports 'e' or 'E' notation (e.g., 1.5e3, 2E-4)
+  - Handles optional sign in exponent
+  - Properly combines base number with exponent for final value
+
+**NumberSchemaStateMachine extension**:
+For JSON Schema integration, use the NumberSchemaStateMachine to add validation constraints:
+
+```python
+from pse.types.json.json_number import NumberSchemaStateMachine
+
+# Create a number state machine with JSON Schema constraints
+constrained_number_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "exclusiveMaximum": True
+    },
+    context={}
+)
+
+# Create an integer-only state machine
+integer_number_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "integer",
+        "multipleOf": 5
+    },
+    context={}
+)
+```
+
+**Example: Basic number parsing**
+```python
+from pse.types.number import NumberStateMachine
+
+# Define a number state machine
+number_sm = NumberStateMachine()
+
+# This will match: "42" (integer)
+# This will match: "-3.14" (negative decimal)
+# This will match: "1.618e2" (scientific notation, equal to 161.8)
+```
+
+**Example: JSON Schema validation**
+```python
+from pse.types.json.json_number import NumberSchemaStateMachine
+
+# Define a number state machine with constraints
+temperature_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "number",
+        "minimum": -273.15,  # Absolute zero in Celsius
+        "maximum": 1000
+    },
+    context={}
+)
+
+# This will match: "25.5" (valid temperature)
+# This will not match: "-300" (below absolute zero)
+# This will not match: "1200" (above maximum)
+```
+
+**Example: Integer validation**
+```python
+from pse.types.json.json_number import NumberSchemaStateMachine
+
+# Define an integer state machine with constraints
+page_number_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "integer",
+        "minimum": 1
+    },
+    context={}
+)
+
+# This will match: "42" (valid page number)
+# This will not match: "2.5" (not an integer)
+# This will not match: "0" (below minimum)
+```
+
+## IntegerStateMachine
+
+`IntegerStateMachine` is a specialized state machine for parsing positive integer values with configurable handling of leading zeros.
+
+```python
+from pse.types.integer import IntegerStateMachine
+
+# Create a basic integer state machine
+int_sm = IntegerStateMachine()
+
+# Create an integer state machine that preserves leading zeros
+raw_int_sm = IntegerStateMachine(drop_leading_zeros=False)
+```
+
+**Implementation details:**
+- Extends CharacterStateMachine with digit characters (0-9)
+- Only accepts positive integers (no negative sign support)
+- By default, removes leading zeros and returns an int value
+- When drop_leading_zeros=False, preserves the original string representation
+
+**Example: Basic integer parsing**
+```python
+from pse.types.integer import IntegerStateMachine
+
+# Define an integer state machine
+int_sm = IntegerStateMachine()
+
+# This will match: "42" -> 42 (int)
+# This will match: "007" -> 7 (int, leading zeros removed)
+# This will not match: "-5" (negative not supported)
+# This will not match: "3.14" (decimals not supported)
+```
+
+**Example: Preserving leading zeros**
+```python
+from pse.types.integer import IntegerStateMachine
+
+# Create an integer state machine that preserves leading zeros
+raw_int_sm = IntegerStateMachine(drop_leading_zeros=False)
+
+# This will match: "42" -> "42" (string)
+# This will match: "007" -> "007" (string, leading zeros preserved)
+# This will not match: "-5" (negative not supported)
+# This will not match: "3.14" (decimals not supported)
+```
+
+**Note:** For more complex integer requirements (negative numbers, range validation), use `NumberSchemaStateMachine` with a JSON Schema:
+
+```python
+from pse.types.json.json_number import NumberSchemaStateMachine
+
+# Create a state machine for integers with validation constraints
+integer_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000
+    },
+    context={}
+)
+```
+
+## BooleanStateMachine
+
+`BooleanStateMachine` parses JSON-compliant boolean literals ("true"/"false").
+
+```python
+from pse.types.boolean import BooleanStateMachine
+
+# Create a boolean state machine
+bool_sm = BooleanStateMachine()
+```
+
+**Implementation details:**
+- State machine structure:
+  - Initial state (0): Expects exact match of "true" or "false" literals
+  - Uses PhraseStateMachine for exact string matching
+  - Transitions directly to accept states with corresponding boolean values
+  - Returns Python `True` or `False` values
+
+- JSON compliance:
+  - Strictly case-sensitive (only "true"/"false", not "True"/"FALSE")
+  - No whitespace allowed (unlike some other PSE state machines)
+  - No partial matches or extra characters permitted
+
+**Example: Boolean parsing**
+```python
+from pse.types.boolean import BooleanStateMachine
+
+# Define a boolean state machine
+bool_sm = BooleanStateMachine()
+
+# This will match: "true" -> True (Python bool)
+# This will match: "false" -> False (Python bool)
+# This will not match: "True" (incorrect case)
+# This will not match: " true" (has whitespace)
+# This will not match: "truthy" (extra characters)
+```
+
+**Integration example:**
+```python
+from pse.types.boolean import BooleanStateMachine
+from pse.types.json.json_object import ObjectSchemaStateMachine
+
+# Using boolean state machine inside a JSON object
+settings_sm = ObjectSchemaStateMachine(
+    schema={
+        "type": "object",
+        "properties": {
+            "enabled": {"type": "boolean"},
+            "notifications": {"type": "boolean"}
+        }
+    },
+    context={}
+)
+
+# This will match: {"enabled": true, "notifications": false}
+```
+
+## ArrayStateMachine
+
+`ArrayStateMachine` handles JSON array structures, processing sequences of elements enclosed in square brackets.
+
+```python
+from pse.types.array import ArrayStateMachine
+
+# Create a basic array state machine for JSON arrays
+array_sm = ArrayStateMachine()
+```
+
+**Implementation details:**
+- State machine structure:
+  - State 0: Initial state that accepts opening bracket "["
+  - State 1: Whitespace handling or immediate closing bracket for empty arrays
+  - State 2: Value state that uses JsonStateMachine to parse elements
+  - State 3: Whitespace handling after each value
+  - State 4: Decision point (comma for next item or "]" to close array)
+
+- Array validation:
+  - Enforces proper structure with opening/closing brackets
+  - Ensures comma-separated values with no trailing commas
+  - Properly validates nested array structures
+  - Supports whitespace between array elements and brackets
+
+- Value collection:
+  - Uses ArrayStepper to track parsed values
+  - Maintains immutability by cloning steppers during processing
+  - Returns a list of parsed JSON values
+
+**ArraySchemaStateMachine extension**:
+For JSON Schema integration and type-specific arrays, use ArraySchemaStateMachine:
+
+```python
+from pse.types.json.json_array import ArraySchemaStateMachine
+
+# Create a typed array state machine for arrays of strings
+string_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {"type": "string"}
+    },
+    context={}
+)
+
+# Create an array with length constraints and unique items
+constrained_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {"type": "number"},
+        "minItems": 1,
+        "maxItems": 5,
+        "uniqueItems": True
+    },
+    context={}
+)
+```
+
+**Example: Basic array parsing**
+```python
+from pse.types.array import ArrayStateMachine
+
+# Define an array state machine
+array_sm = ArrayStateMachine()
+
+# This will match: "[]" -> [] (empty array)
+# This will match: "[1, 2, 3]" -> [1, 2, 3] (array of numbers)
+# This will match: '["a", "b", "c"]' -> ["a", "b", "c"] (array of strings)
+# This will match: '[true, false]' -> [True, False] (array of booleans)
+```
+
+**Example: Nested array parsing**
+```python
+from pse.types.array import ArrayStateMachine
+
+# Define an array state machine
+array_sm = ArrayStateMachine()
+
+# This will match: "[[1, 2], [3, 4]]" -> [[1, 2], [3, 4]] (nested array)
+# This will match: '[{"a": 1}, {"b": 2}]' -> [{"a": 1}, {"b": 2}] (array of objects)
+```
+
+**Example: Schema validation**
+```python
+from pse.types.json.json_array import ArraySchemaStateMachine
+
+# Create a schema-enforced array of integers
+integers_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {"type": "integer"},
+        "minItems": 2
+    },
+    context={}
+)
+
+# This will match: "[1, 2, 3]" -> [1, 2, 3]
+# This will not match: "[1]" (too few items)
+# This will not match: "[1.5, 2]" (non-integer value)
+```
+
+## ObjectStateMachine
+
+`ObjectStateMachine` processes JSON object structures, handling key-value pairs enclosed in curly braces.
+
+```python
+from pse.types.object import ObjectStateMachine
+
+# Create a basic object state machine
+object_sm = ObjectStateMachine()
+
+# Create an object state machine that can be optional (empty objects allowed)
+optional_object_sm = ObjectStateMachine(is_optional=True)
+```
+
+**Implementation details:**
+- State machine structure:
+  - State 0: Initial state that accepts opening brace "{"
+  - State 1: Whitespace handling after opening brace
+  - State 2: Key-value pair processing using KeyValueStateMachine
+  - State 3: Whitespace handling after key-value pair
+  - State 4: Decision point (comma for next property or "}" to close object)
+
+- Object validation:
+  - Enforces proper structure with opening/closing braces
+  - Ensures comma-separated properties with no trailing commas
+  - Properly handles nested object structures
+  - Supports whitespace between properties and braces
+
+- Value collection:
+  - Uses ObjectStepper to accumulate key-value pairs in a dictionary
+  - Maintains immutability by cloning steppers during processing
+  - Returns a dictionary of parsed property values
+
+- Parameters:
+  - `is_optional`: When True, allows empty objects (default: False)
+
+**ObjectSchemaStateMachine extension**:
+For JSON Schema integration and property validation, use ObjectSchemaStateMachine:
+
+```python
+from pse.types.json.json_object import ObjectSchemaStateMachine
+
+# Create a schema-based object state machine
+person_object_sm = ObjectSchemaStateMachine(
+    schema={
+        "type": "object",
+        "properties": {
+            "name": {"type": "string"},
+            "age": {"type": "integer", "minimum": 0},
+            "email": {"type": "string", "format": "email"}
+        },
+        "required": ["name", "email"]
+    },
+    context={}
+)
+```
+
+**Example: Basic object parsing**
+```python
+from pse.types.object import ObjectStateMachine
+
+# Define an object state machine
+object_sm = ObjectStateMachine()
+
+# This will match: "{}" -> {} (empty object, only if is_optional=True)
+# This will match: '{"a": 1}' -> {"a": 1} (simple object)
+# This will match: '{"name": "Alice", "age": 30}' -> {"name": "Alice", "age": 30} (multiple properties)
+```
+
+**Example: Nested object parsing**
+```python
+from pse.types.object import ObjectStateMachine
+
+# Define an object state machine
+object_sm = ObjectStateMachine()
+
+# This will match complex nested objects:
+# {
+#   "user": {
+#     "name": "Alice",
+#     "address": {
+#       "city": "New York",
+#       "zip": "10001"
+#     }
+#   }
+# }
+```
+
+**Example: Working with object values**
+```python
+from pse.types.object import ObjectStateMachine
+
+object_sm = ObjectStateMachine()
+input_str = '{"a": 1, "b": true, "c": "hello"}'
+
+# Parse the object string
+steppers = object_sm.get_steppers()
+for char in input_str:
+    steppers = object_sm.advance_all_steppers(steppers, char)
+
+# Get the parsed object from the first valid stepper
+if steppers:
+    parsed_object = steppers[0].value  # {"a": 1, "b": True, "c": "hello"}
+
+    # Access individual properties
+    value_a = parsed_object["a"]  # 1
+```
+
+## KeyValueStateMachine
+
+`KeyValueStateMachine` handles JSON key-value pairs within objects, processing the structure of `"key": value`.
+
+```python
+from pse.types.key_value import KeyValueStateMachine
+
+# Create a basic key-value pair state machine
+kv_sm = KeyValueStateMachine()
+
+# Create an optional key-value pair state machine
+optional_kv_sm = KeyValueStateMachine(is_optional=True)
+```
+
+**Implementation details:**
+- State machine structure:
+  - By default, uses a sequence of five state machines:
+    1. StringStateMachine() for the key
+    2. WhitespaceStateMachine() for whitespace after key
+    3. PhraseStateMachine(":") for the colon separator
+    4. WhitespaceStateMachine() for whitespace after colon
+    5. JsonStateMachine() for the value
+  - Transitions through each component in sequence
+  - Returns a tuple of (key, value) upon successful parsing
+
+- Parameters:
+  - `sequence`: Optional customized sequence of state machines (default: as described above)
+  - `is_optional`: Whether the key-value pair is optional (default: False)
+
+- Key-value tracking:
+  - Uses KeyValueStepper to track property name and value
+  - Extracts key using json.loads() to handle quote removal and escaping
+  - Value is processed by JsonStateMachine and can be any valid JSON type
+  - Maintains immutability through proper stepper cloning
+
+**Example: Basic key-value parsing**
+```python
+from pse.types.key_value import KeyValueStateMachine
+
+# Define a key-value state machine
+kv_sm = KeyValueStateMachine()
+
+# This will match: '"name": "Alice"' -> ("name", "Alice")
+# This will match: '"age": 30' -> ("age", 30)
+# This will match: '"active": true' -> ("active", True)
+# This will match: '"data": {"x": 1, "y": 2}' -> ("data", {"x": 1, "y": 2})
+```
+
+**Example: Using key-value pairs in objects**
+```python
+from pse.types.object import ObjectStateMachine
+from pse.types.key_value import KeyValueStateMachine
+
+# ObjectStateMachine uses KeyValueStateMachine internally
+object_sm = ObjectStateMachine()
+
+# This uses KeyValueStateMachine to parse each property
+input_str = '{"name": "Alice", "age": 30}'
+
+steppers = object_sm.get_steppers()
+for char in input_str:
+    steppers = object_sm.advance_all_steppers(steppers, char)
+
+# Result is a dictionary built from key-value pairs
+result = steppers[0].value  # {"name": "Alice", "age": 30}
+```
+
+**KeyValueSchemaStateMachine extension**:
+For JSON Schema validation of property pairs, the schema-aware extension provides additional validation:
+
+```python
+from pse.types.json.json_key_value import KeyValueSchemaStateMachine
+
+# Create a schema-validated key-value pair
+email_property_sm = KeyValueSchemaStateMachine(
+    property_name="email",
+    property_schema={"type": "string", "format": "email"},
+    context={},
+    required=True
+)
+
+# This will match: '"email": "user@example.com"'
+# This will not match: '"email": 123' (invalid type)
+# This will not match: '"email": "invalid"' (invalid format)
+```
+
+## WhitespaceStateMachine
+
+`WhitespaceStateMachine` handles whitespace characters (spaces, tabs, newlines, carriage returns) in structured formats.
+
+```python
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Create a whitespace state machine with default settings
+# This makes whitespace optional (min=0) with a maximum of 20 characters
+ws_sm = WhitespaceStateMachine()
+
+# Create a whitespace state machine with specific constraints
+required_ws_sm = WhitespaceStateMachine(
+    min_whitespace=1,  # Require at least one whitespace character
+    max_whitespace=10  # Allow at most 10 whitespace characters
+)
+```
+
+**Implementation details:**
+- State machine structure:
+  - Extends CharacterStateMachine with whitespace characters (" \t\n\r")
+  - Accepts consecutive whitespace characters up to max_whitespace
+  - Becomes optional when min_whitespace is set to 0 (default)
+  - Returns the matched whitespace characters as a string
+
+- Parameters:
+  - `min_whitespace`: Minimum required whitespace characters (default: 0)
+  - `max_whitespace`: Maximum allowed whitespace characters (default: 20)
+  - When `min_whitespace=0`, acts as an optional whitespace matcher
+
+- Matching behavior:
+  - Greedy matching: consumes as many whitespace characters as possible
+  - Stops consuming when encountering non-whitespace characters
+  - Successfully validates when at least min_whitespace characters have been consumed
+  - Rejects input when more than max_whitespace characters are encountered
+
+**Example: Basic whitespace handling**
+```python
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Define a whitespace state machine
+ws_sm = WhitespaceStateMachine()
+
+# This will match: "" (empty string, since min_whitespace=0)
+# This will match: " " (single space)
+# This will match: "\t\n  " (mixed whitespace)
+# This will not match: "a" (non-whitespace character)
+```
+
+**Example: Required whitespace**
+```python
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Define a whitespace state machine requiring at least one character
+required_ws_sm = WhitespaceStateMachine(min_whitespace=1)
+
+# This will not match: "" (empty string)
+# This will match: " " (single space)
+# This will match: "\t\n  " (mixed whitespace)
+```
+
+**Example: Integration with other state machines**
+```python
+from pse.types.base.chain import ChainStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Create a state machine that parses "key = value" format
+assignment_sm = ChainStateMachine([
+    PhraseStateMachine("key"),         # Match "key"
+    WhitespaceStateMachine(),          # Optional whitespace
+    PhraseStateMachine("="),           # Match "="
+    WhitespaceStateMachine(),          # Optional whitespace
+    PhraseStateMachine("value")        # Match "value"
+])
+
+# This will match: "key=value"
+# This will match: "key = value"
+# This will match: "key  =  value"
+```
+
+**Common usage in PSE:**
+- Handles optional whitespace between tokens in structured formats
+- Creates flexible parsers that handle various formatting styles
+- Enables human-readable output with proper spacing
+- Used extensively in JSON, XML, and other format-specific state machines
+
+
+---
+pse-docs/docs/api/state-machines/formats.md
+---
+# Format-Specific State Machines
+
+PSE includes specialized state machines for common data formats, making it easy to generate structured outputs that conform to standard specifications.
+
+## JSON State Machines
+
+PSE provides a suite of state machines specifically designed for working with JSON data.
+
+### JsonStateMachine
+
+`JsonStateMachine` serves as the entry point for parsing any valid JSON value. It functions as a dispatcher to specialized state machines for different JSON types.
+
+```python
+from pse.types.json.json_value import JsonStateMachine
+
+# Create a general JSON state machine that can parse any valid JSON value
+json_sm = JsonStateMachine()
+```
+
+**Implementation details:**
+- Implements a simple two-state machine:
+  - State 0: Initial state with multiple outgoing edges to specialized parsers
+  - All parsers transition to a single final state ("$") upon completion
+- Delegates parsing to specialized state machines for each JSON type:
+  - `ObjectStateMachine` for JSON objects
+  - `ArrayStateMachine` for JSON arrays
+  - `StringStateMachine` for JSON strings
+  - `PhraseStateMachine` for "null" literal
+  - `BooleanStateMachine` for true/false
+  - `NumberStateMachine` for numeric values
+- Uses default steppers from each specialized parser
+- Provides valid continuations for any valid JSON value
+
+**Usage in the PSE hierarchy:**
+- Acts as the root node for all JSON type parsing
+- Used as the default value type in JSON arrays when no schema is specified
+- Primary entry point for generic JSON parsing without schema validation
+- Can be used directly or as part of more complex state machines
+
+### ObjectSchemaStateMachine
+
+`ObjectSchemaStateMachine` implements schema-aware JSON object parsing and generation, extending the base `ObjectStateMachine` to handle JSON Schema validation.
+
+```python
+from pse.types.json.json_object import ObjectSchemaStateMachine
+
+# Define a schema for a person object
+person_schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "age": {"type": "integer", "minimum": 0},
+        "hobbies": {"type": "array", "items": {"type": "string"}}
+    },
+    "required": ["name", "hobbies"]
+}
+
+# Create a schema-based object state machine
+person_object_sm = ObjectSchemaStateMachine(person_schema, {})
+```
+
+**Implementation details:**
+- Parameters:
+  - `schema`: JSON Schema dictionary for object validation
+  - `context`: Context information for parsing
+  - `properties`: Schema properties (default: {})
+  - `required_property_names`: List of required properties (default: [])
+  - `additional_properties`: Controls whether extra properties are allowed (default: {})
+  - `ordered_properties`: Whether properties must be in order (default: True)
+
+- State graph structure:
+  - State 0: Accepts "{" to start object
+  - State 1: Whitespace handling after opening brace
+  - State 2: Property parsing with schema validation
+  - State 3: Whitespace after property
+  - State 4: Decision point (comma for next property or "}" to end)
+
+- Schema processing:
+  - Automatically processes `nullable` and `default` values to determine truly required properties
+  - Properties with default values aren't considered required for parsing
+  - Special handling for pattern properties and additional properties
+
+- Validation mechanisms:
+  - Only allows object closure when all required properties are present
+  - Enforces property ordering when `ordered_properties` is true
+  - Controls which properties can be included based on schema definitions
+
+**Additional property handling:**
+- When `additional_properties` is true (default): Allows any properties beyond the defined ones
+- When `additional_properties` is false: Rejects properties not defined in the schema
+- When `additional_properties` is a schema object: Validates extra properties against that schema
+
+**Example with property ordering and additional properties:**
+```python
+from pse.types.json.json_object import ObjectSchemaStateMachine
+
+# Schema with ordered properties and restricted additional properties
+contact_schema = {
+    "type": "object",
+    "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "email": {"type": "string", "format": "email"}
+    },
+    "required": ["id", "name"],
+    "additionalProperties": {
+        "type": "string"  # Additional props must be strings
+    },
+    "orderedProperties": True  # Must follow schema order
+}
+
+contact_sm = ObjectSchemaStateMachine(
+    schema=contact_schema,
+    context={},
+    ordered_properties=True  # Can also be set via constructor
+)
+```
+
+**Nested schema example:**
+```python
+# Schema with nested objects
+nested_schema = {
+    "type": "object",
+    "properties": {
+        "user": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "street": {"type": "string"},
+                        "city": {"type": "string"}
+                    },
+                    "required": ["street"]
+                }
+            },
+            "required": ["name"]
+        }
+    },
+    "required": ["user"]
+}
+
+# Create nested schema state machine
+nested_sm = ObjectSchemaStateMachine(nested_schema, {})
+```
+
+### ArraySchemaStateMachine
+
+`ArraySchemaStateMachine` implements schema-aware JSON array processing, extending the base `ArrayStateMachine` to handle JSON Schema validation.
+
+```python
+from pse.types.json.json_array import ArraySchemaStateMachine
+
+# Create a JSON array state machine for arrays of strings
+string_array_sm = ArraySchemaStateMachine(
+    schema={"type": "array", "items": {"type": "string"}},
+    context={}
+)
+
+# Create a JSON array with length constraints
+bounded_array_sm = ArraySchemaStateMachine(
+    schema={"type": "array", "items": {"type": "number"}, "minItems": 1, "maxItems": 5},
+    context={}
+)
+```
+
+**Implementation details:**
+- Parameters:
+  - `schema`: JSON Schema dictionary for array validation
+  - `context`: Context for schema resolution containing refs and path information
+
+- State graph structure:
+  - State 0: Initial state accepting '[' to start the array
+  - State 1: Whitespace handling after opening bracket or decision if empty array is valid
+  - State 2: Item parsing using schema from 'items' property
+  - State 3: Whitespace handling after each item
+  - State 4: Decision point (comma for next item or ']' to close)
+
+- Custom stepper implementation:
+  - `ArraySchemaStepper` extends `ArrayStepper` with schema validation
+  - Tracks item history for uniqueItems enforcement
+  - Enforces minItems/maxItems constraints during parsing and generation
+  - Preserves item order when filtering duplicates for uniqueItems
+
+- Schema processing:
+  - Extracts constraints from schema including minItems, maxItems, and uniqueItems
+  - Validates items against 'items' schema property
+  - Handles prefixItems and contains constraints
+  - Supports tuple validation with different schemas per position
+
+**uniqueItems behavior:**
+When `uniqueItems` is true, duplicates are filtered while preserving the order of first occurrence:
+```python
+# Array with unique items constraint
+unique_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {"type": "number"},
+        "uniqueItems": True
+    },
+    context={}
+)
+
+# This would only allow [1, 2, 3], not [1, 2, 1, 3]
+```
+
+**Advanced constraints example:**
+```python
+# Array with multiple constraints
+complex_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string"},
+                "value": {"type": "number"}
+            },
+            "required": ["id"]
+        },
+        "minItems": 1,
+        "maxItems": 10,
+        "uniqueItems": True
+    },
+    context={"path": "root"}
+)
+```
+
+**Integration with other state machines:**
+```python
+# Nested structure with arrays inside objects
+nested_schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "tags": {
+            "type": "array",
+            "items": {"type": "string"},
+            "uniqueItems": True
+        },
+        "scores": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 3
+        }
+    },
+    "required": ["name", "scores"]
+}
+
+# The object state machine will automatically use ArraySchemaStateMachine
+# for the array properties
+nested_sm = ObjectSchemaStateMachine(nested_schema, {})
+```
+
+### AnySchemaStateMachine
+
+`AnySchemaStateMachine` provides a powerful way to create state machines from complex JSON Schemas with logical composition operators.
+
+```python
+from pse.types.json.any_json_schema import AnySchemaStateMachine
+
+complex_schemas = [
+    {"type": "string"},
+    {"type": "number"},
+    {
+        "type": "object",
+        "properties": {
+            "status": {"type": "string", "enum": ["success", "error"]},
+            "data": {"type": "object"}
+        },
+        "required": ["status"]
+    }
+]
+
+# Create a state machine for the complex schema
+complex_sm = AnySchemaStateMachine(
+    schemas=complex_schemas,
+    context={}
+)
+```
+
+**Implementation details:**
+- Parameters:
+  - `schemas`: List of JSON Schema objects to validate against
+  - `context`: Context for schema resolution containing refs and path information
+
+- State machine structure:
+  - Creates individual state machines for each schema
+  - Constructs transitions from the initial state to each schema state machine
+  - Accepts if any schema path reaches an accept state
+
+- Parallel path exploration:
+  - Maintains multiple steppers to validate against different schemas simultaneously
+  - Returns the first successfully validated value
+  - Only fails if all schema paths fail to validate
+  - Preserves the correctly typed value for the matching schema
+
+**JSON Schema logical composition:**
+`AnySchemaStateMachine` is used internally for handling JSON Schema's logical composition operators:
+
+```python
+# These schema patterns are automatically processed using AnySchemaStateMachine
+schema1 = {
+    "oneOf": [  # Must match exactly one schema
+        {"type": "string"},
+        {"type": "number"}
+    ]
+}
+
+schema2 = {
+    "anyOf": [  # Can match any number of schemas
+        {"type": "string"},
+        {"type": "number"}
+    ]
+}
+
+schema3 = {
+    "type": ["string", "number"]  # Union type (string OR number)
+}
+
+schema4 = {
+    "type": "string",
+    "nullable": True  # String OR null
+}
+```
+
+**Usage for complex schema validation:**
+```python
+# Create a state machine for a payment method schema
+payment_method_sm = AnySchemaStateMachine(
+    schemas=[
+        {  # Credit card schema
+            "type": "object",
+            "properties": {
+                "type": {"type": "string", "enum": ["credit_card"]},
+                "card_number": {"type": "string", "pattern": "^[0-9]{16}$"},
+                "expiration": {"type": "string", "pattern": "^[0-9]{2}/[0-9]{2}$"},
+                "cvv": {"type": "string", "pattern": "^[0-9]{3,4}$"}
+            },
+            "required": ["type", "card_number", "expiration", "cvv"]
+        },
+        {  # Bank transfer schema
+            "type": "object",
+            "properties": {
+                "type": {"type": "string", "enum": ["bank_transfer"]},
+                "account_number": {"type": "string"},
+                "routing_number": {"type": "string"}
+            },
+            "required": ["type", "account_number", "routing_number"]
+        },
+        {  # Digital wallet schema
+            "type": "object",
+            "properties": {
+                "type": {"type": "string", "enum": ["digital_wallet"]},
+                "provider": {"type": "string", "enum": ["paypal", "venmo", "apple_pay"]},
+                "email": {"type": "string", "format": "email"}
+            },
+            "required": ["type", "provider", "email"]
+        }
+    ],
+    context={"path": "payment_method"}
+)
+```
+
+**Performance considerations:**
+- Shares the token processing pipeline across all paths to minimize overhead
+- Designed for efficient exploration of multiple potential schema matches
+- Automatically prunes invalid paths as tokens are processed
+
+## XML State Machines
+
+PSE includes state machines for working with XML data.
+
+### XMLTagStateMachine
+
+`XMLTagStateMachine` parses XML opening and closing tags with a specific tag name.
+
+```python
+from pse.types.xml.xml_tag import XMLTagStateMachine
+
+# Create an XML opening tag state machine with a specific tag name
+person_tag_sm = XMLTagStateMachine(tag_name="person")
+
+# Create an XML closing tag state machine
+person_closing_tag_sm = XMLTagStateMachine(tag_name="person", closing_tag=True)
+```
+
+**Implementation details:**
+- Parameters:
+  - `tag_name`: The name of the XML tag to match (required)
+  - `closing_tag`: Boolean flag to indicate if it's a closing tag (default: False)
+
+- Internal structure:
+  - Inherits from `ChainStateMachine`
+  - Creates a chain of `PhraseStateMachine` instances that match parts of the tag:
+    1. Opening delimiter: `<` for normal tags, `</` for closing tags
+    2. The tag name itself
+    3. Closing delimiter: `>`
+
+- Custom stepper behavior:
+  - Implements `XMLTagStepper` that extends `ChainStepper`
+  - Overrides `get_valid_continuations()` to return the complete tag as a single valid continuation
+  - Ensures proper tag name matching with exact case sensitivity
+
+**Usage notes:**
+- Currently focused on basic tag recognition without attributes
+- Does not support self-closing tags (e.g., `<br/>`)
+- Whitespace is not allowed within tags
+- Used as a building block for `XMLEncapsulatedStateMachine`
+
+**Simple example:**
+```python
+from pse.types.xml.xml_tag import XMLTagStateMachine
+
+# Match a specific opening tag
+h1_tag_sm = XMLTagStateMachine(tag_name="h1")
+
+# This will match "<h1>" but not "<h2>" or "<H1>"
+```
+
+### XMLEncapsulatedStateMachine
+
+`XMLEncapsulatedStateMachine` handles complete XML elements with content between matching tags.
+
+```python
+from pse.types.xml.xml_encapsulated import XMLEncapsulatedStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+
+# Create an XML element with text content
+text_element_sm = XMLEncapsulatedStateMachine(
+    tag_name="p",  # XML tag name
+    state_machine=PhraseStateMachine("Hello world"),  # Content state machine
+    min_buffer_length=-1,  # Minimum buffer length (default: -1)
+    is_optional=False  # Whether the element is optional (default: False)
+)
+```
+
+**Implementation details:**
+- Parameters:
+  - `tag_name`: Name of the XML tag (required)
+  - `state_machine`: The inner state machine that processes content between tags (required)
+  - `min_buffer_length`: Minimum buffer length before attempting to match (default: -1)
+  - `is_optional`: Whether the element is optional (default: False)
+
+- State graph structure:
+  - State 0: Uses `WaitFor` with `XMLTagStateMachine` to find opening tag
+  - State 1: Processes content using the provided inner state machine
+  - State 2: Looks for closing tag using `XMLTagStateMachine` with closing_tag=True
+
+- Custom stepper behavior:
+  - Uses `EncapsulatedStepper` for tracking buffer and inner state
+  - Maintains proper nesting by requiring matching opening and closing tags
+  - Returns validated content from between the tags
+
+**Complex content example:**
+```python
+from pse.types.xml.xml_encapsulated import XMLEncapsulatedStateMachine
+from pse.types.json.json_value import JsonStateMachine
+
+# XML element containing JSON content
+json_in_xml_sm = XMLEncapsulatedStateMachine(
+    tag_name="data",
+    state_machine=JsonStateMachine()
+)
+
+# This will match: <data>{"key": "value"}</data>
+```
+
+**Nested XML elements:**
+```python
+from pse.types.xml.xml_encapsulated import XMLEncapsulatedStateMachine
+from pse.types.base.chain import ChainStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+
+# Create a nested XML structure for HTML-like content
+paragraph_sm = XMLEncapsulatedStateMachine(
+    tag_name="p",
+    state_machine=PhraseStateMachine("Sample text")
+)
+
+# A div containing a paragraph
+div_with_paragraph_sm = XMLEncapsulatedStateMachine(
+    tag_name="div",
+    state_machine=paragraph_sm
+)
+
+# This will match: <div><p>Sample text</p></div>
+```
+
+**Optional XML element:**
+```python
+from pse.types.xml.xml_encapsulated import XMLEncapsulatedStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+
+# Optional XML element
+optional_element_sm = XMLEncapsulatedStateMachine(
+    tag_name="optional",
+    state_machine=PhraseStateMachine("Some content"),
+    is_optional=True
+)
+
+# Will match both "<optional>Some content</optional>" and empty string
+```
+
+## Grammar State Machines
+
+PSE provides state machines for parsing according to formal grammars.
+
+Currently, this approach is kind of experimental and not all grammars are supported.
+
+Manual massaging of the lark grammars is required to get the best results.
+
+We've provided a few pre-configured grammars - for valid python and bash syntax - but again these are hacks and not a full solution.
+
+In the future we want to natively support BNF grammars and have a more robust solution.
+
+**Integration with other state machines:**
+```python
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+from pse.types.grammar.lark import LarkGrammarStateMachine
+from pse.types.grammar.default_grammars.python import PythonGrammar
+
+# Create a state machine for code blocks containing Python code
+python_code_block = EncapsulatedStateMachine(
+    left_delimiter="```python\n",
+    right_delimiter="\n```",
+    state_machine=LarkGrammarStateMachine(PythonGrammar())
+)
+```
+
+### PythonStateMachine
+
+`PythonStateMachine` is a pre-configured instance of `LarkGrammarStateMachine` that specializes in parsing valid Python code.
+
+```python
+from pse.types.grammar.default_grammars.python import PythonStateMachine
+
+# Use the pre-configured Python state machine
+python_sm = PythonStateMachine
+
+# Use with encapsulation for markdown-style code blocks
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+python_block_sm = EncapsulatedStateMachine(
+    state_machine=PythonStateMachine,
+    left_delimiter="```python\n",
+    right_delimiter="\n```"
+)
+```
+
+**Implementation details:**
+- Based on `LarkGrammarStateMachine` using a specialized `PythonGrammar` class
+- Uses a comprehensive Lark grammar file (`python.lark`) that covers Python 3.x syntax
+- Employs a custom Python indentation handler for proper handling of indentation-sensitive code
+- Default delimiters for markdown-style code blocks: `"```python\n"` and `"\n```"`
+- Implements special validation logic for Python syntax
+
+**Python-specific validation features:**
+- Intelligent handling of incomplete code during generation
+- Special processing for indent/dedent tokens
+- Proper handling of unclosed quotes, brackets, and parentheses
+- Support for all Python syntax including:
+  - Function and class definitions
+  - Control flow statements
+  - List/dict/set comprehensions
+  - Async/await syntax
+  - Type annotations
+  - Decorators and lambda expressions
+
+**Example: Python code validation**
+```python
+from pse.types.grammar.default_grammars.python import PythonStateMachine
+
+# Parse a simple Python function
+code = """
+def factorial(n):
+    if n <= 1:
+        return 1
+    return n * factorial(n-1)
+"""
+
+# Get steppers and advance through the code
+steppers = PythonStateMachine.get_steppers()
+for char in code:
+    steppers = PythonStateMachine.advance_all_steppers(steppers, char)
+
+# Check if any stepper successfully parsed the code
+valid = any(s.has_reached_accept_state() for s in steppers)
+```
+
+**Example: Integration with structuring engine**
+```python
+from pse import StructuringEngine
+from pse.types.grammar.default_grammars.python import PythonStateMachine
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+
+# Create a Python code block parser
+python_block = EncapsulatedStateMachine(
+    state_machine=PythonStateMachine,
+    left_delimiter="```python\n",
+    right_delimiter="\n```"
+)
+
+# Create structuring engine with the Python block state machine
+engine = StructuringEngine().configure(python_block)
+
+# Generate code with LLM
+response = engine.generate("Write a function to calculate the Fibonacci sequence", model="claude-3-sonnet-20240229")
+```
+
+**Example: Partial code validation during generation**
+```python
+from pse.types.grammar.default_grammars.python import PythonStateMachine
+
+# Even incomplete code is accepted during non-strict validation
+incomplete_code = "def factorial(n):\n    if n <= 1:"
+steppers = PythonStateMachine.get_steppers()
+steppers = PythonStateMachine.advance_all_steppers(steppers, incomplete_code)
+
+# Steppers remain valid for incomplete but syntactically correct code
+assert len(steppers) > 0
+```
+
+### BashStateMachine
+
+`BashStateMachine` is a pre-configured instance of `LarkGrammarStateMachine` that specializes in parsing and generating Bash shell code.
+
+```python
+from pse.types.grammar.default_grammars.bash import BashStateMachine
+
+# Use the pre-configured Bash state machine
+bash_sm = BashStateMachine
+
+# Use with encapsulation for markdown-style code blocks
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+bash_block_sm = EncapsulatedStateMachine(
+    state_machine=BashStateMachine,
+    left_delimiter="```bash\n",
+    right_delimiter="\n```"
+)
+```
+
+**Implementation details:**
+- Based on `LarkGrammarStateMachine` using a specialized `BashGrammar` class
+- Uses a comprehensive Lark grammar file (`bash.lark`) that covers Bash shell syntax
+- Default delimiters for markdown-style code blocks: `"```bash\n"` and `"\n```"`
+- Implements special validation logic for Bash-specific syntax structures
+
+**Bash-specific validation features:**
+- Intelligent handling of incomplete commands during generation
+- Special processing for unclosed quotes and control structures
+- Support for all Bash syntax including:
+  - Control flow (if/then/else, for/while/until loops, case statements)
+  - Variables and parameter expansion (`$var`, `${var}`)
+  - Command substitution (`$(command)`) and subshells
+  - I/O redirections (`>`, `>>`, `<`, `2>&1`, etc.)
+  - Function definitions
+  - Arithmetic expressions (`$(( expr ))`)
+  - Comments and shebangs
+
+**Example: Bash script validation**
+```python
+from pse.types.grammar.default_grammars.bash import BashStateMachine
+
+# Parse a simple Bash script
+script = """
+#!/bin/bash
+
+function greet() {
+    local name=$1
+    echo "Hello, $name!"
+}
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <name>"
+    exit 1
+fi
+
+greet $1
+"""
+
+# Check if the script is valid
+is_valid = BashStateMachine.grammar.validate(script, strict=True)
+```
+
+**Example: Integration with structuring engine**
+```python
+from pse import StructuringEngine
+from pse.types.grammar.default_grammars.bash import BashStateMachine
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+
+# Create a Bash code block parser
+bash_block = EncapsulatedStateMachine(
+    state_machine=BashStateMachine,
+    left_delimiter="```bash\n",
+    right_delimiter="\n```"
+)
+
+# Create structuring engine with the Bash block state machine
+engine = StructuringEngine().configure(bash_block)
+
+# Generate shell script with LLM
+response = engine.generate(
+    "Write a Bash script to find the largest files in a directory",
+    model="claude-3-sonnet-20240229"
+)
+```
+
+**Example: Handling incomplete Bash code**
+```python
+from pse.types.grammar.default_grammars.bash import BashStateMachine
+
+# Incomplete code that's syntactically valid so far
+incomplete_code = "if [ -f /etc/passwd ]; then\n  grep 'root' /etc/passwd"
+
+# In non-strict mode, this should be accepted
+is_valid_partial = BashStateMachine.grammar.validate(incomplete_code, strict=False)
+assert is_valid_partial  # True
+
+# In strict mode, this would be rejected
+is_valid_strict = BashStateMachine.grammar.validate(incomplete_code, strict=True)
+assert not is_valid_strict  # False
+```
+
+**Performance considerations:**
+- Parses Bash syntax incrementally, providing good performance
+- Uses efficient path pruning to avoid exploring invalid syntax paths
+- Handles complex scripts including nested structures
+- Token healing enables recovery from minor syntax errors
+
+## Mixed-Content State Machines
+
+PSE includes state machines for handling mixed content formats.
+
+### FencedFreeformStateMachine
+
+`FencedFreeformStateMachine` allows free-form text between specific delimiters, functioning as an enhanced version of `EncapsulatedStateMachine` that accepts any character content.
+
+```python
+from pse.types.misc.fenced_freeform import FencedFreeformStateMachine
+
+# Create a state machine that captures content between markdown-style fences
+python_block_sm = FencedFreeformStateMachine(
+    identifier="python",  # Specifies fence type (becomes ```python\n and \n```)
+)
+
+# Create a state machine with custom delimiters
+custom_block_sm = FencedFreeformStateMachine(
+    delimiters=("<START>", "<END>"),  # Custom opening and closing delimiters
+    char_min=10,  # Minimum content length
+    char_max=1000,  # Maximum content length
+    is_optional=False  # Whether the content is required
+)
+```
+
+**Implementation details:**
+- Parameters:
+  - `identifier`: Optional language identifier (e.g., "python" produces ```python\n and \n``` fences)
+  - `delimiters`: Tuple of opening and closing delimiters (overrides identifier-based fences)
+  - `char_min`: Minimum number of characters required (default: 0)
+  - `char_max`: Maximum number of characters allowed (default: None)
+  - `buffer_length`: Controls character buffer size during processing (default: 32768)
+  - `is_optional`: Whether the content is optional (default: False)
+
+- Internal structure:
+  - Extends `EncapsulatedStateMachine` with freeform character acceptance
+  - Uses `CharacterStateMachine` internally with a whitelist containing all characters
+  - Maintains character counting to enforce min/max constraints
+  - Provides a `FencedFreeformStepper` for controlling character processing
+
+- Fence behavior:
+  - With identifier: Uses markdown-style code fences (```<identifier>\n and \n```)
+  - With delimiters: Uses the provided custom delimiters
+  - Both can be set to customize fence appearance
+
+**Usage examples:**
+
+**Example: Character limits**
+```python
+from pse.types.misc.fenced_freeform import FencedFreeformStateMachine
+
+# Create a state machine for short descriptions (10-50 characters)
+description_sm = FencedFreeformStateMachine(
+    delimiters=("<desc>", "</desc>"),
+    char_min=10,
+    char_max=50
+)
+
+# This enforces both minimum and maximum length constraints
+```
+
+**Common applications:**
+- Markdown-style code blocks in documentation
+- Processing custom template languages
+- Extracting specific sections from text
+- Allowing structured and unstructured content in the same document
+- Creating custom delimited content regions
+
+
+---
+pse-docs/docs/api/state-machines/schema-sources.md
+---
+# Schema Sources
+
+PSE provides several ways to create state machines from schema definitions, enabling flexible integration with existing code and data models.
+
+## JSON Schema
+
+The most common way to define structures in PSE is using JSON Schema, a powerful standard for describing JSON data structures.
+
+```python
+from pse import StructuringEngine
+
+# Define a JSON Schema
+person_schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "age": {"type": "integer", "minimum": 0},
+        "address": {
+            "type": "object",
+            "properties": {
+                "street": {"type": "string"},
+                "city": {"type": "string"},
+                "zipcode": {"type": "string"}
+            },
+            "required": ["street", "city"]
+        },
+        "hobbies": {
+            "type": "array",
+            "items": {"type": "string"}
+        }
+    },
+    "required": ["name", "age"]
+}
+
+# Create a structuring engine from the schema
+engine = StructuringEngine.configure(person_schema)
+```
+
+**Key features:**
+- Support for the full JSON Schema specification
+- Nested object and array structures
+- Validation constraints (min/max, required fields, patterns)
+- Type validation and coercion
+
+## Pydantic Models
+
+PSE can create state machines directly from Pydantic models, integrating seamlessly with Python type definitions.
+
+```python
+from pydantic import BaseModel, Field
+from typing import List, Optional
+from pse import StructuringEngine
+
+# Define a Pydantic model
+class Address(BaseModel):
+    street: str
+    city: str
+    zipcode: Optional[str] = None
+
+class Person(BaseModel):
+    name: str
+    age: int = Field(ge=0)
+    address: Optional[Address] = None
+    hobbies: List[str] = []
+
+# Create a structuring engine from the Pydantic model
+engine = StructuringEngine.configure(Person)
+```
+
+**Key features:**
+- Direct integration with Python type annotations
+- Automatic schema generation from class definitions
+- Support for nested models and complex types
+- Validation using Pydantic's powerful validators
+
+## Function Signatures
+
+PSE can extract schema information from function signatures, enabling generation of valid function calls.
+
+```python
+from pse import StructuringEngine
+
+def search_database(
+    query: str,
+    max_results: int = 10,
+    filters: dict[str, str] | None = None,
+    sort_by: list[str] = ["relevance"]
+) -> list[dict]:
+    """
+    Search the database with the given parameters.
+
+    Args:
+        query: The search query string
+        max_results: Maximum number of results to return
+        filters: Optional dictionary of field/value filters
+        sort_by: Fields to sort results by
+    """
+    pass
+
+# Create a structuring engine from the function signature
+engine = StructuringEngine.configure(search_database)
+```
+
+**Key features:**
+- Extracts parameter types from function signatures
+- Supports default values and optional parameters
+- Handles complex nested types with type annotations
+- Enables generation of valid function calls with proper arguments
+
+
+---
+pse-docs/docs/core-concepts/core-architecture.md
+---
+# PSE Core Architecture
+
+The Proxy Structuring Engine is built on a high-performance C++ core that implements a novel non-deterministic finite state automaton (NFA) parsing algorithm. This page provides a detailed look at the internal architecture of PSE's core implementation, which is distributed as a precompiled binary via PyPI (pse-core).
+
+
+---
+pse-docs/docs/core-concepts/multi-token-processing.md
+---
+# Multi-Token Processing
+
+Multi-Token Processing (MTP) is an optional feature in PSE that can speed up generation when specific elements map to multiple tokens.
+
+
+---
+pse-docs/docs/core-concepts/state-graph-traversal.md
+---
+# State Graph Traversal Algorithm
+
+The state graph traversal algorithm is at the heart of PSE's ability to efficiently navigate complex grammar structures while maintaining deterministic performance characteristics. This document provides a comprehensive explanation of the algorithm's design, implementation, and unique features.
+
+## Algorithmic Foundation
+
+PSE's state graph traversal algorithm extends traditional non-deterministic finite automata (NFA) theory with several novel enhancements to achieve both flexibility and efficiency.
+
+### Key Innovations
+
+1. **Hierarchical Composition**: Unlike traditional NFAs where transitions are atomic symbols, PSE transitions contain nested state machines, creating a recursive graph structure that enables context-free grammar expressivity while maintaining finite state machine efficiency.
+
+2. **Immutable Exploration**: The algorithm employs persistent data structures through clone-based immutability, allowing concurrent evaluation of multiple interpretation paths without state interference.
+
+3. **Breadth-First Multi-Path Exploration**: Rather than using backtracking for non-determinism, the algorithm maintains and advances multiple steppers simultaneously, exploring all viable paths in parallel.
+
+4. **Partial Match Processing**: The algorithm can process tokens that match only partially with expected patterns, using longest-prefix matching through a HAT-trie data structure.
+
+5. **Hierarchical Probabilistic Path Selection**: When multiple valid paths exist, the algorithm employs a multi-criteria probabilistic selection that balances structural correctness with model-assigned probabilities.
+
+
+---
+pse-docs/docs/core-concepts/state-machine.md
+---
+# State Machine Architecture
+
+More information coming soon.
+
+
+---
+pse-docs/docs/core-concepts/stepper.md
+---
+# The Stepper System
+
+More information coming soon.
+
+
+---
+pse-docs/docs/core-concepts/token-healing.md
+---
+# Token Healing
+
+Token healing is an error recovery mechanism in PSE that enables robust handling of tokenization mismatches between language model tokens and grammar rules.
+
+## What is Token Healing?
+
+Token healing allows PSE to recover from situations where a model generates tokens that don't perfectly align with the grammar's expected tokens. Instead of rejecting these tokens outright, PSE can "heal" them by finding valid prefixes and continuing generation.
+
+More information coming soon.
+
+
+---
+
+
+---
+pse-docs/docs/getting-started/installation.md
+---
+# Installation
+
+This guide will help you install the Proxy Structuring Engine (PSE) and set up your environment for development.
+
+## Standard Installation
+
+We recommend using uv to install PSE:
+```bash
+uv pip install pse
+```
+
+You can also install PSE using pip:
+
+```bash
+pip install pse
+```
+
+
+## Development Installation
+
+For development or to access the latest features, you can install from source:
+
+```bash
+# Clone the repository
+git clone https://github.com/TheProxyCompany/proxy-structuring-engine.git
+cd proxy-structuring-engine
+
+# Install in development mode
+pip install -e ".[dev]"
+```
+
+## Framework-Specific Installation
+
+PSE works with multiple ML frameworks. Install the one(s) you plan to use:
+
+### PyTorch
+
+```bash
+pip install pse[torch]
+
+# Or for a specific version
+pip install torch pse
+```
+
+### MLX (Apple Silicon)
+
+```bash
+pip install pse[mlx]
+
+# Or for a specific version
+pip install mlx pse
+```
+
+### TensorFlow
+
+```bash
+pip install pse[tensorflow]
+
+# Or for a specific version
+pip install tensorflow pse
+```
+
+### JAX
+
+```bash
+pip install pse[jax]
+
+# Or for a specific version
+pip install jax jaxlib pse
+```
+
+## System Requirements
+
+- **Python**: 3.8 or higher
+- **Operating Systems**:
+  - Linux (Ubuntu 20.04+, Debian 11+, etc.)
+  - macOS (11.0+)
+  - Windows 10/11
+- **Hardware**:
+  - Any system capable of running your selected LLM (the PSE only works with local models)
+
+## Getting Help
+
+If you continue to experience issues:
+
+- Check our [GitHub Issues](https://github.com/TheProxyCompany/proxy-structuring-engine/issues)
+
+## Next Steps
+
+Now that you've installed PSE, proceed to the [Quickstart](quickstart.md) guide to run your first example.
+
+
+---
+pse-docs/docs/getting-started/quickstart.md
+---
+# Quickstart
+
+This quickstart guide will help you get up and running with PSE in just a few minutes.
+
+We'll cover the basic workflow and show you how to generate structured outputs with your favorite language model.
+
+# Installation
+
+This quickstart assumes you have PSE installed on your machine.
+
+If you don't have PSE installed yet, follow the [installation instructions](installation.md) to get PSE installed on your machine.
+
+# Quickstart
+
+Let's walk through a basic example of how to use PSE to generate structured outputs.
+
+
+---
+pse-docs/docs/api/framework-adapters.md
+---
+# Framework Adapters
+
+PSE is designed to be framework-agnostic, supporting multiple machine learning frameworks through its adapter system. This page explains how to use PSE with different ML frameworks and how to optimize for each.
+
+## Supported Frameworks
+
+PSE officially supports the following frameworks:
+
+- [PyTorch](#pytorch-adapter)
+- [MLX](#mlx-adapter)
+- [TensorFlow](#tensorflow-adapter)
+- [JAX](#jax-adapter)
+
+More documentation coming soon.
+
+
+---
+pse-docs/docs/api/structuring-engine.md
+---
+# StructuringEngine API Reference
+
+The `StructuringEngine` class is the primary interface for the Proxy Structuring Engine (PSE).
+
+It provides a powerful mechanism to enforce structured output generation from language models by using state machines to constrain token generation.
+
+More documentation coming soon.
+
+
+---
+pse-docs/docs/api/state-machines/base.md
+---
+# Base State Machines
+
+Base state machines provide the fundamental building blocks for constructing more complex state machines in PSE. These components handle common pattern-matching tasks and can be composed together to create sophisticated parsing behaviors.
+
+## AnyStateMachine
+
+`AnyStateMachine` allows choosing between multiple state machines, effectively implementing a logical OR operation for state machine matching.
+
+```python
+from pse.types.base.any import AnyStateMachine
+from pse.types.string import StringStateMachine
+from pse.types.number import NumberStateMachine
+
+# Create a state machine that accepts either a string or a number
+any_state_machine = AnyStateMachine([
+    StringStateMachine(),
+    NumberStateMachine()
+])
+```
+
+**Key features:**
+- Accepts input if any of its child state machines accepts it
+- Creates transitions from the initial state to each alternative state machine
+- Collects steppers from all possible edges to enable parallel path exploration
+- Essential for implementing union types, optional patterns, and alternatives
+- Lightweight implementation with no additional parameters beyond the list of state machines
+
+**Implementation details:**
+- Creates a state graph where state 0 transitions directly to the end state ("$") through each provided state machine
+- Uses a simple graph structure with a single state (0) and multiple transitions
+- On input, explores all possible paths in parallel through its steppers
+- Returns a simple string representation of "Any" for debugging purposes
+
+## ChainStateMachine
+
+`ChainStateMachine` combines multiple state machines in sequence, requiring each to match in order.
+
+```python
+from pse.types.base.chain import ChainStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+from pse.types.string import StringStateMachine
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Create a state machine for parsing a key-value pair like "name: "John""
+chain_state_machine = ChainStateMachine([
+    StringStateMachine(),  # The key
+    WhitespaceStateMachine(),  # Optional whitespace
+    PhraseStateMachine(":"),  # The separator
+    WhitespaceStateMachine(),  # Optional whitespace
+    StringStateMachine()  # The value
+])
+
+# Create an optional chain
+optional_chain = ChainStateMachine([
+    PhraseStateMachine(","),
+    WhitespaceStateMachine()
+], is_optional=True)
+```
+
+**Key features:**
+- Enforces sequential matching of multiple patterns
+- Propagates state from one sub-machine to the next
+- Supports optional chains with the `is_optional` parameter
+- Essential for constructing complex sequential patterns
+- Used extensively in format-specific state machines
+
+**Implementation details:**
+- Creates a linear state graph where each state `i` transitions to state `i+1` through its corresponding state machine
+- Automatically sets the final state `len(state_machines)` as the only end state
+- Uses a specialized `ChainStepper` class to handle sequential execution
+- Minimal implementation that efficiently chains state machines together
+- Accurately tracks state transitions through the sequence
+- Handles nested chains and complex sequences within larger state machines
+
+## LoopStateMachine
+
+`LoopStateMachine` repeats a state machine a configurable number of times, enabling iteration patterns.
+
+```python
+from pse.types.base.loop import LoopStateMachine
+from pse.types.number import NumberStateMachine
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Create a state machine for a comma-separated list of numbers
+numbers_list = LoopStateMachine(
+    NumberStateMachine(),
+    min_loop_count=1,  # At least one number
+    max_loop_count=5,  # Maximum five numbers
+    whitespace_seperator=True  # Allow whitespace between elements
+)
+```
+
+**Key features:**
+- Configurable minimum and maximum repetition counts
+- Optional whitespace handling between iterations
+- Maintains loop count tracking through the specialized `LoopStepper` class
+- Implements arrays, lists, and repeated patterns
+- Supports unlimited repetition with `max_loop_count=-1` (default)
+
+**Implementation details:**
+- Creates two different state graph structures based on `whitespace_seperator`:
+  - Without separator: State 0 → State 1 (via state_machine) → back to State 0 (via state_machine again)
+  - With separator: State 0 → State 1 (via state_machine) → State 2 (via whitespace) → back to State 1 (via state_machine)
+- Uses the `is_optional` parameter internally calculated from `min_loop_count == 0`
+- Contains a typo in parameter name ("whitespace_seperator" instead of "separator")
+- Specialized `LoopStepper` tracks iteration count with `loop_count` property, incrementing in `add_to_history`
+- Whitespace separators are excluded from history and loop count calculation
+- Determines acceptance state based on the minimum loop count and sub-stepper state
+- Enforces maximum iterations by overriding `can_accept_more_input` and `should_start_step`
+- Provides special handling of final state to exclude whitespace separators
+
+## PhraseStateMachine
+
+`PhraseStateMachine` matches specific text sequences exactly, validating input against the target string.
+
+```python
+from pse.types.base.phrase import PhraseStateMachine
+
+# Create a state machine that matches only the text "Hello, World!"
+greeting = PhraseStateMachine("Hello, World!")
+
+# Create an optional phrase that may or may not appear
+optional_phrase = PhraseStateMachine("Optional text", is_optional=True)
+
+# Create a case-insensitive phrase
+case_insensitive = PhraseStateMachine("HELLO", is_case_sensitive=False)
+```
+
+**Key features:**
+- Matches exact character sequences with character-by-character validation
+- High-efficiency implementation for literal text using optimized prefix matching
+- Support for Unicode characters and multi-byte sequences
+- Case sensitivity configuration with the `is_case_sensitive` parameter
+- Can be marked as optional with the `is_optional` parameter
+- Used for keywords, delimiters, and fixed tokens throughout PSE
+
+**Implementation details:**
+- Requires a non-empty phrase string (raises `ValueError` if empty)
+- Uses a specialized `PhraseStepper` that tracks position with `consumed_character_count`
+- Sets target state directly to end state ("$") in the stepper
+- Implements prefix matching with the optimized `_get_valid_match_length` method
+- Processes partial matches by accepting as much of the input as matches the phrase
+- Returns the exact remaining portion of the phrase for valid continuations
+- String representation includes the phrase value: `Phrase('value')`
+- Completion is determined when `consumed_character_count == len(phrase)`
+- Can check for equality with other PhraseStateMachine instances
+- Essential building block for many other state machines in PSE
+
+## WaitFor
+
+`WaitFor` accumulates arbitrary text until a specific pattern is detected, enabling flexible pattern recognition in mixed content.
+
+```python
+from pse.types.base.wait_for import WaitFor
+from pse.types.base.phrase import PhraseStateMachine
+
+# Create a state machine that accumulates text until "```json" is encountered
+# Useful for finding JSON code blocks in Markdown
+json_block_start = WaitFor(
+    PhraseStateMachine("```json"),
+    buffer_length=0  # No minimum buffer required
+)
+
+# Create a state machine with strict validation
+# If the pattern starts but is interrupted, the match will fail
+strict_pattern = WaitFor(
+    PhraseStateMachine("BEGIN DATA"),
+    buffer_length=10,  # Require at least 10 characters before matching pattern
+    strict=True  # Fail if pattern is interrupted
+)
+```
+
+**Key features:**
+- Buffers text until target pattern is detected
+- Configurable minimum buffer length with `buffer_length` parameter
+- Strict mode for handling invalid inputs with the `strict` parameter
+- Perfect for delimiter-based parsing of mixed content
+- Enables flexible handling of unstructured text before structured elements
+
+**Implementation details:**
+- Uses a direct transition structure with the target pattern transitioning to end state ("$")
+- `get_transitions` creates transitions directly from the nested state machine's steppers
+- Specialized `WaitForStepper` maintains accumulated text in a `buffer` property
+- Sets `target_state = "$"` in the stepper initialization
+- Implements `accepts_any_token()` based on buffer length and sub-stepper state
+- `should_start_step()` checks:
+  - Buffer length requirements
+  - Presence of remaining input
+  - Current processing state
+- When `strict=True`, rejects entire input if the pattern is interrupted
+- When `strict=False`, allows pattern matching to restart after interruption
+- With `buffer_length=-1`, only accepts tokens that match the target pattern
+- With `buffer_length=0`, accepts any token while watching for the pattern
+- With `buffer_length>0`, requires buffer to reach minimum length before allowing match
+- Provides specialized handling of valid and invalid continuations
+- Efficiently processes tokens by finding valid prefixes using token partitioning
+
+## CharacterStateMachine
+
+`CharacterStateMachine` matches individual characters based on character sets, allowing precise control over which characters are accepted.
+
+```python
+from pse.types.base.character import CharacterStateMachine
+
+# Create a state machine that matches any character (no restrictions)
+any_char_sm = CharacterStateMachine()
+
+# Create a state machine that matches only lowercase letters a-z
+alpha_sm = CharacterStateMachine(whitelist_charset="abcdefghijklmnopqrstuvwxyz")
+
+# Create a state machine that matches any character except digits
+no_digits_sm = CharacterStateMachine(blacklist_charset="0123456789")
+
+# Create a state machine with multiple constraints
+identifier_sm = CharacterStateMachine(
+    whitelist_charset="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_",
+    char_min=1,          # At least one character
+    char_limit=64,       # Maximum of 64 characters
+    case_sensitive=True  # Case-sensitive matching
+)
+
+# Use graylist for characters that terminate a match
+word_sm = CharacterStateMachine(
+    graylist_charset=" \t\n.,:;!?"  # Space and punctuation terminate words
+)
+```
+
+**Key features:**
+- Highly flexible character-level matching with configurable character sets
+- Supports whitelist (explicitly allowed), blacklist (explicitly forbidden), and graylist (allowed but terminates sequence) character sets
+- Configurable minimum and maximum character counts
+- Case-sensitive or case-insensitive matching
+- Efficiently processes longest valid prefixes in input tokens
+
+**Implementation details:**
+- Configurable parameters with clear defaults:
+  - Empty charsets by default (empty strings)
+  - `char_min` defaults to 0 (no minimum length)
+  - `char_limit` defaults to 0 (unlimited length)
+  - `is_optional` defaults to false
+  - `case_sensitive` defaults to true
+- Three distinct character set types stored as `set` objects:
+  - `charset` (whitelist): Only these characters are allowed
+  - `blacklist_charset`: These characters are explicitly forbidden
+  - `graylist_charset`: Allowed but terminate matching when after other characters
+- Case-insensitive mode converts all characters to lowercase
+- `CharacterStepper` sets `target_state="$"` and tracks value with `_raw_value`
+- Implements `accepts_any_token()` to return true when no whitelist is defined
+- Uses `should_start_step()` to validate the first character against constraints
+- Implements efficient prefix matching in `consume()`:
+  - Checks each character in token for validity against all constraints
+  - Finds longest valid prefix that satisfies all character constraints
+  - Efficiently handles blacklist, whitelist, length limits, and graylist checks
+  - Preserves remaining input for continued processing
+- Returns the complete whitelist charset for valid continuations
+- Allows early termination of matching when graylist characters appear
+
+## EncapsulatedStateMachine
+
+`EncapsulatedStateMachine` wraps a state machine between start and end delimiters, enabling parsing of fenced or delimited content.
+
+```python
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+from pse.types.base.any import AnyStateMachine
+from pse.types.string import StringStateMachine
+from pse.types.number import NumberStateMachine
+
+# Create a state machine for parsing JSON code blocks in Markdown
+json_code_block = EncapsulatedStateMachine(
+    ObjectStateMachine(),              # Content state machine for JSON objects
+    delimiters=("```json\n", "\n```"),  # Start and end delimiters
+    buffer_length=0                     # No minimum buffer before delimiter
+)
+
+# Create a state machine for XML tags with content
+xml_content = EncapsulatedStateMachine(
+    StringStateMachine(),              # Content for the XML element
+    delimiters=("<content>", "</content>")  # XML tags
+)
+
+# Create a state machine that requires minimum buffer before finding delimiter
+delayed_content = EncapsulatedStateMachine(
+    StringStateMachine(),              # Content state machine
+    delimiters=("<START>", "<END>"),   # Delimiters
+    buffer_length=10,                  # Require at least 10 characters before matching delimiter
+    is_optional=True                   # Make the entire structure optional
+)
+```
+
+**Key features:**
+- Wraps any state machine between specified start and end delimiters
+- Configurable buffer length before matching start delimiter
+- Can be optional with the `is_optional` parameter
+- Perfect for parsing code blocks, markup elements, and delimited content
+- Provides clean token output with delimiters automatically removed
+
+**Implementation details:**
+- Implements a three-state process with a clear state graph:
+  - State 0: Uses `WaitFor` with `PhraseStateMachine` to find the start delimiter
+  - State 1: Processes the inner content using the provided state machine
+  - State 2: Matches the end delimiter using a `PhraseStateMachine`
+- Default delimiters are ("```", "```") if none are provided
+- `buffer_length` parameter is passed to the internal `WaitFor` state machine
+- Uses specialized `EncapsulatedStepper` to track state and content
+- Maintains an `inner_stepper` reference for the state machine's stepper in state 2
+- `is_within_value()` returns true when not in state 0 or when in state 0 with an active sub-stepper
+- Provides `get_invalid_continuations()` to prevent end delimiter before processing starts
+- Implements the `get_token_safe_output()` helper method which:
+  - Efficiently handles both exact and partial delimiter occurrences
+  - Optimizes removal by checking for exact matches before using strip operations
+  - Processes token IDs history for reliable delimiter removal
+- Can handle nested encapsulated content with proper tracking
+- Used extensively for parsing structured content like code blocks and XML elements
+
+
+---
+pse-docs/docs/api/state-machines/datatypes.md
+---
+# Data Type State Machines
+
+PSE provides specialized state machines for handling common data types, allowing precise control over the format and content of generated values.
+
+## StringStateMachine
+
+`StringStateMachine` handles JSON-style string parsing with double quotation marks and proper escaping of special characters.
+
+```python
+from pse.types.string import StringStateMachine
+
+# Create a basic string state machine that matches quoted strings like "hello"
+string_sm = StringStateMachine()
+
+# Create a string state machine with length constraints
+constrained_string_sm = StringStateMachine(
+    min_length=3,  # Minimum string length (excluding quotes)
+    max_length=50  # Maximum string length (excluding quotes)
+)
+```
+
+**Implementation details:**
+- State machine structure:
+  - Initial state (0): Expects opening double quote (")
+  - String contents state (1): Processes regular characters
+  - Escape sequence state (2): Handles escape sequences
+  - Unicode escape state (3): Processes \uXXXX Unicode escapes
+
+- Escape sequence handling:
+  - Standard JSON escape sequences: \", \\, \/, \b, \f, \n, \r, \t
+  - Unicode escape sequences: \uXXXX (4 hex digits)
+  - Automatically rejects invalid escape sequences
+
+- Character handling:
+  - Properly validates all string content
+  - Automatically rejects control characters that must be escaped
+  - Maintains proper JSON string compliance
+
+**StringSchemaStateMachine extension**:
+For JSON Schema integration, the StringSchemaStateMachine adds pattern and format validation:
+
+```python
+from pse.types.json.json_string import StringSchemaStateMachine
+
+# Create a string state machine with JSON Schema constraints
+email_string_sm = StringSchemaStateMachine(
+    schema={"type": "string", "format": "email"},
+    context={}
+)
+
+# Create a string state machine with pattern validation
+pattern_string_sm = StringSchemaStateMachine(
+    schema={"type": "string", "pattern": "^[A-Z]{2}-\\d{4}$"},  # Format like "AB-1234"
+    context={}
+)
+```
+
+**Example: String with escape sequences**
+```python
+from pse.types.string import StringStateMachine
+
+# Define a string state machine
+string_sm = StringStateMachine()
+
+# This will match: "Hello\nWorld" and correctly handle the newline
+# The value returned will be the string without quotes: Hello\nWorld
+```
+
+**Example: Unicode handling**
+```python
+from pse.types.string import StringStateMachine
+
+# Define a string state machine
+string_sm = StringStateMachine()
+
+# This will match: "Hello\u0057orld" and correctly interpret it as "HelloWorld"
+# This also matches: "Hello 世界" as Unicode is supported via direct inclusion or escapes
+```
+
+**Example: Length validation**
+```python
+from pse.types.string import StringStateMachine
+
+# Create a string state machine with length constraints
+username_sm = StringStateMachine(min_length=3, max_length=20)
+
+# This will match: "user123"
+# This will not match: "a" (too short)
+# This will not match: "this_username_is_way_too_long" (too long)
+```
+
+## NumberStateMachine
+
+`NumberStateMachine` parses JSON-compliant numeric values, handling integers, decimals, and scientific notation.
+
+```python
+from pse.types.number import NumberStateMachine
+
+# Create a basic number state machine for all numeric formats
+number_sm = NumberStateMachine()
+```
+
+**Implementation details:**
+- State machine structure:
+  - State 0: Starting state that optionally accepts a negative sign (-)
+  - State 1: Expects an integer part (mandatory)
+  - State 2: Accept state for integers, can also transition to decimal part
+  - State 3: Decimal part state (after the decimal point), also an accept state
+  - State 4: Exponential notation marker 'e' or 'E'
+  - State 5: Optional sign for the exponent (+ or -)
+  - Final state: Exponent integer value, if present
+
+- Decimal handling:
+  - Properly handles decimal points followed by integer part
+  - Maintains leading zeros after decimal point (e.g., 0.001)
+  - Validates full decimal number structure
+
+- Scientific notation:
+  - Supports 'e' or 'E' notation (e.g., 1.5e3, 2E-4)
+  - Handles optional sign in exponent
+  - Properly combines base number with exponent for final value
+
+**NumberSchemaStateMachine extension**:
+For JSON Schema integration, use the NumberSchemaStateMachine to add validation constraints:
+
+```python
+from pse.types.json.json_number import NumberSchemaStateMachine
+
+# Create a number state machine with JSON Schema constraints
+constrained_number_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100,
+        "exclusiveMaximum": True
+    },
+    context={}
+)
+
+# Create an integer-only state machine
+integer_number_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "integer",
+        "multipleOf": 5
+    },
+    context={}
+)
+```
+
+**Example: Basic number parsing**
+```python
+from pse.types.number import NumberStateMachine
+
+# Define a number state machine
+number_sm = NumberStateMachine()
+
+# This will match: "42" (integer)
+# This will match: "-3.14" (negative decimal)
+# This will match: "1.618e2" (scientific notation, equal to 161.8)
+```
+
+**Example: JSON Schema validation**
+```python
+from pse.types.json.json_number import NumberSchemaStateMachine
+
+# Define a number state machine with constraints
+temperature_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "number",
+        "minimum": -273.15,  # Absolute zero in Celsius
+        "maximum": 1000
+    },
+    context={}
+)
+
+# This will match: "25.5" (valid temperature)
+# This will not match: "-300" (below absolute zero)
+# This will not match: "1200" (above maximum)
+```
+
+**Example: Integer validation**
+```python
+from pse.types.json.json_number import NumberSchemaStateMachine
+
+# Define an integer state machine with constraints
+page_number_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "integer",
+        "minimum": 1
+    },
+    context={}
+)
+
+# This will match: "42" (valid page number)
+# This will not match: "2.5" (not an integer)
+# This will not match: "0" (below minimum)
+```
+
+## IntegerStateMachine
+
+`IntegerStateMachine` is a specialized state machine for parsing positive integer values with configurable handling of leading zeros.
+
+```python
+from pse.types.integer import IntegerStateMachine
+
+# Create a basic integer state machine
+int_sm = IntegerStateMachine()
+
+# Create an integer state machine that preserves leading zeros
+raw_int_sm = IntegerStateMachine(drop_leading_zeros=False)
+```
+
+**Implementation details:**
+- Extends CharacterStateMachine with digit characters (0-9)
+- Only accepts positive integers (no negative sign support)
+- By default, removes leading zeros and returns an int value
+- When drop_leading_zeros=False, preserves the original string representation
+
+**Example: Basic integer parsing**
+```python
+from pse.types.integer import IntegerStateMachine
+
+# Define an integer state machine
+int_sm = IntegerStateMachine()
+
+# This will match: "42" -> 42 (int)
+# This will match: "007" -> 7 (int, leading zeros removed)
+# This will not match: "-5" (negative not supported)
+# This will not match: "3.14" (decimals not supported)
+```
+
+**Example: Preserving leading zeros**
+```python
+from pse.types.integer import IntegerStateMachine
+
+# Create an integer state machine that preserves leading zeros
+raw_int_sm = IntegerStateMachine(drop_leading_zeros=False)
+
+# This will match: "42" -> "42" (string)
+# This will match: "007" -> "007" (string, leading zeros preserved)
+# This will not match: "-5" (negative not supported)
+# This will not match: "3.14" (decimals not supported)
+```
+
+**Note:** For more complex integer requirements (negative numbers, range validation), use `NumberSchemaStateMachine` with a JSON Schema:
+
+```python
+from pse.types.json.json_number import NumberSchemaStateMachine
+
+# Create a state machine for integers with validation constraints
+integer_sm = NumberSchemaStateMachine(
+    schema={
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000
+    },
+    context={}
+)
+```
+
+## BooleanStateMachine
+
+`BooleanStateMachine` parses JSON-compliant boolean literals ("true"/"false").
+
+```python
+from pse.types.boolean import BooleanStateMachine
+
+# Create a boolean state machine
+bool_sm = BooleanStateMachine()
+```
+
+**Implementation details:**
+- State machine structure:
+  - Initial state (0): Expects exact match of "true" or "false" literals
+  - Uses PhraseStateMachine for exact string matching
+  - Transitions directly to accept states with corresponding boolean values
+  - Returns Python `True` or `False` values
+
+- JSON compliance:
+  - Strictly case-sensitive (only "true"/"false", not "True"/"FALSE")
+  - No whitespace allowed (unlike some other PSE state machines)
+  - No partial matches or extra characters permitted
+
+**Example: Boolean parsing**
+```python
+from pse.types.boolean import BooleanStateMachine
+
+# Define a boolean state machine
+bool_sm = BooleanStateMachine()
+
+# This will match: "true" -> True (Python bool)
+# This will match: "false" -> False (Python bool)
+# This will not match: "True" (incorrect case)
+# This will not match: " true" (has whitespace)
+# This will not match: "truthy" (extra characters)
+```
+
+**Integration example:**
+```python
+from pse.types.boolean import BooleanStateMachine
+from pse.types.json.json_object import ObjectSchemaStateMachine
+
+# Using boolean state machine inside a JSON object
+settings_sm = ObjectSchemaStateMachine(
+    schema={
+        "type": "object",
+        "properties": {
+            "enabled": {"type": "boolean"},
+            "notifications": {"type": "boolean"}
+        }
+    },
+    context={}
+)
+
+# This will match: {"enabled": true, "notifications": false}
+```
+
+## ArrayStateMachine
+
+`ArrayStateMachine` handles JSON array structures, processing sequences of elements enclosed in square brackets.
+
+```python
+from pse.types.array import ArrayStateMachine
+
+# Create a basic array state machine for JSON arrays
+array_sm = ArrayStateMachine()
+```
+
+**Implementation details:**
+- State machine structure:
+  - State 0: Initial state that accepts opening bracket "["
+  - State 1: Whitespace handling or immediate closing bracket for empty arrays
+  - State 2: Value state that uses JsonStateMachine to parse elements
+  - State 3: Whitespace handling after each value
+  - State 4: Decision point (comma for next item or "]" to close array)
+
+- Array validation:
+  - Enforces proper structure with opening/closing brackets
+  - Ensures comma-separated values with no trailing commas
+  - Properly validates nested array structures
+  - Supports whitespace between array elements and brackets
+
+- Value collection:
+  - Uses ArrayStepper to track parsed values
+  - Maintains immutability by cloning steppers during processing
+  - Returns a list of parsed JSON values
+
+**ArraySchemaStateMachine extension**:
+For JSON Schema integration and type-specific arrays, use ArraySchemaStateMachine:
+
+```python
+from pse.types.json.json_array import ArraySchemaStateMachine
+
+# Create a typed array state machine for arrays of strings
+string_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {"type": "string"}
+    },
+    context={}
+)
+
+# Create an array with length constraints and unique items
+constrained_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {"type": "number"},
+        "minItems": 1,
+        "maxItems": 5,
+        "uniqueItems": True
+    },
+    context={}
+)
+```
+
+**Example: Basic array parsing**
+```python
+from pse.types.array import ArrayStateMachine
+
+# Define an array state machine
+array_sm = ArrayStateMachine()
+
+# This will match: "[]" -> [] (empty array)
+# This will match: "[1, 2, 3]" -> [1, 2, 3] (array of numbers)
+# This will match: '["a", "b", "c"]' -> ["a", "b", "c"] (array of strings)
+# This will match: '[true, false]' -> [True, False] (array of booleans)
+```
+
+**Example: Nested array parsing**
+```python
+from pse.types.array import ArrayStateMachine
+
+# Define an array state machine
+array_sm = ArrayStateMachine()
+
+# This will match: "[[1, 2], [3, 4]]" -> [[1, 2], [3, 4]] (nested array)
+# This will match: '[{"a": 1}, {"b": 2}]' -> [{"a": 1}, {"b": 2}] (array of objects)
+```
+
+**Example: Schema validation**
+```python
+from pse.types.json.json_array import ArraySchemaStateMachine
+
+# Create a schema-enforced array of integers
+integers_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {"type": "integer"},
+        "minItems": 2
+    },
+    context={}
+)
+
+# This will match: "[1, 2, 3]" -> [1, 2, 3]
+# This will not match: "[1]" (too few items)
+# This will not match: "[1.5, 2]" (non-integer value)
+```
+
+## ObjectStateMachine
+
+`ObjectStateMachine` processes JSON object structures, handling key-value pairs enclosed in curly braces.
+
+```python
+from pse.types.object import ObjectStateMachine
+
+# Create a basic object state machine
+object_sm = ObjectStateMachine()
+
+# Create an object state machine that can be optional (empty objects allowed)
+optional_object_sm = ObjectStateMachine(is_optional=True)
+```
+
+**Implementation details:**
+- State machine structure:
+  - State 0: Initial state that accepts opening brace "{"
+  - State 1: Whitespace handling after opening brace
+  - State 2: Key-value pair processing using KeyValueStateMachine
+  - State 3: Whitespace handling after key-value pair
+  - State 4: Decision point (comma for next property or "}" to close object)
+
+- Object validation:
+  - Enforces proper structure with opening/closing braces
+  - Ensures comma-separated properties with no trailing commas
+  - Properly handles nested object structures
+  - Supports whitespace between properties and braces
+
+- Value collection:
+  - Uses ObjectStepper to accumulate key-value pairs in a dictionary
+  - Maintains immutability by cloning steppers during processing
+  - Returns a dictionary of parsed property values
+
+- Parameters:
+  - `is_optional`: When True, allows empty objects (default: False)
+
+**ObjectSchemaStateMachine extension**:
+For JSON Schema integration and property validation, use ObjectSchemaStateMachine:
+
+```python
+from pse.types.json.json_object import ObjectSchemaStateMachine
+
+# Create a schema-based object state machine
+person_object_sm = ObjectSchemaStateMachine(
+    schema={
+        "type": "object",
+        "properties": {
+            "name": {"type": "string"},
+            "age": {"type": "integer", "minimum": 0},
+            "email": {"type": "string", "format": "email"}
+        },
+        "required": ["name", "email"]
+    },
+    context={}
+)
+```
+
+**Example: Basic object parsing**
+```python
+from pse.types.object import ObjectStateMachine
+
+# Define an object state machine
+object_sm = ObjectStateMachine()
+
+# This will match: "{}" -> {} (empty object, only if is_optional=True)
+# This will match: '{"a": 1}' -> {"a": 1} (simple object)
+# This will match: '{"name": "Alice", "age": 30}' -> {"name": "Alice", "age": 30} (multiple properties)
+```
+
+**Example: Nested object parsing**
+```python
+from pse.types.object import ObjectStateMachine
+
+# Define an object state machine
+object_sm = ObjectStateMachine()
+
+# This will match complex nested objects:
+# {
+#   "user": {
+#     "name": "Alice",
+#     "address": {
+#       "city": "New York",
+#       "zip": "10001"
+#     }
+#   }
+# }
+```
+
+**Example: Working with object values**
+```python
+from pse.types.object import ObjectStateMachine
+
+object_sm = ObjectStateMachine()
+input_str = '{"a": 1, "b": true, "c": "hello"}'
+
+# Parse the object string
+steppers = object_sm.get_steppers()
+for char in input_str:
+    steppers = object_sm.advance_all_steppers(steppers, char)
+
+# Get the parsed object from the first valid stepper
+if steppers:
+    parsed_object = steppers[0].value  # {"a": 1, "b": True, "c": "hello"}
+
+    # Access individual properties
+    value_a = parsed_object["a"]  # 1
+```
+
+## KeyValueStateMachine
+
+`KeyValueStateMachine` handles JSON key-value pairs within objects, processing the structure of `"key": value`.
+
+```python
+from pse.types.key_value import KeyValueStateMachine
+
+# Create a basic key-value pair state machine
+kv_sm = KeyValueStateMachine()
+
+# Create an optional key-value pair state machine
+optional_kv_sm = KeyValueStateMachine(is_optional=True)
+```
+
+**Implementation details:**
+- State machine structure:
+  - By default, uses a sequence of five state machines:
+    1. StringStateMachine() for the key
+    2. WhitespaceStateMachine() for whitespace after key
+    3. PhraseStateMachine(":") for the colon separator
+    4. WhitespaceStateMachine() for whitespace after colon
+    5. JsonStateMachine() for the value
+  - Transitions through each component in sequence
+  - Returns a tuple of (key, value) upon successful parsing
+
+- Parameters:
+  - `sequence`: Optional customized sequence of state machines (default: as described above)
+  - `is_optional`: Whether the key-value pair is optional (default: False)
+
+- Key-value tracking:
+  - Uses KeyValueStepper to track property name and value
+  - Extracts key using json.loads() to handle quote removal and escaping
+  - Value is processed by JsonStateMachine and can be any valid JSON type
+  - Maintains immutability through proper stepper cloning
+
+**Example: Basic key-value parsing**
+```python
+from pse.types.key_value import KeyValueStateMachine
+
+# Define a key-value state machine
+kv_sm = KeyValueStateMachine()
+
+# This will match: '"name": "Alice"' -> ("name", "Alice")
+# This will match: '"age": 30' -> ("age", 30)
+# This will match: '"active": true' -> ("active", True)
+# This will match: '"data": {"x": 1, "y": 2}' -> ("data", {"x": 1, "y": 2})
+```
+
+**Example: Using key-value pairs in objects**
+```python
+from pse.types.object import ObjectStateMachine
+from pse.types.key_value import KeyValueStateMachine
+
+# ObjectStateMachine uses KeyValueStateMachine internally
+object_sm = ObjectStateMachine()
+
+# This uses KeyValueStateMachine to parse each property
+input_str = '{"name": "Alice", "age": 30}'
+
+steppers = object_sm.get_steppers()
+for char in input_str:
+    steppers = object_sm.advance_all_steppers(steppers, char)
+
+# Result is a dictionary built from key-value pairs
+result = steppers[0].value  # {"name": "Alice", "age": 30}
+```
+
+**KeyValueSchemaStateMachine extension**:
+For JSON Schema validation of property pairs, the schema-aware extension provides additional validation:
+
+```python
+from pse.types.json.json_key_value import KeyValueSchemaStateMachine
+
+# Create a schema-validated key-value pair
+email_property_sm = KeyValueSchemaStateMachine(
+    property_name="email",
+    property_schema={"type": "string", "format": "email"},
+    context={},
+    required=True
+)
+
+# This will match: '"email": "user@example.com"'
+# This will not match: '"email": 123' (invalid type)
+# This will not match: '"email": "invalid"' (invalid format)
+```
+
+## WhitespaceStateMachine
+
+`WhitespaceStateMachine` handles whitespace characters (spaces, tabs, newlines, carriage returns) in structured formats.
+
+```python
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Create a whitespace state machine with default settings
+# This makes whitespace optional (min=0) with a maximum of 20 characters
+ws_sm = WhitespaceStateMachine()
+
+# Create a whitespace state machine with specific constraints
+required_ws_sm = WhitespaceStateMachine(
+    min_whitespace=1,  # Require at least one whitespace character
+    max_whitespace=10  # Allow at most 10 whitespace characters
+)
+```
+
+**Implementation details:**
+- State machine structure:
+  - Extends CharacterStateMachine with whitespace characters (" \t\n\r")
+  - Accepts consecutive whitespace characters up to max_whitespace
+  - Becomes optional when min_whitespace is set to 0 (default)
+  - Returns the matched whitespace characters as a string
+
+- Parameters:
+  - `min_whitespace`: Minimum required whitespace characters (default: 0)
+  - `max_whitespace`: Maximum allowed whitespace characters (default: 20)
+  - When `min_whitespace=0`, acts as an optional whitespace matcher
+
+- Matching behavior:
+  - Greedy matching: consumes as many whitespace characters as possible
+  - Stops consuming when encountering non-whitespace characters
+  - Successfully validates when at least min_whitespace characters have been consumed
+  - Rejects input when more than max_whitespace characters are encountered
+
+**Example: Basic whitespace handling**
+```python
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Define a whitespace state machine
+ws_sm = WhitespaceStateMachine()
+
+# This will match: "" (empty string, since min_whitespace=0)
+# This will match: " " (single space)
+# This will match: "\t\n  " (mixed whitespace)
+# This will not match: "a" (non-whitespace character)
+```
+
+**Example: Required whitespace**
+```python
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Define a whitespace state machine requiring at least one character
+required_ws_sm = WhitespaceStateMachine(min_whitespace=1)
+
+# This will not match: "" (empty string)
+# This will match: " " (single space)
+# This will match: "\t\n  " (mixed whitespace)
+```
+
+**Example: Integration with other state machines**
+```python
+from pse.types.base.chain import ChainStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+from pse.types.whitespace import WhitespaceStateMachine
+
+# Create a state machine that parses "key = value" format
+assignment_sm = ChainStateMachine([
+    PhraseStateMachine("key"),         # Match "key"
+    WhitespaceStateMachine(),          # Optional whitespace
+    PhraseStateMachine("="),           # Match "="
+    WhitespaceStateMachine(),          # Optional whitespace
+    PhraseStateMachine("value")        # Match "value"
+])
+
+# This will match: "key=value"
+# This will match: "key = value"
+# This will match: "key  =  value"
+```
+
+**Common usage in PSE:**
+- Handles optional whitespace between tokens in structured formats
+- Creates flexible parsers that handle various formatting styles
+- Enables human-readable output with proper spacing
+- Used extensively in JSON, XML, and other format-specific state machines
+
+
+---
+pse-docs/docs/api/state-machines/formats.md
+---
+# Format-Specific State Machines
+
+PSE includes specialized state machines for common data formats, making it easy to generate structured outputs that conform to standard specifications.
+
+## JSON State Machines
+
+PSE provides a suite of state machines specifically designed for working with JSON data.
+
+### JsonStateMachine
+
+`JsonStateMachine` serves as the entry point for parsing any valid JSON value. It functions as a dispatcher to specialized state machines for different JSON types.
+
+```python
+from pse.types.json.json_value import JsonStateMachine
+
+# Create a general JSON state machine that can parse any valid JSON value
+json_sm = JsonStateMachine()
+```
+
+**Implementation details:**
+- Implements a simple two-state machine:
+  - State 0: Initial state with multiple outgoing edges to specialized parsers
+  - All parsers transition to a single final state ("$") upon completion
+- Delegates parsing to specialized state machines for each JSON type:
+  - `ObjectStateMachine` for JSON objects
+  - `ArrayStateMachine` for JSON arrays
+  - `StringStateMachine` for JSON strings
+  - `PhraseStateMachine` for "null" literal
+  - `BooleanStateMachine` for true/false
+  - `NumberStateMachine` for numeric values
+- Uses default steppers from each specialized parser
+- Provides valid continuations for any valid JSON value
+
+**Usage in the PSE hierarchy:**
+- Acts as the root node for all JSON type parsing
+- Used as the default value type in JSON arrays when no schema is specified
+- Primary entry point for generic JSON parsing without schema validation
+- Can be used directly or as part of more complex state machines
+
+### ObjectSchemaStateMachine
+
+`ObjectSchemaStateMachine` implements schema-aware JSON object parsing and generation, extending the base `ObjectStateMachine` to handle JSON Schema validation.
+
+```python
+from pse.types.json.json_object import ObjectSchemaStateMachine
+
+# Define a schema for a person object
+person_schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "age": {"type": "integer", "minimum": 0},
+        "hobbies": {"type": "array", "items": {"type": "string"}}
+    },
+    "required": ["name", "hobbies"]
+}
+
+# Create a schema-based object state machine
+person_object_sm = ObjectSchemaStateMachine(person_schema, {})
+```
+
+**Implementation details:**
+- Parameters:
+  - `schema`: JSON Schema dictionary for object validation
+  - `context`: Context information for parsing
+  - `properties`: Schema properties (default: {})
+  - `required_property_names`: List of required properties (default: [])
+  - `additional_properties`: Controls whether extra properties are allowed (default: {})
+  - `ordered_properties`: Whether properties must be in order (default: True)
+
+- State graph structure:
+  - State 0: Accepts "{" to start object
+  - State 1: Whitespace handling after opening brace
+  - State 2: Property parsing with schema validation
+  - State 3: Whitespace after property
+  - State 4: Decision point (comma for next property or "}" to end)
+
+- Schema processing:
+  - Automatically processes `nullable` and `default` values to determine truly required properties
+  - Properties with default values aren't considered required for parsing
+  - Special handling for pattern properties and additional properties
+
+- Validation mechanisms:
+  - Only allows object closure when all required properties are present
+  - Enforces property ordering when `ordered_properties` is true
+  - Controls which properties can be included based on schema definitions
+
+**Additional property handling:**
+- When `additional_properties` is true (default): Allows any properties beyond the defined ones
+- When `additional_properties` is false: Rejects properties not defined in the schema
+- When `additional_properties` is a schema object: Validates extra properties against that schema
+
+**Example with property ordering and additional properties:**
+```python
+from pse.types.json.json_object import ObjectSchemaStateMachine
+
+# Schema with ordered properties and restricted additional properties
+contact_schema = {
+    "type": "object",
+    "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "email": {"type": "string", "format": "email"}
+    },
+    "required": ["id", "name"],
+    "additionalProperties": {
+        "type": "string"  # Additional props must be strings
+    },
+    "orderedProperties": True  # Must follow schema order
+}
+
+contact_sm = ObjectSchemaStateMachine(
+    schema=contact_schema,
+    context={},
+    ordered_properties=True  # Can also be set via constructor
+)
+```
+
+**Nested schema example:**
+```python
+# Schema with nested objects
+nested_schema = {
+    "type": "object",
+    "properties": {
+        "user": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "street": {"type": "string"},
+                        "city": {"type": "string"}
+                    },
+                    "required": ["street"]
+                }
+            },
+            "required": ["name"]
+        }
+    },
+    "required": ["user"]
+}
+
+# Create nested schema state machine
+nested_sm = ObjectSchemaStateMachine(nested_schema, {})
+```
+
+### ArraySchemaStateMachine
+
+`ArraySchemaStateMachine` implements schema-aware JSON array processing, extending the base `ArrayStateMachine` to handle JSON Schema validation.
+
+```python
+from pse.types.json.json_array import ArraySchemaStateMachine
+
+# Create a JSON array state machine for arrays of strings
+string_array_sm = ArraySchemaStateMachine(
+    schema={"type": "array", "items": {"type": "string"}},
+    context={}
+)
+
+# Create a JSON array with length constraints
+bounded_array_sm = ArraySchemaStateMachine(
+    schema={"type": "array", "items": {"type": "number"}, "minItems": 1, "maxItems": 5},
+    context={}
+)
+```
+
+**Implementation details:**
+- Parameters:
+  - `schema`: JSON Schema dictionary for array validation
+  - `context`: Context for schema resolution containing refs and path information
+
+- State graph structure:
+  - State 0: Initial state accepting '[' to start the array
+  - State 1: Whitespace handling after opening bracket or decision if empty array is valid
+  - State 2: Item parsing using schema from 'items' property
+  - State 3: Whitespace handling after each item
+  - State 4: Decision point (comma for next item or ']' to close)
+
+- Custom stepper implementation:
+  - `ArraySchemaStepper` extends `ArrayStepper` with schema validation
+  - Tracks item history for uniqueItems enforcement
+  - Enforces minItems/maxItems constraints during parsing and generation
+  - Preserves item order when filtering duplicates for uniqueItems
+
+- Schema processing:
+  - Extracts constraints from schema including minItems, maxItems, and uniqueItems
+  - Validates items against 'items' schema property
+  - Handles prefixItems and contains constraints
+  - Supports tuple validation with different schemas per position
+
+**uniqueItems behavior:**
+When `uniqueItems` is true, duplicates are filtered while preserving the order of first occurrence:
+```python
+# Array with unique items constraint
+unique_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {"type": "number"},
+        "uniqueItems": True
+    },
+    context={}
+)
+
+# This would only allow [1, 2, 3], not [1, 2, 1, 3]
+```
+
+**Advanced constraints example:**
+```python
+# Array with multiple constraints
+complex_array_sm = ArraySchemaStateMachine(
+    schema={
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string"},
+                "value": {"type": "number"}
+            },
+            "required": ["id"]
+        },
+        "minItems": 1,
+        "maxItems": 10,
+        "uniqueItems": True
+    },
+    context={"path": "root"}
+)
+```
+
+**Integration with other state machines:**
+```python
+# Nested structure with arrays inside objects
+nested_schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "tags": {
+            "type": "array",
+            "items": {"type": "string"},
+            "uniqueItems": True
+        },
+        "scores": {
+            "type": "array",
+            "items": {"type": "number"},
+            "minItems": 3
+        }
+    },
+    "required": ["name", "scores"]
+}
+
+# The object state machine will automatically use ArraySchemaStateMachine
+# for the array properties
+nested_sm = ObjectSchemaStateMachine(nested_schema, {})
+```
+
+### AnySchemaStateMachine
+
+`AnySchemaStateMachine` provides a powerful way to create state machines from complex JSON Schemas with logical composition operators.
+
+```python
+from pse.types.json.any_json_schema import AnySchemaStateMachine
+
+complex_schemas = [
+    {"type": "string"},
+    {"type": "number"},
+    {
+        "type": "object",
+        "properties": {
+            "status": {"type": "string", "enum": ["success", "error"]},
+            "data": {"type": "object"}
+        },
+        "required": ["status"]
+    }
+]
+
+# Create a state machine for the complex schema
+complex_sm = AnySchemaStateMachine(
+    schemas=complex_schemas,
+    context={}
+)
+```
+
+**Implementation details:**
+- Parameters:
+  - `schemas`: List of JSON Schema objects to validate against
+  - `context`: Context for schema resolution containing refs and path information
+
+- State machine structure:
+  - Creates individual state machines for each schema
+  - Constructs transitions from the initial state to each schema state machine
+  - Accepts if any schema path reaches an accept state
+
+- Parallel path exploration:
+  - Maintains multiple steppers to validate against different schemas simultaneously
+  - Returns the first successfully validated value
+  - Only fails if all schema paths fail to validate
+  - Preserves the correctly typed value for the matching schema
+
+**JSON Schema logical composition:**
+`AnySchemaStateMachine` is used internally for handling JSON Schema's logical composition operators:
+
+```python
+# These schema patterns are automatically processed using AnySchemaStateMachine
+schema1 = {
+    "oneOf": [  # Must match exactly one schema
+        {"type": "string"},
+        {"type": "number"}
+    ]
+}
+
+schema2 = {
+    "anyOf": [  # Can match any number of schemas
+        {"type": "string"},
+        {"type": "number"}
+    ]
+}
+
+schema3 = {
+    "type": ["string", "number"]  # Union type (string OR number)
+}
+
+schema4 = {
+    "type": "string",
+    "nullable": True  # String OR null
+}
+```
+
+**Usage for complex schema validation:**
+```python
+# Create a state machine for a payment method schema
+payment_method_sm = AnySchemaStateMachine(
+    schemas=[
+        {  # Credit card schema
+            "type": "object",
+            "properties": {
+                "type": {"type": "string", "enum": ["credit_card"]},
+                "card_number": {"type": "string", "pattern": "^[0-9]{16}$"},
+                "expiration": {"type": "string", "pattern": "^[0-9]{2}/[0-9]{2}$"},
+                "cvv": {"type": "string", "pattern": "^[0-9]{3,4}$"}
+            },
+            "required": ["type", "card_number", "expiration", "cvv"]
+        },
+        {  # Bank transfer schema
+            "type": "object",
+            "properties": {
+                "type": {"type": "string", "enum": ["bank_transfer"]},
+                "account_number": {"type": "string"},
+                "routing_number": {"type": "string"}
+            },
+            "required": ["type", "account_number", "routing_number"]
+        },
+        {  # Digital wallet schema
+            "type": "object",
+            "properties": {
+                "type": {"type": "string", "enum": ["digital_wallet"]},
+                "provider": {"type": "string", "enum": ["paypal", "venmo", "apple_pay"]},
+                "email": {"type": "string", "format": "email"}
+            },
+            "required": ["type", "provider", "email"]
+        }
+    ],
+    context={"path": "payment_method"}
+)
+```
+
+**Performance considerations:**
+- Shares the token processing pipeline across all paths to minimize overhead
+- Designed for efficient exploration of multiple potential schema matches
+- Automatically prunes invalid paths as tokens are processed
+
+## XML State Machines
+
+PSE includes state machines for working with XML data.
+
+### XMLTagStateMachine
+
+`XMLTagStateMachine` parses XML opening and closing tags with a specific tag name.
+
+```python
+from pse.types.xml.xml_tag import XMLTagStateMachine
+
+# Create an XML opening tag state machine with a specific tag name
+person_tag_sm = XMLTagStateMachine(tag_name="person")
+
+# Create an XML closing tag state machine
+person_closing_tag_sm = XMLTagStateMachine(tag_name="person", closing_tag=True)
+```
+
+**Implementation details:**
+- Parameters:
+  - `tag_name`: The name of the XML tag to match (required)
+  - `closing_tag`: Boolean flag to indicate if it's a closing tag (default: False)
+
+- Internal structure:
+  - Inherits from `ChainStateMachine`
+  - Creates a chain of `PhraseStateMachine` instances that match parts of the tag:
+    1. Opening delimiter: `<` for normal tags, `</` for closing tags
+    2. The tag name itself
+    3. Closing delimiter: `>`
+
+- Custom stepper behavior:
+  - Implements `XMLTagStepper` that extends `ChainStepper`
+  - Overrides `get_valid_continuations()` to return the complete tag as a single valid continuation
+  - Ensures proper tag name matching with exact case sensitivity
+
+**Usage notes:**
+- Currently focused on basic tag recognition without attributes
+- Does not support self-closing tags (e.g., `<br/>`)
+- Whitespace is not allowed within tags
+- Used as a building block for `XMLEncapsulatedStateMachine`
+
+**Simple example:**
+```python
+from pse.types.xml.xml_tag import XMLTagStateMachine
+
+# Match a specific opening tag
+h1_tag_sm = XMLTagStateMachine(tag_name="h1")
+
+# This will match "<h1>" but not "<h2>" or "<H1>"
+```
+
+### XMLEncapsulatedStateMachine
+
+`XMLEncapsulatedStateMachine` handles complete XML elements with content between matching tags.
+
+```python
+from pse.types.xml.xml_encapsulated import XMLEncapsulatedStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+
+# Create an XML element with text content
+text_element_sm = XMLEncapsulatedStateMachine(
+    tag_name="p",  # XML tag name
+    state_machine=PhraseStateMachine("Hello world"),  # Content state machine
+    min_buffer_length=-1,  # Minimum buffer length (default: -1)
+    is_optional=False  # Whether the element is optional (default: False)
+)
+```
+
+**Implementation details:**
+- Parameters:
+  - `tag_name`: Name of the XML tag (required)
+  - `state_machine`: The inner state machine that processes content between tags (required)
+  - `min_buffer_length`: Minimum buffer length before attempting to match (default: -1)
+  - `is_optional`: Whether the element is optional (default: False)
+
+- State graph structure:
+  - State 0: Uses `WaitFor` with `XMLTagStateMachine` to find opening tag
+  - State 1: Processes content using the provided inner state machine
+  - State 2: Looks for closing tag using `XMLTagStateMachine` with closing_tag=True
+
+- Custom stepper behavior:
+  - Uses `EncapsulatedStepper` for tracking buffer and inner state
+  - Maintains proper nesting by requiring matching opening and closing tags
+  - Returns validated content from between the tags
+
+**Complex content example:**
+```python
+from pse.types.xml.xml_encapsulated import XMLEncapsulatedStateMachine
+from pse.types.json.json_value import JsonStateMachine
+
+# XML element containing JSON content
+json_in_xml_sm = XMLEncapsulatedStateMachine(
+    tag_name="data",
+    state_machine=JsonStateMachine()
+)
+
+# This will match: <data>{"key": "value"}</data>
+```
+
+**Nested XML elements:**
+```python
+from pse.types.xml.xml_encapsulated import XMLEncapsulatedStateMachine
+from pse.types.base.chain import ChainStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+
+# Create a nested XML structure for HTML-like content
+paragraph_sm = XMLEncapsulatedStateMachine(
+    tag_name="p",
+    state_machine=PhraseStateMachine("Sample text")
+)
+
+# A div containing a paragraph
+div_with_paragraph_sm = XMLEncapsulatedStateMachine(
+    tag_name="div",
+    state_machine=paragraph_sm
+)
+
+# This will match: <div><p>Sample text</p></div>
+```
+
+**Optional XML element:**
+```python
+from pse.types.xml.xml_encapsulated import XMLEncapsulatedStateMachine
+from pse.types.base.phrase import PhraseStateMachine
+
+# Optional XML element
+optional_element_sm = XMLEncapsulatedStateMachine(
+    tag_name="optional",
+    state_machine=PhraseStateMachine("Some content"),
+    is_optional=True
+)
+
+# Will match both "<optional>Some content</optional>" and empty string
+```
+
+## Grammar State Machines
+
+PSE provides state machines for parsing according to formal grammars.
+
+Currently, this approach is kind of experimental and not all grammars are supported.
+
+Manual massaging of the lark grammars is required to get the best results.
+
+We've provided a few pre-configured grammars - for valid python and bash syntax - but again these are hacks and not a full solution.
+
+In the future we want to natively support BNF grammars and have a more robust solution.
+
+**Integration with other state machines:**
+```python
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+from pse.types.grammar.lark import LarkGrammarStateMachine
+from pse.types.grammar.default_grammars.python import PythonGrammar
+
+# Create a state machine for code blocks containing Python code
+python_code_block = EncapsulatedStateMachine(
+    left_delimiter="```python\n",
+    right_delimiter="\n```",
+    state_machine=LarkGrammarStateMachine(PythonGrammar())
+)
+```
+
+### PythonStateMachine
+
+`PythonStateMachine` is a pre-configured instance of `LarkGrammarStateMachine` that specializes in parsing valid Python code.
+
+```python
+from pse.types.grammar.default_grammars.python import PythonStateMachine
+
+# Use the pre-configured Python state machine
+python_sm = PythonStateMachine
+
+# Use with encapsulation for markdown-style code blocks
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+python_block_sm = EncapsulatedStateMachine(
+    state_machine=PythonStateMachine,
+    left_delimiter="```python\n",
+    right_delimiter="\n```"
+)
+```
+
+**Implementation details:**
+- Based on `LarkGrammarStateMachine` using a specialized `PythonGrammar` class
+- Uses a comprehensive Lark grammar file (`python.lark`) that covers Python 3.x syntax
+- Employs a custom Python indentation handler for proper handling of indentation-sensitive code
+- Default delimiters for markdown-style code blocks: `"```python\n"` and `"\n```"`
+- Implements special validation logic for Python syntax
+
+**Python-specific validation features:**
+- Intelligent handling of incomplete code during generation
+- Special processing for indent/dedent tokens
+- Proper handling of unclosed quotes, brackets, and parentheses
+- Support for all Python syntax including:
+  - Function and class definitions
+  - Control flow statements
+  - List/dict/set comprehensions
+  - Async/await syntax
+  - Type annotations
+  - Decorators and lambda expressions
+
+**Example: Python code validation**
+```python
+from pse.types.grammar.default_grammars.python import PythonStateMachine
+
+# Parse a simple Python function
+code = """
+def factorial(n):
+    if n <= 1:
+        return 1
+    return n * factorial(n-1)
+"""
+
+# Get steppers and advance through the code
+steppers = PythonStateMachine.get_steppers()
+for char in code:
+    steppers = PythonStateMachine.advance_all_steppers(steppers, char)
+
+# Check if any stepper successfully parsed the code
+valid = any(s.has_reached_accept_state() for s in steppers)
+```
+
+**Example: Integration with structuring engine**
+```python
+from pse import StructuringEngine
+from pse.types.grammar.default_grammars.python import PythonStateMachine
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+
+# Create a Python code block parser
+python_block = EncapsulatedStateMachine(
+    state_machine=PythonStateMachine,
+    left_delimiter="```python\n",
+    right_delimiter="\n```"
+)
+
+# Create structuring engine with the Python block state machine
+engine = StructuringEngine().configure(python_block)
+
+# Generate code with LLM
+response = engine.generate("Write a function to calculate the Fibonacci sequence", model="claude-3-sonnet-20240229")
+```
+
+**Example: Partial code validation during generation**
+```python
+from pse.types.grammar.default_grammars.python import PythonStateMachine
+
+# Even incomplete code is accepted during non-strict validation
+incomplete_code = "def factorial(n):\n    if n <= 1:"
+steppers = PythonStateMachine.get_steppers()
+steppers = PythonStateMachine.advance_all_steppers(steppers, incomplete_code)
+
+# Steppers remain valid for incomplete but syntactically correct code
+assert len(steppers) > 0
+```
+
+### BashStateMachine
+
+`BashStateMachine` is a pre-configured instance of `LarkGrammarStateMachine` that specializes in parsing and generating Bash shell code.
+
+```python
+from pse.types.grammar.default_grammars.bash import BashStateMachine
+
+# Use the pre-configured Bash state machine
+bash_sm = BashStateMachine
+
+# Use with encapsulation for markdown-style code blocks
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+bash_block_sm = EncapsulatedStateMachine(
+    state_machine=BashStateMachine,
+    left_delimiter="```bash\n",
+    right_delimiter="\n```"
+)
+```
+
+**Implementation details:**
+- Based on `LarkGrammarStateMachine` using a specialized `BashGrammar` class
+- Uses a comprehensive Lark grammar file (`bash.lark`) that covers Bash shell syntax
+- Default delimiters for markdown-style code blocks: `"```bash\n"` and `"\n```"`
+- Implements special validation logic for Bash-specific syntax structures
+
+**Bash-specific validation features:**
+- Intelligent handling of incomplete commands during generation
+- Special processing for unclosed quotes and control structures
+- Support for all Bash syntax including:
+  - Control flow (if/then/else, for/while/until loops, case statements)
+  - Variables and parameter expansion (`$var`, `${var}`)
+  - Command substitution (`$(command)`) and subshells
+  - I/O redirections (`>`, `>>`, `<`, `2>&1`, etc.)
+  - Function definitions
+  - Arithmetic expressions (`$(( expr ))`)
+  - Comments and shebangs
+
+**Example: Bash script validation**
+```python
+from pse.types.grammar.default_grammars.bash import BashStateMachine
+
+# Parse a simple Bash script
+script = """
+#!/bin/bash
+
+function greet() {
+    local name=$1
+    echo "Hello, $name!"
+}
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <name>"
+    exit 1
+fi
+
+greet $1
+"""
+
+# Check if the script is valid
+is_valid = BashStateMachine.grammar.validate(script, strict=True)
+```
+
+**Example: Integration with structuring engine**
+```python
+from pse import StructuringEngine
+from pse.types.grammar.default_grammars.bash import BashStateMachine
+from pse.types.base.encapsulated import EncapsulatedStateMachine
+
+# Create a Bash code block parser
+bash_block = EncapsulatedStateMachine(
+    state_machine=BashStateMachine,
+    left_delimiter="```bash\n",
+    right_delimiter="\n```"
+)
+
+# Create structuring engine with the Bash block state machine
+engine = StructuringEngine().configure(bash_block)
+
+# Generate shell script with LLM
+response = engine.generate(
+    "Write a Bash script to find the largest files in a directory",
+    model="claude-3-sonnet-20240229"
+)
+```
+
+**Example: Handling incomplete Bash code**
+```python
+from pse.types.grammar.default_grammars.bash import BashStateMachine
+
+# Incomplete code that's syntactically valid so far
+incomplete_code = "if [ -f /etc/passwd ]; then\n  grep 'root' /etc/passwd"
+
+# In non-strict mode, this should be accepted
+is_valid_partial = BashStateMachine.grammar.validate(incomplete_code, strict=False)
+assert is_valid_partial  # True
+
+# In strict mode, this would be rejected
+is_valid_strict = BashStateMachine.grammar.validate(incomplete_code, strict=True)
+assert not is_valid_strict  # False
+```
+
+**Performance considerations:**
+- Parses Bash syntax incrementally, providing good performance
+- Uses efficient path pruning to avoid exploring invalid syntax paths
+- Handles complex scripts including nested structures
+- Token healing enables recovery from minor syntax errors
+
+## Mixed-Content State Machines
+
+PSE includes state machines for handling mixed content formats.
+
+### FencedFreeformStateMachine
+
+`FencedFreeformStateMachine` allows free-form text between specific delimiters, functioning as an enhanced version of `EncapsulatedStateMachine` that accepts any character content.
+
+```python
+from pse.types.misc.fenced_freeform import FencedFreeformStateMachine
+
+# Create a state machine that captures content between markdown-style fences
+python_block_sm = FencedFreeformStateMachine(
+    identifier="python",  # Specifies fence type (becomes ```python\n and \n```)
+)
+
+# Create a state machine with custom delimiters
+custom_block_sm = FencedFreeformStateMachine(
+    delimiters=("<START>", "<END>"),  # Custom opening and closing delimiters
+    char_min=10,  # Minimum content length
+    char_max=1000,  # Maximum content length
+    is_optional=False  # Whether the content is required
+)
+```
+
+**Implementation details:**
+- Parameters:
+  - `identifier`: Optional language identifier (e.g., "python" produces ```python\n and \n``` fences)
+  - `delimiters`: Tuple of opening and closing delimiters (overrides identifier-based fences)
+  - `char_min`: Minimum number of characters required (default: 0)
+  - `char_max`: Maximum number of characters allowed (default: None)
+  - `buffer_length`: Controls character buffer size during processing (default: 32768)
+  - `is_optional`: Whether the content is optional (default: False)
+
+- Internal structure:
+  - Extends `EncapsulatedStateMachine` with freeform character acceptance
+  - Uses `CharacterStateMachine` internally with a whitelist containing all characters
+  - Maintains character counting to enforce min/max constraints
+  - Provides a `FencedFreeformStepper` for controlling character processing
+
+- Fence behavior:
+  - With identifier: Uses markdown-style code fences (```<identifier>\n and \n```)
+  - With delimiters: Uses the provided custom delimiters
+  - Both can be set to customize fence appearance
+
+**Usage examples:**
+
+**Example: Character limits**
+```python
+from pse.types.misc.fenced_freeform import FencedFreeformStateMachine
+
+# Create a state machine for short descriptions (10-50 characters)
+description_sm = FencedFreeformStateMachine(
+    delimiters=("<desc>", "</desc>"),
+    char_min=10,
+    char_max=50
+)
+
+# This enforces both minimum and maximum length constraints
+```
+
+**Common applications:**
+- Markdown-style code blocks in documentation
+- Processing custom template languages
+- Extracting specific sections from text
+- Allowing structured and unstructured content in the same document
+- Creating custom delimited content regions
+
+
+---
+pse-docs/docs/api/state-machines/schema-sources.md
+---
+# Schema Sources
+
+PSE provides several ways to create state machines from schema definitions, enabling flexible integration with existing code and data models.
+
+## JSON Schema
+
+The most common way to define structures in PSE is using JSON Schema, a powerful standard for describing JSON data structures.
+
+```python
+from pse import StructuringEngine
+
+# Define a JSON Schema
+person_schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "age": {"type": "integer", "minimum": 0},
+        "address": {
+            "type": "object",
+            "properties": {
+                "street": {"type": "string"},
+                "city": {"type": "string"},
+                "zipcode": {"type": "string"}
+            },
+            "required": ["street", "city"]
+        },
+        "hobbies": {
+            "type": "array",
+            "items": {"type": "string"}
+        }
+    },
+    "required": ["name", "age"]
+}
+
+# Create a structuring engine from the schema
+engine = StructuringEngine.configure(person_schema)
+```
+
+**Key features:**
+- Support for the full JSON Schema specification
+- Nested object and array structures
+- Validation constraints (min/max, required fields, patterns)
+- Type validation and coercion
+
+## Pydantic Models
+
+PSE can create state machines directly from Pydantic models, integrating seamlessly with Python type definitions.
+
+```python
+from pydantic import BaseModel, Field
+from typing import List, Optional
+from pse import StructuringEngine
+
+# Define a Pydantic model
+class Address(BaseModel):
+    street: str
+    city: str
+    zipcode: Optional[str] = None
+
+class Person(BaseModel):
+    name: str
+    age: int = Field(ge=0)
+    address: Optional[Address] = None
+    hobbies: List[str] = []
+
+# Create a structuring engine from the Pydantic model
+engine = StructuringEngine.configure(Person)
+```
+
+**Key features:**
+- Direct integration with Python type annotations
+- Automatic schema generation from class definitions
+- Support for nested models and complex types
+- Validation using Pydantic's powerful validators
+
+## Function Signatures
+
+PSE can extract schema information from function signatures, enabling generation of valid function calls.
+
+```python
+from pse import StructuringEngine
+
+def search_database(
+    query: str,
+    max_results: int = 10,
+    filters: dict[str, str] | None = None,
+    sort_by: list[str] = ["relevance"]
+) -> list[dict]:
+    """
+    Search the database with the given parameters.
+
+    Args:
+        query: The search query string
+        max_results: Maximum number of results to return
+        filters: Optional dictionary of field/value filters
+        sort_by: Fields to sort results by
+    """
+    pass
+
+# Create a structuring engine from the function signature
+engine = StructuringEngine.configure(search_database)
+```
+
+**Key features:**
+- Extracts parameter types from function signatures
+- Supports default values and optional parameters
+- Handles complex nested types with type annotations
+- Enables generation of valid function calls with proper arguments
+
+
+---
+pse-docs/docs/core-concepts/core-architecture.md
+---
+# PSE Core Architecture
+
+The Proxy Structuring Engine is built on a high-performance C++ core that implements a novel non-deterministic finite state automaton (NFA) parsing algorithm. This page provides a detailed look at the internal architecture of PSE's core implementation, which is distributed as a precompiled binary via PyPI (pse-core).
+
+
+---
+pse-docs/docs/core-concepts/multi-token-processing.md
+---
+# Multi-Token Processing
+
+Multi-Token Processing (MTP) is an optional feature in PSE that can speed up generation when specific elements map to multiple tokens.
+
+
+---
+pse-docs/docs/core-concepts/state-graph-traversal.md
+---
+# State Graph Traversal Algorithm
+
+The state graph traversal algorithm is at the heart of PSE's ability to efficiently navigate complex grammar structures while maintaining deterministic performance characteristics. This document provides a comprehensive explanation of the algorithm's design, implementation, and unique features.
+
+## Algorithmic Foundation
+
+PSE's state graph traversal algorithm extends traditional non-deterministic finite automata (NFA) theory with several novel enhancements to achieve both flexibility and efficiency.
+
+### Key Innovations
+
+1. **Hierarchical Composition**: Unlike traditional NFAs where transitions are atomic symbols, PSE transitions contain nested state machines, creating a recursive graph structure that enables context-free grammar expressivity while maintaining finite state machine efficiency.
+
+2. **Immutable Exploration**: The algorithm employs persistent data structures through clone-based immutability, allowing concurrent evaluation of multiple interpretation paths without state interference.
+
+3. **Breadth-First Multi-Path Exploration**: Rather than using backtracking for non-determinism, the algorithm maintains and advances multiple steppers simultaneously, exploring all viable paths in parallel.
+
+4. **Partial Match Processing**: The algorithm can process tokens that match only partially with expected patterns, using longest-prefix matching through a HAT-trie data structure.
+
+5. **Hierarchical Probabilistic Path Selection**: When multiple valid paths exist, the algorithm employs a multi-criteria probabilistic selection that balances structural correctness with model-assigned probabilities.
+
+
+---
+pse-docs/docs/core-concepts/state-machine.md
+---
+# State Machine Architecture
+
+More information coming soon.
+
+
+---
+pse-docs/docs/core-concepts/stepper.md
+---
+# The Stepper System
+
+More information coming soon.
+
+
+---
+pse-docs/docs/core-concepts/token-healing.md
+---
+# Token Healing
+
+Token healing is an error recovery mechanism in PSE that enables robust handling of tokenization mismatches between language model tokens and grammar rules.
+
+## What is Token Healing?
+
+Token healing allows PSE to recover from situations where a model generates tokens that don't perfectly align with the grammar's expected tokens. Instead of rejecting these tokens outright, PSE can "heal" them by finding valid prefixes and continuing generation.
+
+More information coming soon.
+
+
+---

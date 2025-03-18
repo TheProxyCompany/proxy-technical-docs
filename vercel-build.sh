@@ -38,10 +38,6 @@ if [ -n "$GH_TOKEN" ]; then
   $PYTHON_CMD -m pip install git+https://${GH_TOKEN}@github.com/squidfunk/mkdocs-material-insiders.git
 fi
 
-echo "Generating LLM-friendly documentation..."
-files-to-prompt docs/index.md pba-docs/docs pse-docs/docs > assets/llm.txt
-echo "LLM-friendly documentation generated successfully"
-
 # Copy assets from root assets folder to site/assets
 echo "Copying assets from root directory to site/assets..."
 mkdir -p site/assets
@@ -58,7 +54,7 @@ mkdir -p site/pba
 # Build PSE docs
 echo "Building PSE documentation..."
 cd pse-docs
-$MKDOCS build || echo "Warning: PSE docs build failed, continuing..."
+$PYTHON_CMD -m mkdocs build || echo "Warning: PSE docs build failed, continuing..."
 if [ -d "site" ]; then
   cp -r site/* ../site/pse/ || echo "Warning: PSE site copy failed"
 else
@@ -70,7 +66,7 @@ cd ..
 # Build PBA docs
 echo "Building PBA documentation..."
 cd pba-docs
-$MKDOCS build || echo "Warning: PBA docs build failed, continuing..."
+$PYTHON_CMD -m mkdocs build || echo "Warning: PBA docs build failed, continuing..."
 if [ -d "site" ]; then
   cp -r site/* ../site/pba/ || echo "Warning: PBA site copy failed"
 else
