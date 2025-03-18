@@ -6,22 +6,19 @@ CI=true
 
 # Check available Python commands
 echo "Checking for Python..."
-which python || echo "python not found"
 which python3 || echo "python3 not found"
-ls -la /usr/bin/python* || echo "No Python found in /usr/bin"
-echo "PATH: $PATH"
 
 # Create a Python virtual environment
 echo "Creating virtual environment..."
-python3 -m venv .venv || python -m venv .venv || mkdir -p .venv/bin && echo '#!/bin/sh' > .venv/bin/activate
+python3 -m venv .venv
 
 # Activate the virtual environment
 echo "Activating virtual environment..."
 source .venv/bin/activate || true
 
 # Verify we're using the venv Python
-echo "Using Python: $(which python)"
-PYTHON_CMD=$(which python)
+echo "Using Python: $(which python3)"
+PYTHON_CMD=$(which python3)
 
 # Install dependencies
 echo "Installing dependencies..."
