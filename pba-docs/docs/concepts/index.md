@@ -1,29 +1,52 @@
-# Overview
+# Core Concepts
 
-The Proxy Base Agent is designed to be a flexible and extensible foundation for building intelligent agents.
+The Proxy Base Agent (PBA) is built upon several core concepts that enable its reliable and extensible nature. Understanding these concepts is key to effectively using and customizing the agent.
 
-It achieves this through a novel state machine architecture and tool use integration, all powered by the Proxy Structuring Engine (PSE).
+## 1. State Machine Architecture
 
-## Core Concepts
+PBA's behavior is not driven by simple prompt chains, but by a formal **Hierarchical State Machine (HSM)**. This machine defines distinct phases (like Planning and Action) and specific states (like Thinking, Tool Call) the agent transitions through.
 
-*   **State Machine:** The agent's behavior is defined by a state machine. Each state represents a specific step in the agent's processing, such as planning, or executing an action. Each state can contain sub-states, which allow for more complex behaviors. Text based delimeters are used to separate the different states, and the language model transitions between states based on these delimeters.
+*   **Reliability:** The HSM structure, enforced by the underlying Proxy Structuring Engine (PSE), guarantees that the agent follows the defined workflow predictably.
+*   **Control:** Developers have explicit control over the agent's execution flow.
 
-*   **Tools:** The agent can interact with external tools and APIs. Tools are self-contained units of functionality that the agent can call upon to perform specific tasks, such as retrieving information, interacting with services, or executing code.
+[Learn more about the State Machine](./state-machine.md)
 
-*   **Proxy Structuring Engine (PSE):** The PSE provides the underlying framework for defining and managing the agent's state machine, tools, and overall execution. It handles the complexities of state transitions, input/output processing, and error handling.
+## 2. Agent States
 
+Each step in the agent's HSM is represented by an **Agent State**. These states encapsulate specific functionalities:
 
-## Custom Agents
+*   **Planning States:** `Thinking`, `Scratchpad`, `InnerMonologue` allow the agent to reason and plan internally.
+*   **Action States:** `ToolCallState`, `Python` enable the agent to interact with the external environment or execute code.
 
-The Proxy Base Agent is designed to be a *starting point*.
+Each state uses its own nested PSE `StateMachine` to define and enforce the structure of the content generated *within* that state.
 
-It provides a basic set of states and tools, demonstrating the core capabilities of the PSE.
+[Learn more about States](./states.md) (Content Pending)
 
-You can extend this base agent by:
+## 3. Tools
 
-*   **Adding Custom Tools:** Integrate new tools to handle specific tasks relevant to your application.
-*   **Creating Custom States:** Define new states to model more complex behaviors and workflows.
-*   **Modifying Existing Logic:** Adjust the transitions and actions within existing states to fine-tune the agent's behavior.
-*   **Adding Custom Logic:** Add custom logic to the base agent to handle specific tasks or workflows.
-*   **Use Reinforcement Learning:** Use reinforcement learning to improve the agent's performance over time.
-*   **Expirement with different language models:** Try out different language models to see which ones work best for your use case.
+Tools are external capabilities the agent can invoke during its Action Phase. They allow the agent to interact with APIs, databases, code interpreters, or perform specialized tasks.
+
+*   **Reliable Invocation:** PBA uses PSE to guarantee that the arguments provided to a tool call match the tool's defined schema *before* execution.
+*   **Extensibility:** New tools can be easily added to expand the agent's capabilities.
+
+[Learn more about Tools](./tools.md)
+
+## 4. Proxy Structuring Engine (PSE) Integration
+
+PSE is the foundational technology that makes PBA's reliability possible.
+
+*   **Runtime Enforcement:** PSE integrates into the LLM's generation loop, using the defined HSMs (both the main agent HSM and the nested state HSMs) to constrain the LLM's output at runtime.
+*   **Guarantees:** This ensures structurally valid outputs for states and tool calls, and enforces valid transitions between agent states.
+
+Understanding PSE concepts enhances your ability to customize PBA. [See PSE Documentation](https://docs.theproxycompany.com/pse/)
+
+## 5. Model Context Protocol (MCP)
+
+PBA supports dynamic tool integration at runtime using the Model Context Protocol (MCP).
+
+*   **Adaptability:** Agents can connect to MCP servers to gain access to new tools without restarting or retraining.
+*   **Reliability:** Tools loaded via MCP are integrated into the `ToolCallState` and benefit from the same PSE-guaranteed schema enforcement.
+
+[Learn more about MCP Integration](../extending/model-context-protocol.md) (Content Pending)
+
+These core concepts work together to create an agent framework focused on engineered reliability, control, and adaptability.

@@ -69,26 +69,33 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 nav:
-  - Proxy Base Agent:
-    - index.md
-    - Quickstart: getting-started/quickstart.md
+  - Overview: index.md
+  - Getting Started:
     - Installation: getting-started/installation.md
-  - Concepts:
-    - Overview: concepts/overview.md
-    # - State Graph: concepts/state-graph.md
-    - States: concepts/states.md
+    - Quickstart: getting-started/quickstart.md
+  - Core Concepts:
+    - index.md
+    - State Machine: concepts/state-machine.md
+    - Agent States: concepts/states.md
     - Tools: concepts/tools.md
-    # - State Machine: concepts/state-machine.md
+    - PSE Integration: concepts/pse-integration.md
+    # - State Graph: concepts/state-graph.md # Placeholder
   - Extending the Agent:
+    - index.md
     - Custom Tools: extending/custom-tools.md
-    - Custom States: extending/custom-states.md
-    # - Custom State Graphs: extending/custom-state-graphs.md
-    - Model Context Protocol: extending/model-context-protocol.md
-  # - Running the Agent:
-  #   - MLX: frontends/mlx.md
-  #   - PyTorch: frontends/pytorch.md
+    # - Custom States: extending/custom-states.md # Placeholder
+    # - Custom State Graphs: extending/custom-state-graphs.md # Placeholder
+    # - Model Context Protocol: extending/model-context-protocol.md # Placeholder
+  - LLM Frontends:
+      - index.md
+      - MLX: frontends/mlx.md
+      - PyTorch: frontends/pytorch.md
   - API Reference:
-    - Agent: api/agent.md
+    - index.md
+    - Agent Class: api/agent.md
+    # - Tool & ToolCall: api/tool.md # Placeholder
+    # - AgentState: api/state.md # Placeholder
+  # - Troubleshooting: troubleshooting.md # Placeholder
 
 extra:
   generator: false

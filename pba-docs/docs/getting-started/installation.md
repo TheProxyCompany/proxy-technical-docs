@@ -1,14 +1,59 @@
 # Installation
 
-The Proxy Base Agent requires Python 3.11 or higher.
+This guide covers installing the Proxy Base Agent (PBA) and its dependencies.
 
 ## Prerequisites
 
-- Python 3.10 or higher
-- Linux, macOS, or Windows
-- Hardware requirements vary depending on the underlying language model you are using.
+*   **Python:** Version 3.10 or higher.
+*   **Operating System:** Linux, macOS, or Windows.
+*   **LLM Backend:** You need a compatible local LLM setup. PBA currently supports:
+    *   [MLX](https://github.com/ml-explore/mlx) (for Apple Silicon Macs)
+    *   [PyTorch](https://pytorch.org/) (CPU or GPU)
+    *(Support for other backends may be added in the future).*
+*   **Hardware:** Requirements depend heavily on the LLM you choose to run locally. Ensure your system meets the minimum requirements for your selected model.
 
-## Installation Steps
+## Installation Methods
+
+Choose the method that best suits your needs:
+
+### Method 1: Using `pip` (Recommended)
+
+This is the simplest way to install the latest stable release of PBA from PyPI.
+
+```bash
+# Install the core PBA package
+pip install proxy-base-agent
+
+# --- Framework Extras ---
+# Install extras for the LLM backend you intend to use:
+
+# For MLX (Apple Silicon):
+pip install proxy-base-agent[mlx]
+
+# For PyTorch:
+pip install proxy-base-agent[torch]
+# (Ensure you have a compatible PyTorch version installed separately if needed)
+```
+
+### Method 2: Using `uv` (Fast Alternative)
+
+If you use `uv`, Astral's fast package manager:
+
+```bash
+# Install the core PBA package
+uv pip install proxy-base-agent
+
+# --- Framework Extras ---
+# For MLX (Apple Silicon):
+uv pip install proxy-base-agent[mlx]
+
+# For PyTorch:
+uv pip install proxy-base-agent[torch]
+```
+
+### Method 3: From Source (Development / Latest Features)
+
+Install directly from the GitHub repository for development or to get the absolute latest code (potentially unstable).
 
 1.  **Clone the Repository:**
     ```bash
@@ -16,61 +61,44 @@ The Proxy Base Agent requires Python 3.11 or higher.
     cd proxy-base-agent
     ```
 
-2.  **Install Dependencies:**
+2.  **Install in Editable Mode:**
+    We recommend using a virtual environment.
 
-    We recommend using [uv](https://docs.astral.sh/uv/) for fast and reliable dependency management.
-    ```bash
-    uv pip install -e .
-    ```
-    This command installs the agent and its dependencies in editable mode (`-e .`), making it easy to modify the code and see changes immediately.
+    *   **Using `pip`:**
+        ```bash
+        # Install core package and common dev dependencies
+        pip install -e ".[dev]"
 
-    If you don't want to use uv, you can install the dependencies using pip:
-    ```bash
-    pip install -e .
-    ```
+        # Install specific framework extras if needed
+        pip install -e ".[mlx]"
+        # or
+        pip install -e ".[torch]"
+        ```
+    *   **Using `uv`:**
+        ```bash
+        # Install core package and common dev dependencies
+        uv pip install -e ".[dev]"
 
-## Installation Methods
+        # Install specific framework extras if needed
+        uv pip install -e ".[mlx]"
+        # or
+        uv pip install -e ".[torch]"
+        ```
+    The `-e` flag installs the package in "editable" mode, meaning changes you make to the source code will be reflected immediately when you run the agent.
 
-### Using pip (Recommended)
+## Verifying Installation
 
-The simplest way to install PBA is using pip:
-
-```bash
-pip install proxy-base-agent
-```
-
-For development or the latest features, you can install directly from the repository:
-
-```bash
-pip install git+https://github.com/TheProxyCompany/proxy-base-agent.git
-```
-
-### Using conda
-
-If you use conda for environment management:
+After installation, you should be able to run the agent's setup wizard:
 
 ```bash
-conda create -n pba python=3.10
-conda activate pba
-pip install proxy-base-agent
+python -m agent
 ```
 
-### From Source
-
-For development or customization, you can install from source:
-
-```bash
-git clone https://github.com/TheProxyCompany/proxy-base-agent.git
-cd proxy-base-agent
-pip install -e .
-```
+If the wizard starts without import errors, the installation was successful.
 
 ## Next Steps
 
-Now that you have PBA installed, you can:
+*   Follow the [Quickstart Guide](./quickstart.md) to run the agent and interact with it.
+*   Explore the [Core Concepts](../concepts/index.md) to understand how PBA works.
 
-1. Follow the [Quickstart Guide](quickstart.md)
-2. Explore the [Concepts](../concepts/overview.md)
-3. Extend the agent with [Custom Tools](../extending/custom-tools.md)
-
-If you encounter any issues during installation, please report an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
+If you encounter issues, please open an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).

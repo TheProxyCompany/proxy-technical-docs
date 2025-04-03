@@ -79,6 +79,16 @@ After sufficient planning, the agent transitions to executing actions:
 This state graph describes the base behavior of the agent.
 It can be extended and modified to support more complex agentic behaviors.
 
+## Key Capabilities
+
+PBA leverages PSE to deliver capabilities beyond conventional agent frameworks:
+
+*   🧠 **True Stateful Execution:** Define and enforce complex workflows using an explicit HSM (Plan ➔ Act). PSE guarantees state consistency.
+*   ✅ **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated arguments via schema validation *during generation*.
+*   ⚡ **Dynamic Runtime Adaptation (MCP):** Integrate new tools on-the-fly via the Model Context Protocol with guaranteed reliability.
+*   ⚙️ **Predictable Control Flow:** Explicitly define agent reasoning patterns and action sequences for deterministic behavior.
+*   🔌 **Universal LLM Compatibility:** Designed for local models using various backends (MLX, PyTorch supported).
+*   🧩 **Modular & Extensible:** Build bespoke agents by adding custom tools, states, or modifying the core HSM architecture.
 
 ## Installation & Quickstart
 
