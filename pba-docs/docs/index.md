@@ -61,18 +61,18 @@ flowchart TD
 
 ### Planning Phase
 
-The agent engages in iterative reasoning through multiple cognitive states:
+The agent first enters a planning loop, choosing between internal states to reason about the task:
 
-- **Thinking**: High-level reasoning and goal setting.
-- **Scratchpad**: Intermediate notes and working memory.
-- **Inner Monologue**: Reflective reasoning and self-assessment.
+*   **Thinking**: Deliberate analysis and planning.
+*   **Scratchpad**: Quick notes and working memory.
+*   **Inner Monologue**: Detailed self-reflection and narrative reasoning.
 
 ### Action Phase
 
-After sufficient planning, the agent transitions to executing actions:
+Once planning is complete, the agent selects an action to interact with the environment:
 
-- **Tool Calls**: Interaction with external APIs or custom tools.
-- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+*   **Tool Calls**: Invokes external tools or APIs via guaranteed schemas.
+*   **Python Code Execution**: (Optional) Runs Python code snippets.
 
 ### State Graph
 
@@ -85,7 +85,7 @@ PBA leverages PSE to deliver capabilities beyond conventional agent frameworks:
 
 *   🧠 **True Stateful Execution:** Define and enforce complex workflows using an explicit HSM (Plan ➔ Act). PSE guarantees state consistency.
 *   ✅ **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated arguments via schema validation *during generation*.
-*   ⚡ **Dynamic Runtime Adaptation (MCP):** Integrate new tools on-the-fly via the Model Context Protocol with guaranteed reliability.
+*   ⚡ **Dynamic Runtime Adaptation (MCP):** Connect to external MCP servers to integrate new tools on-the-fly. PBA dynamically updates its configuration, allowing immediate, reliable use of new capabilities.
 *   ⚙️ **Predictable Control Flow:** Explicitly define agent reasoning patterns and action sequences for deterministic behavior.
 *   🔌 **Universal LLM Compatibility:** Designed for local models using various backends (MLX, PyTorch supported).
 *   🧩 **Modular & Extensible:** Build bespoke agents by adding custom tools, states, or modifying the core HSM architecture.

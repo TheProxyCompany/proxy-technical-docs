@@ -27,3 +27,5 @@ PSE's runtime logit masking and state tracking provide the technical foundation 
 For a deeper understanding of the underlying mechanisms:
 
 *   Refer to the [Proxy Structuring Engine Documentation](https://docs.theproxycompany.com/pse/) for details on PSE's core concepts (HSM, Steppers, Engine, Token Healing).
+
+This tight integration ensures not only that the agent follows the correct high-level steps but also that each individual step (like a tool call or code generation) is structurally sound, drastically reducing runtime errors and increasing overall system reliability.

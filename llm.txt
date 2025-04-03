@@ -247,6 +247,16 @@ After sufficient planning, the agent transitions to executing actions:
 This state graph describes the base behavior of the agent.
 It can be extended and modified to support more complex agentic behaviors.
 
+## Key Capabilities
+
+PBA leverages PSE to deliver capabilities beyond conventional agent frameworks:
+
+*   🧠 **True Stateful Execution:** Define and enforce complex workflows using an explicit HSM (Plan ➔ Act). PSE guarantees state consistency.
+*   ✅ **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated arguments via schema validation *during generation*.
+*   ⚡ **Dynamic Runtime Adaptation (MCP):** Integrate new tools on-the-fly via the Model Context Protocol with guaranteed reliability.
+*   ⚙️ **Predictable Control Flow:** Explicitly define agent reasoning patterns and action sequences for deterministic behavior.
+*   🔌 **Universal LLM Compatibility:** Designed for local models using various backends (MLX, PyTorch supported).
+*   🧩 **Modular & Extensible:** Build bespoke agents by adding custom tools, states, or modifying the core HSM architecture.
 
 ## Installation & Quickstart
 
@@ -368,6 +378,16 @@ After sufficient planning, the agent transitions to executing actions:
 This state graph describes the base behavior of the agent.
 It can be extended and modified to support more complex agentic behaviors.
 
+## Key Capabilities
+
+PBA leverages PSE to deliver capabilities beyond conventional agent frameworks:
+
+*   🧠 **True Stateful Execution:** Define and enforce complex workflows using an explicit HSM (Plan ➔ Act). PSE guarantees state consistency.
+*   ✅ **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated arguments via schema validation *during generation*.
+*   ⚡ **Dynamic Runtime Adaptation (MCP):** Integrate new tools on-the-fly via the Model Context Protocol with guaranteed reliability.
+*   ⚙️ **Predictable Control Flow:** Explicitly define agent reasoning patterns and action sequences for deterministic behavior.
+*   🔌 **Universal LLM Compatibility:** Designed for local models using various backends (MLX, PyTorch supported).
+*   🧩 **Modular & Extensible:** Build bespoke agents by adding custom tools, states, or modifying the core HSM architecture.
 
 ## Installation & Quickstart
 
@@ -401,316 +421,6 @@ For more detailed guides, see:
 ---
 
 [View on GitHub](https://github.com/TheProxyCompany/proxy-base-agent){: .md-button .md-button--primary }
-
-
----
-
-
----
-pba-docs/docs/frontends/index.md
----
-
-
----
-pba-docs/docs/frontends/mlx.md
----
-More documentation coming soon.
-
-
----
-pba-docs/docs/frontends/pytorch.md
----
-More documentation coming soon.
-
-
----
-pba-docs/docs/getting-started/installation.md
----
-# Installation
-
-The Proxy Base Agent requires Python 3.11 or higher.
-
-## Prerequisites
-
-- Python 3.10 or higher
-- Linux, macOS, or Windows
-- Hardware requirements vary depending on the underlying language model you are using.
-
-## Installation Steps
-
-1.  **Clone the Repository:**
-    ```bash
-    git clone https://github.com/TheProxyCompany/proxy-base-agent.git
-    cd proxy-base-agent
-    ```
-
-2.  **Install Dependencies:**
-
-    We recommend using [uv](https://docs.astral.sh/uv/) for fast and reliable dependency management.
-    ```bash
-    uv pip install -e .
-    ```
-    This command installs the agent and its dependencies in editable mode (`-e .`), making it easy to modify the code and see changes immediately.
-
-    If you don't want to use uv, you can install the dependencies using pip:
-    ```bash
-    pip install -e .
-    ```
-
-## Installation Methods
-
-### Using pip (Recommended)
-
-The simplest way to install PBA is using pip:
-
-```bash
-pip install proxy-base-agent
-```
-
-For development or the latest features, you can install directly from the repository:
-
-```bash
-pip install git+https://github.com/TheProxyCompany/proxy-base-agent.git
-```
-
-### Using conda
-
-If you use conda for environment management:
-
-```bash
-conda create -n pba python=3.10
-conda activate pba
-pip install proxy-base-agent
-```
-
-### From Source
-
-For development or customization, you can install from source:
-
-```bash
-git clone https://github.com/TheProxyCompany/proxy-base-agent.git
-cd proxy-base-agent
-pip install -e .
-```
-
-## Next Steps
-
-Now that you have PBA installed, you can:
-
-1. Follow the [Quickstart Guide](quickstart.md)
-2. Explore the [Concepts](../concepts/overview.md)
-3. Extend the agent with [Custom Tools](../extending/custom-tools.md)
-
-If you encounter any issues during installation, please report an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
-
-
----
-pba-docs/docs/getting-started/quickstart.md
----
-# Quickstart
-
-This quickstart guide will walk you through running the Proxy Base Agent and interacting with it.
-
-1.  **Run the Agent:**
-
-    After installing the agent (see [Installation](installation.md)), you can start it using the following command:
-
-    ```bash
-    python -m agent
-    ```
-
-2.  **Interactive Setup:**
-
-    The agent will guide you through an interactive setup process. This allows you to configure the agent's parameters.
-
-3.  **Interact with the Agent:**
-
-    Once the setup is complete, you can interact with the agent. The agent will process your input, transition through its states, and potentially use tools to achieve its goal. Observe the agent's output to understand its reasoning and actions.
-
-
----
-pba-docs/docs/concepts/index.md
----
-# Overview
-
-The Proxy Base Agent is designed to be a flexible and extensible foundation for building intelligent agents.
-
-It achieves this through a novel state machine architecture and tool use integration, all powered by the Proxy Structuring Engine (PSE).
-
-## Core Concepts
-
-*   **State Machine:** The agent's behavior is defined by a state machine. Each state represents a specific step in the agent's processing, such as planning, or executing an action. Each state can contain sub-states, which allow for more complex behaviors. Text based delimeters are used to separate the different states, and the language model transitions between states based on these delimeters.
-
-*   **Tools:** The agent can interact with external tools and APIs. Tools are self-contained units of functionality that the agent can call upon to perform specific tasks, such as retrieving information, interacting with services, or executing code.
-
-*   **Proxy Structuring Engine (PSE):** The PSE provides the underlying framework for defining and managing the agent's state machine, tools, and overall execution. It handles the complexities of state transitions, input/output processing, and error handling.
-
-
-## Custom Agents
-
-The Proxy Base Agent is designed to be a *starting point*.
-
-It provides a basic set of states and tools, demonstrating the core capabilities of the PSE.
-
-You can extend this base agent by:
-
-*   **Adding Custom Tools:** Integrate new tools to handle specific tasks relevant to your application.
-*   **Creating Custom States:** Define new states to model more complex behaviors and workflows.
-*   **Modifying Existing Logic:** Adjust the transitions and actions within existing states to fine-tune the agent's behavior.
-*   **Adding Custom Logic:** Add custom logic to the base agent to handle specific tasks or workflows.
-*   **Use Reinforcement Learning:** Use reinforcement learning to improve the agent's performance over time.
-*   **Expirement with different language models:** Try out different language models to see which ones work best for your use case.
-
-
----
-pba-docs/docs/concepts/state-graph.md
----
-More documentation coming soon.
-
-
----
-pba-docs/docs/concepts/state-machine.md
----
-# State Machine
-
-The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical State Machine (HSM)**. Unlike traditional agents that rely heavily on prompt chaining, PBA uses this state machine, enforced by the underlying Proxy Structuring Engine (PSE), to ensure reliable and predictable execution flow.
-
-## The Core Loop: Plan -> Act
-
-The default PBA state machine defines a fundamental operational cycle:
-
-1.  **Planning Phase:** The agent first enters a planning loop. Here, it utilizes internal states like `Thinking`, `Scratchpad`, and `InnerMonologue` to analyze the task, break down problems, and formulate a strategy. The agent can cycle through these planning states multiple times (configurable) to refine its approach. PSE ensures the content generated within these states adheres to their defined delimiters (e.g., ```thinking ... ```).
-
-2.  **Action Phase:** Once planning is sufficient, the agent transitions to the action phase. It selects *one* available action state, such as `ToolCallState` (to use an external tool) or `Python` (to execute code). PSE guarantees that the output for the chosen action state conforms to the required structure (e.g., a valid JSON schema for the selected tool call).
-
-3.  **Completion:** After executing the action, the agent typically transitions to a final state, often awaiting further user input or concluding the task.
-
-```mermaid
-flowchart TD
-    Start([Start]) --> PlanLoopCheck{Evaluate Task}
-    PlanLoopCheck -- Requires Planning --> Plan
-    PlanLoopCheck -- Direct Action OK --> Action
-
-    subgraph Plan["Planning Phase (Loop ≤ N times)"]
-        direction LR
-        PlanningChoice{"Choose planning type"} --> Thinking["Thinking"]
-        PlanningChoice --> Scratchpad["Scratchpad"]
-        PlanningChoice --> InnerMonologue["Inner Monologue"]
-    end
-
-    Plan --> PlanLoopDecision{"More planning needed?"}
-    PlanLoopDecision -- "Yes" --> Plan
-    PlanLoopDecision -- "No" --> Action
-
-    subgraph Action["Action Phase"]
-        direction LR
-        ActionChoice{"Choose action type"} --> ToolAction["Tool Call"]
-        ActionChoice --> CodeAction["Python Code"]
-    end
-
-    Action --> Finish([Finish/Await User])
-
-    classDef phase fill:#DAD0AF,stroke:#0c5460,color:#024645
-    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
-    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
-    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
-
-    class Plan,Action phase
-    class PlanLoopCheck,PlanLoopDecision,ActionChoice decision
-    class PlanningChoice,Thinking,Scratchpad,InnerMonologue,ToolAction,CodeAction state
-    class Start,Finish terminal
-```
-
-## Why an HSM?
-
-Using an explicit HSM enforced by PSE provides key advantages:
-
-*   **Reliability:** Prevents the agent from getting stuck, hallucinating invalid actions, or deviating from the intended workflow.
-*   **Control:** Allows developers to precisely define and constrain the agent's behavior.
-*   **Observability:** Makes the agent's internal state and decision-making process transparent.
-*   **Extensibility:** Provides a clear structure for adding new states and capabilities.
-
-This state machine architecture is fundamental to PBA's ability to perform complex tasks reliably. You can learn more about extending this base structure in the [Extending the Agent](../extending/index.md) section.
-
----
-pba-docs/docs/concepts/states.md
----
-More documentation coming soon.
-
-
----
-pba-docs/docs/concepts/tools.md
----
-# Tools
-
-Tools are a crucial part of the Proxy Base Agent's capabilities.
-
-They allow the agent to interact with the external world, access information, and perform actions beyond its core logic.
-
-## What are Tools?
-
-Tools are self-contained modules that encapsulate specific functionality.  They can be:
-
-*   **API Wrappers:**  Provide access to external services like weather APIs, search engines, or databases.
-*   **Custom Functions:**  Perform specific computations, data manipulations, or other tasks.
-*   **Code Executors:** Execute code in different languages (e.g., Python, JavaScript).
-
-## Tool Interaction
-
-The agent interacts with tools through a standardized flow:
-
-1.  **Selects a Tool:** Based on its current state and plan, the agent chooses the appropriate tool to use.
-2.  **Provides Input:** The agent prepares the necessary input data for the tool.
-3.  **Calls the Tool:** The agent invokes the tool with the provided input.
-4.  **Receives Output:** The tool processes the input and returns the results to the agent.
-5.  **Processes Output:** The agent integrates the tool's output into its state and continues its processing.
-
-
----
-pba-docs/docs/extending/custom-state-graphs.md
----
-More documentation coming soon.
-
-
----
-pba-docs/docs/extending/custom-states.md
----
-# Custom States
-
-Creating custom states allows you to extend the Proxy Base Agent's behavior with new capabilities and workflows.
-
-More documentation coming soon.
-
-
----
-pba-docs/docs/extending/custom-tools.md
----
-# Custom Tools
-
-Adding custom tools is a powerful way to extend the Proxy Base Agent's capabilities. This guide explains how to create and integrate your own tools.
-
-More documentation coming soon.
-
-
----
-pba-docs/docs/extending/index.md
----
-
-
----
-pba-docs/docs/extending/model-context-protocol.md
----
-More documentation coming soon.
-
-
----
-pba-docs/docs/api/agent.md
----
-# Agent API Reference
-
-The Agent class is the core of the Proxy Base Agent framework. It coordinates all the components and provides the main interface for interacting with the agent.
-
-More documentation coming soon.
 
 
 ---
@@ -944,6 +654,1156 @@ If the wizard starts without import errors, the installation was successful.
 *   Explore the [Core Concepts](../concepts/index.md) to understand how PBA works.
 
 If you encounter issues, please check the [Troubleshooting Guide](../troubleshooting.md) (Content Pending) or open an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
+
+---
+pba-docs/docs/getting-started/quickstart.md
+---
+# Quickstart
+
+This guide provides the fastest way to get the Proxy Base Agent (PBA) running locally and see it in action.
+
+We'll launch the agent using its built-in command-line interface (CLI) and interactive setup wizard.
+
+## Prerequisites
+
+*   Ensure you have met the requirements and installed PBA by following the [Installation Guide](./installation.md).
+
+## 1. Launch the Agent
+
+Open your terminal or command prompt, navigate to the directory where you installed or cloned the `proxy-base-agent`, and run the following command:
+
+```bash
+python -m agent
+```
+
+This command executes the main entry point of the PBA package.
+
+## 2. Interactive Setup Wizard
+
+Upon launching, PBA will start an interactive setup wizard directly in your terminal. This wizard guides you through configuring the agent for the current session:
+
+*   **Agent Identity:** You'll be prompted to provide a name for the agent instance.
+*   **System Prompt:** Choose a base system prompt template that defines the agent's core personality and instructions.
+*   **Language Model (LLM):** Select the local LLM you want the agent to use. PBA will scan common locations for compatible models (MLX or PyTorch, depending on your setup). You can also specify a Hugging Face model ID to download.
+*   **Inference Backend:** Choose the backend (MLX or PyTorch) if multiple are available for your selected model.
+*   **Configuration Mode:**
+    *   **Basic:** Uses sensible defaults for most parameters (recommended for first use).
+    *   **Advanced:** Allows detailed configuration of capabilities (Python execution, voice), planning behavior, performance options, inference parameters, and more.
+
+Follow the prompts, selecting the options appropriate for your setup. For your first run, using "Basic" configuration mode is recommended.
+
+## 3. Interact
+
+Once the setup wizard completes and the model is loaded, the agent will be ready. You'll see a prompt like:
+
+```
+> Enter your message [enter to send, Ctrl+C to exit]:
+```
+
+Type your message or instruction to the agent and press Enter.
+
+Observe the agent's output in the terminal. If you enabled advanced options or logging, you might see:
+
+*   **Planning States:** Output delimited by tags like `[thinking]...[/thinking]` or `[scratchpad]...[/scratchpad]` showing the agent's internal reasoning (if the chosen prompt uses them).
+*   **Tool Calls:** Structured JSON output within `[tool_call]...[/tool_call]` tags when the agent decides to use a tool.
+*   **Tool Results:** Output from the tool execution, often prefixed with `[Tool]`.
+*   **Final Response:** The agent's message to you, typically generated via the `send_message` tool.
+
+Experiment with different prompts to see how the agent plans, uses tools (if available), and responds.
+
+## Next Steps
+
+*   Explore the [Core Concepts](../concepts/index.md) to understand the underlying architecture.
+*   Learn how to add [Custom Tools](../extending/custom-tools.md) (Content Pending).
+*   Configure different [LLM Frontends](../frontends/index.md) (Content Pending).
+
+---
+pba-docs/docs/concepts/index.md
+---
+# Core Concepts
+
+The Proxy Base Agent (PBA) is built upon several core concepts that enable its reliable and extensible nature. Understanding these concepts is key to effectively using and customizing the agent.
+
+## 1. State Machine Architecture
+
+PBA's behavior is not driven by simple prompt chains, but by a formal **Hierarchical State Machine (HSM)**. This machine defines distinct phases (like Planning and Action) and specific states (like Thinking, Tool Call) the agent transitions through.
+
+*   **Reliability:** The HSM structure, enforced by the underlying Proxy Structuring Engine (PSE), guarantees that the agent follows the defined workflow predictably.
+*   **Control:** Developers have explicit control over the agent's execution flow.
+
+[Learn more about the State Machine](./state-machine.md)
+
+## 2. Agent States
+
+Each step in the agent's HSM is represented by an **Agent State**. These states encapsulate specific functionalities:
+
+*   **Planning States:** `Thinking`, `Scratchpad`, `InnerMonologue` allow the agent to reason and plan internally.
+*   **Action States:** `ToolCallState`, `Python` enable the agent to interact with the external environment or execute code.
+
+Each state uses its own nested PSE `StateMachine` to define and enforce the structure of the content generated *within* that state.
+
+[Learn more about States](./states.md) (Content Pending)
+
+## 3. Tools
+
+Tools are external capabilities the agent can invoke during its Action Phase. They allow the agent to interact with APIs, databases, code interpreters, or perform specialized tasks.
+
+*   **Reliable Invocation:** PBA uses PSE to guarantee that the arguments provided to a tool call match the tool's defined schema *before* execution.
+*   **Extensibility:** New tools can be easily added to expand the agent's capabilities.
+
+[Learn more about Tools](./tools.md)
+
+## 4. Proxy Structuring Engine (PSE) Integration
+
+PSE is the foundational technology that makes PBA's reliability possible.
+
+*   **Runtime Enforcement:** PSE integrates into the LLM's generation loop, using the defined HSMs (both the main agent HSM and the nested state HSMs) to constrain the LLM's output at runtime.
+*   **Guarantees:** This ensures structurally valid outputs for states and tool calls, and enforces valid transitions between agent states.
+
+Understanding PSE concepts enhances your ability to customize PBA. [See PSE Documentation](https://docs.theproxycompany.com/pse/)
+
+## 5. Model Context Protocol (MCP)
+
+PBA supports dynamic tool integration at runtime using the Model Context Protocol (MCP).
+
+*   **Adaptability:** Agents can connect to MCP servers to gain access to new tools without restarting or retraining.
+*   **Reliability:** Tools loaded via MCP are integrated into the `ToolCallState` and benefit from the same PSE-guaranteed schema enforcement.
+
+[Learn more about MCP Integration](../extending/model-context-protocol.md) (Content Pending)
+
+These core concepts work together to create an agent framework focused on engineered reliability, control, and adaptability.
+
+---
+pba-docs/docs/concepts/pse-integration.md
+---
+# PSE Integration: The Engine Behind Reliability
+
+The Proxy Base Agent (PBA) achieves its reliability and stateful execution guarantees through its deep integration with the **Proxy Structuring Engine (PSE)**. While PBA defines the high-level agent workflow and states, PSE provides the low-level runtime enforcement mechanism.
+
+## How PBA Uses PSE
+
+PSE operates at two critical levels within PBA:
+
+1.  **Enforcing Agent State Transitions:** The main `AgentStateMachine` (defining the Plan -> Act loop) is configured within PBA's `StructuringEngine` (provided by PSE). During generation, PSE's `process_logits` hook ensures that the LLM can only generate tokens that lead to valid state transitions according to the `AgentStateMachine`'s graph. This prevents the agent from getting stuck or taking unexpected paths.
+
+2.  **Enforcing Structure within States:** Each individual `AgentState` (like `Thinking`, `ToolCallState`, `Python`) defines its *own* nested PSE `StateMachine`. This nested machine dictates the required structure for the content generated *while the agent is in that state*.
+    *   For `ToolCallState`, this nested machine enforces that the output must be valid JSON matching the schema of one of the available tools.
+    *   For `Python`, it ensures syntactically valid Python code.
+    *   For planning states (`Thinking`, etc.), it typically enforces that the content is wrapped in the correct delimiters (e.g., ```thinking ... ```).
+
+## The Guarantee
+
+This dual enforcement means:
+
+*   The agent **must** follow the defined high-level workflow (e.g., Plan before Acting).
+*   The output generated *within* each state **must** conform to that state's structural requirements (e.g., valid tool call JSON).
+
+PSE's runtime logit masking and state tracking provide the technical foundation for PBA's guarantees, transforming the LLM from a probabilistic text generator into a more reliable, controllable execution engine within the defined state machine boundaries.
+
+## Further Reading
+
+For a deeper understanding of the underlying mechanisms:
+
+*   Refer to the [Proxy Structuring Engine Documentation](https://docs.theproxycompany.com/pse/) for details on PSE's core concepts (HSM, Steppers, Engine, Token Healing).
+
+---
+pba-docs/docs/concepts/state-machine.md
+---
+# State Machine
+
+The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical State Machine (HSM)**. Unlike traditional agents that rely heavily on prompt chaining, PBA uses this state machine, enforced by the underlying Proxy Structuring Engine (PSE), to ensure reliable and predictable execution flow.
+
+## The Core Loop: Plan -> Act
+
+The default PBA state machine defines a fundamental operational cycle:
+
+1.  **Planning Phase:** The agent first enters a planning loop. Here, it utilizes internal states like `Thinking`, `Scratchpad`, and `InnerMonologue` to analyze the task, break down problems, and formulate a strategy. The agent can cycle through these planning states multiple times (configurable) to refine its approach. PSE ensures the content generated within these states adheres to their defined delimiters (e.g., ```thinking ... ```).
+
+2.  **Action Phase:** Once planning is sufficient, the agent transitions to the action phase. It selects *one* available action state, such as `ToolCallState` (to use an external tool) or `Python` (to execute code). PSE guarantees that the output for the chosen action state conforms to the required structure (e.g., a valid JSON schema for the selected tool call).
+
+3.  **Completion:** After executing the action, the agent typically transitions to a final state, often awaiting further user input or concluding the task.
+
+```mermaid
+flowchart TD
+    Start([Start]) --> PlanLoopCheck{Evaluate Task}
+    PlanLoopCheck -- Requires Planning --> Plan
+    PlanLoopCheck -- Direct Action OK --> Action
+
+    subgraph Plan["Planning Phase (Loop ≤ N times)"]
+        direction LR
+        PlanningChoice{"Choose planning type"} --> Thinking["Thinking"]
+        PlanningChoice --> Scratchpad["Scratchpad"]
+        PlanningChoice --> InnerMonologue["Inner Monologue"]
+    end
+
+    Plan --> PlanLoopDecision{"More planning needed?"}
+    PlanLoopDecision -- "Yes" --> Plan
+    PlanLoopDecision -- "No" --> Action
+
+    subgraph Action["Action Phase"]
+        direction LR
+        ActionChoice{"Choose action type"} --> ToolAction["Tool Call"]
+        ActionChoice --> CodeAction["Python Code"]
+    end
+
+    Action --> Finish([Finish/Await User])
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460,color:#024645
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:diamond
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,shape:stadium
+
+    class Plan,Action phase
+    class PlanLoopCheck,PlanLoopDecision,ActionChoice decision
+    class PlanningChoice,Thinking,Scratchpad,InnerMonologue,ToolAction,CodeAction state
+    class Start,Finish terminal
+```
+
+## Why an HSM?
+
+Using an explicit HSM enforced by PSE provides key advantages:
+
+*   **Reliability:** Prevents the agent from getting stuck, hallucinating invalid actions, or deviating from the intended workflow.
+*   **Control:** Allows developers to precisely define and constrain the agent's behavior.
+*   **Observability:** Makes the agent's internal state and decision-making process transparent.
+*   **Extensibility:** Provides a clear structure for adding new states and capabilities.
+
+This state machine architecture is fundamental to PBA's ability to perform complex tasks reliably. You can learn more about extending this base structure in the [Extending the Agent](../extending/index.md) section.
+
+---
+pba-docs/docs/concepts/states.md
+---
+# Agent States
+
+Agent States are the building blocks of the Proxy Base Agent's (PBA) behavior, defined within its core [State Machine](./state-machine.md). Each state represents a distinct phase or capability within the agent's operational cycle.
+
+## State Structure
+
+Every `AgentState` in PBA typically includes:
+
+*   **Identifier:** A unique machine-readable name (e.g., `thinking`, `tool_call`).
+*   **Readable Name:** A human-friendly name for display (e.g., "Thinking", "External Tool Use").
+*   **Delimiters:** A pair of strings (e.g., `("```thinking\n", "\n```")`) used by the agent to signal the start and end of content generated within that state.
+*   **State Machine (via PSE):** A nested Proxy Structuring Engine (PSE) `StateMachine` that defines and enforces the *structure* of the content allowed *within* that state.
+*   **State Prompt:** Instructions provided to the LLM explaining the purpose of the state and how to use its delimiters and structure.
+*   **UI Properties:** Color and emoji for visual representation in interfaces.
+
+## Default States in PBA
+
+The standard PBA includes several pre-defined states grouped into Planning and Action phases:
+
+### Planning States
+
+These states are used within the agent's planning loop for internal reasoning and strategy formulation. The content generated here is typically *not* shown directly to the user.
+
+*   **`Thinking`:** For deliberate, analytical thought processes. Simulates conscious reflection and reasoning. Uses a `FencedFreeformStateMachine` to allow relatively unstructured text within its delimiters.
+*   **`Scratchpad`:** For quick notes, temporary calculations, or outlining steps. Mimics jotting down ideas. Also uses a `FencedFreeformStateMachine`.
+*   **`InnerMonologue`:** For more detailed, narrative-style internal dialogue. Allows the agent to explore nuances and build a coherent mental model. Uses a `FencedFreeformStateMachine`.
+
+### Action States
+
+These states are used when the agent needs to interact with the external environment or execute specific tasks after planning.
+
+*   **`ToolCallState`:** The state for invoking external tools. Its internal PSE `StateMachine` is dynamically built based on the schemas of all currently available tools, ensuring the LLM generates a valid call structure (tool name + arguments matching one tool's schema).
+*   **`Python`:** (Optional) Allows the agent to generate and request the execution of Python code snippets within a sandboxed environment. Uses a `PythonStateMachine` (via PSE's grammar types) wrapped in delimiters to ensure syntactically valid Python code.
+
+## Role of PSE within States
+
+Crucially, the nested PSE `StateMachine` associated with each `AgentState` enforces the structure *within* that state's output. For example:
+
+*   The `ToolCallState`'s machine guarantees the output is valid JSON matching a known tool schema.
+*   The `Python` state's machine guarantees the output is syntactically valid Python code.
+*   The planning states' machines guarantee the output is correctly enclosed within the specified delimiters.
+
+This ensures that even the agent's internal steps and action requests are structurally sound and reliable.
+
+## Extending with Custom States
+
+You can define and integrate your own custom `AgentState` classes to add unique capabilities or modify the agent's workflow. See [Custom States](../extending/custom-states.md) (Content Pending).
+
+---
+pba-docs/docs/concepts/tools.md
+---
+# Tools
+
+Tools are the primary mechanism through which the Proxy Base Agent (PBA) interacts with the external world, performs actions, and accesses capabilities beyond the core language model.
+
+## What are Tools?
+
+In PBA, a Tool represents a specific, callable function or capability. Examples include:
+
+*   **API Wrappers:** Interacting with web services (e.g., weather, search, databases).
+*   **Custom Functions:** Performing specific calculations, data processing, or logic defined by the developer.
+*   **Code Execution:** Running code snippets (like the built-in `Python` state).
+*   **User Interaction:** Sending messages back to the user (like the built-in `send_message` tool).
+
+Each tool is defined with:
+
+1.  **Name:** A unique identifier (e.g., `web_search`, `send_message`).
+2.  **Description:** A natural language explanation of what the tool does and when to use it (used in the agent's prompt).
+3.  **Schema:** A formal definition (typically JSON Schema derived from Python type hints or Pydantic models) specifying the input arguments the tool requires.
+4.  **Implementation:** The actual Python code (callable) that executes the tool's logic.
+
+## Reliable Tool Interaction via PSE
+
+A key differentiator for PBA is how it handles tool interactions using the Proxy Structuring Engine (PSE):
+
+1.  **Tool Selection:** During the Planning Phase, the agent reasons about which tool (if any) is needed to accomplish the current task.
+2.  **Structured Invocation:** When the agent transitions to the `ToolCallState`, it must generate output conforming to the JSON schema of *one* of the available tools. PSE *enforces* this structure at runtime.
+3.  **Guaranteed Schema:** This means the agent *cannot* hallucinate non-existent tools or provide arguments that don't match the required types or format for the selected tool. Malformed tool calls are prevented *before* they happen.
+4.  **Execution:** PBA receives the guaranteed-valid tool call structure (name and arguments) and executes the corresponding tool implementation.
+5.  **Result Processing:** The tool's output (often formatted as an `Interaction` object) is returned to the agent's memory and informs the next step in its process.
+
+This PSE-driven approach eliminates a major source of unreliability found in traditional agents, ensuring that tool calls are always structurally correct and executable.
+
+## Adding Custom Tools
+
+You can easily extend PBA's capabilities by adding your own custom tools. See the [Custom Tools](../extending/custom-tools.md) guide for details.
+
+## Model Context Protocol (MCP)
+
+PBA also supports dynamically loading tools at runtime from external servers using the Model Context Protocol (MCP). These tools are integrated seamlessly and benefit from the same PSE schema guarantees. See [MCP Integration](../extending/model-context-protocol.md) (Content Pending).
+
+---
+pba-docs/docs/extending/custom-state-graphs.md
+---
+# Custom State Graphs
+
+Modifying the core **State Graph** of the Proxy Base Agent (PBA) allows for fundamental changes to its operational workflow beyond just adding tools or individual states. This provides advanced control over the agent's execution loop, enabling complex custom behaviors.
+
+## Understanding the State Graph
+
+The main state graph is defined within the `__init__` method of the `agent.state_machine.AgentStateMachine` class. It's a Python dictionary where:
+
+*   **Keys:** Represent the *origin* state's identifier (e.g., `"plan"`, `"take_action"`).
+*   **Values:** Are lists of transitions originating from that state. Each transition is a tuple: `(StateMachine, TargetStateId)`.
+    *   `StateMachine`: An instance of a PSE `StateMachine` (often an `AgentState`'s `.state_machine` property, or a composer like `LoopStateMachine` or `AnyStateMachine`) that governs the transition *and* the structure of the output generated during that transition.
+    *   `TargetStateId`: The identifier of the state the agent will move to *after* successfully completing the transition governed by the `StateMachine`.
+
+**Default Graph Structure (Simplified):**
+
+```python
+# Inside AgentStateMachine.__init__
+
+planning_states = [...] # List of StateMachine instances for Thinking, etc.
+action_states = [...]   # List of StateMachine instances for ToolCall, Python
+
+state_graph = {
+    "plan": [
+        (
+            LoopStateMachine( # Governs the planning loop
+                AnyStateMachine(planning_states), # Allows any planning state
+                min_loop_count=int(force_planning),
+                max_loop_count=max_planning_loops,
+                # ...
+            ),
+            "take_action", # Target state after planning loop completes
+        )
+    ],
+    "take_action": [
+        # Each tuple represents a possible action transition
+        (action_state.state_machine, "done") for action_state in action_states
+    ],
+    # "done" is a terminal state (defined in end_states)
+}
+
+super().__init__(
+    state_graph=state_graph,
+    start_state="plan",
+    end_states=["done"],
+)
+```
+
+## Modifying the Graph
+
+You can customize the agent's flow by directly editing this `state_graph` dictionary within `agent/state_machine.py`.
+
+**Common Modifications:**
+
+1.  **Changing the Planning Loop:**
+    *   Adjust `min_loop_count` / `max_loop_count` in the `LoopStateMachine` within the `"plan"` state's transitions.
+    *   Change the `AnyStateMachine(planning_states)` to a `ChainStateMachine` to enforce a specific *order* of planning states.
+    *   Replace the planning loop entirely with a direct transition or a different structure.
+
+2.  **Adding a New Top-Level State:**
+    *   Define your new `CustomState` (see [Custom States](./custom-states.md)).
+    *   Add a new key to the `state_graph` for your state's identifier (e.g., `"summarize"`).
+    *   Define transitions *from* your new state (e.g., `("summarize", [(SummarizationState().state_machine, "done")])`).
+    *   Modify existing transitions to point *to* your new state (e.g., change the target of the `"plan"` state's transition from `"take_action"` to `"summarize"`).
+    *   Remember to add your `CustomState` instance to the `self.states` dictionary so the agent recognizes it.
+
+3.  **Creating Conditional Transitions:**
+    *   This is more advanced and typically involves creating a custom `StateMachine` subclass **in Python** (by inheriting from `pse_core.StateMachine` or composing base Python types like `ChainStateMachine`, `AnyStateMachine`, etc.) that implements logic to choose the `TargetStateId` based on the content generated or the agent's internal memory/context. The default PBA structure relies on the LLM choosing between parallel paths (like different tools in `take_action`).
+
+4.  **Adding Parallel Action Paths:**
+    *   Instead of `AnyStateMachine` for actions (implicitly handled by listing multiple transitions from `take_action`), you could define parallel structures if needed, though the default usually suffices as the LLM selects only one action path.
+
+## Important Considerations
+
+*   **PSE Knowledge:** Modifying the state graph effectively requires understanding how PSE `StateMachine` types (`Chain`, `Loop`, `Any`, etc.) compose and how transitions work. Refer to the [PSE Documentation](https://docs.theproxycompany.com/pse/).
+*   **State Recognition:** Ensure any new state identifiers added to the graph keys or as `TargetStateId` values correspond to `AgentState` instances added to the `self.states` dictionary in `AgentStateMachine.__init__`.
+*   **Prompting:** Update the system prompt (`agent/llm/prompts/base.txt` or your custom prompt) to accurately reflect the new workflow and instruct the LLM on how to navigate the modified state graph and use any new states.
+*   **Complexity:** While powerful, overly complex state graphs can become difficult for the LLM to follow reliably, even with PSE's enforcement. Aim for clarity and logical flow.
+
+Modifying the state graph offers deep control but should be done carefully, considering the impact on the agent's overall behavior and the LLM's ability to navigate the new structure.
+
+---
+pba-docs/docs/extending/custom-states.md
+---
+# Custom States
+
+While PBA provides default states for Planning (`Thinking`, `Scratchpad`, `InnerMonologue`) and Action (`ToolCallState`, `Python`), you can create entirely new states to model unique phases or capabilities in your agent's workflow.
+
+## Defining a Custom State
+
+Creating a custom state involves subclassing the `agent.state.AgentState` abstract base class.
+
+**Steps:**
+
+1.  **Create a Python File:** Typically within the `agent/state/` directory or a custom subdirectory (e.g., `agent/state/custom/my_state.py`).
+2.  **Subclass `AgentState`:** Define a new class inheriting from `AgentState`.
+3.  **Implement `__init__`:**
+    *   Call `super().__init__(...)` providing:
+        *   `identifier`: A unique, lowercase string for the state (e.g., `"summarize"`).
+        *   `readable_name`: A human-friendly name (e.g., `"Summarization"`).
+        *   `delimiters`: A tuple of start and end strings (e.g., `("```summary\n", "\n```")`).
+        *   `color`: A Rich color name for UI styling (e.g., `"blue"`).
+        *   `emoji`: An emoji character for UI styling (e.g., `"scroll"`).
+    *   Store any state-specific configuration.
+4.  **Implement `state_machine` Property:**
+    *   This property must return a configured PSE `StateMachine` instance. This machine defines and enforces the structure of the content generated *within* this custom state. You can use any PSE `StateMachine` type (e.g., `FencedFreeformStateMachine`, `JsonStateMachine`, `PythonStateMachine`, or a custom composition).
+5.  **Implement `state_prompt` Property:**
+    *   This property must return a string containing instructions for the LLM on *how* and *when* to use this state, including how to use the delimiters and expected content structure.
+
+## Example: A Simple "Summarization" State
+
+Let's create a state where the agent generates a concise summary.
+
+```python
+# agent/state/custom/summarization.py
+from pse.types.misc.fenced_freeform import FencedFreeformStateMachine
+from pse_core.state_machine import StateMachine
+from agent.state import AgentState
+
+class SummarizationState(AgentState):
+    def __init__(self, delimiters: tuple[str, str] | None = None, character_max: int = 500):
+        super().__init__(
+            identifier="summarize",
+            readable_name="Summarization",
+            delimiters=delimiters or ("```summary\n", "\n```"),
+            color="green",
+            emoji="scroll",
+        )
+        self.character_max = character_max
+
+    @property
+    def state_machine(self) -> StateMachine:
+        # Use FencedFreeform to allow text within delimiters, enforcing length
+        sm = FencedFreeformStateMachine(
+            identifier=self.identifier,
+            delimiters=self.delimiters,
+            char_min=10, # Require at least a short summary
+            char_max=self.character_max,
+        )
+        # Important: Assign the identifier for PBA to recognize it
+        sm.identifier = self.identifier
+        return sm
+
+    @property
+    def state_prompt(self) -> str:
+        return f"""
+    The Summarization state is used to generate a concise summary of previous interactions or information.
+    Keep the summary brief and to the point, adhering to the character limit ({self.character_max}).
+
+    Always encapsulate the summary within {self.delimiters[0]!r} and {self.delimiters[1]!r} tags.
+    This state's output might be shown to the user.
+        """
+```
+
+## Integrating Custom States
+
+To make the agent use your custom state, you need to modify the main `AgentStateMachine` definition in `agent/state_machine.py`:
+
+1.  **Import:** Import your custom state class.
+2.  **Instantiate:** Create an instance of your custom state.
+3.  **Add to `self.states`:** Add the instance to the `self.states` dictionary in `AgentStateMachine.__init__` so the agent recognizes its identifier.
+4.  **Modify State Graph:** Update the `state_graph` dictionary to include transitions *to* and *from* your new state. For example, you might add it as an option in the Planning phase or as a distinct step after the Action phase.
+
+See [Custom State Graphs](./custom-state-graphs.md) (Content Pending) for more details on modifying the agent's core workflow.
+
+---
+pba-docs/docs/extending/custom-tools.md
+---
+# Custom Tools
+
+Adding custom tools is one of the primary ways to extend the capabilities of the Proxy Base Agent (PBA), allowing it to interact with specific APIs, databases, or perform specialized logic relevant to your application.
+
+## Defining a Tool
+
+A tool in PBA is essentially a Python function with type hints and a docstring, which PBA uses to automatically generate the necessary schema for the Proxy Structuring Engine (PSE).
+
+**Steps to Create a Custom Tool:**
+
+1.  **Create a Python File:** Create a new `.py` file in the `agent/tools/` directory (or a subdirectory). The filename (excluding `.py`) will typically be used as the tool's name.
+2.  **Define the Function:** Write a standard Python function (it can be `async` or synchronous).
+    *   **First Argument:** The function *must* accept `self: Agent` as its first argument. This provides access to the agent's state and methods if needed.
+    *   **Type Hinting:** Use standard Python type hints for all other arguments and the return type. PBA uses these hints (along with Pydantic if models are used) to generate the JSON Schema for PSE.
+    *   **Docstring:** Write a clear docstring explaining what the tool does, its arguments, and what it returns. The first line is often used as a short description, and the rest provides details.
+3.  **Return Value:** The function should ideally return an `agent.system.interaction.Interaction` object, typically with `role=Interaction.Role.TOOL`. This allows you to structure the tool's output clearly, including content, titles, or even images. Returning a simple string is also possible, which will be wrapped in a basic `Interaction` object.
+
+## Example: Simple Calculator Tool
+
+Let's create a tool named `calculator` that adds two numbers.
+
+1.  **Create File:** `agent/tools/calculator.py`
+
+2.  **Define Function:**
+
+    ```python
+    # agent/tools/calculator.py
+    from agent.agent import Agent
+    from agent.system.interaction import Interaction
+
+    async def calculator(
+        self: Agent,
+        num1: float,
+        num2: float,
+        operation: str = "add"
+    ) -> Interaction:
+        """
+        Performs basic arithmetic operations (add, subtract, multiply, divide).
+
+        Args:
+            num1: The first number.
+            num2: The second number.
+            operation: The operation to perform ('add', 'subtract', 'multiply', 'divide'). Defaults to 'add'.
+
+        Returns:
+            An Interaction object containing the calculation result or an error message.
+        """
+        result: float | str
+        try:
+            if operation == "add":
+                result = num1 + num2
+            elif operation == "subtract":
+                result = num1 - num2
+            elif operation == "multiply":
+                result = num1 * num2
+            elif operation == "divide":
+                if num2 == 0:
+                    raise ValueError("Cannot divide by zero.")
+                result = num1 / num2
+            else:
+                raise ValueError(f"Unsupported operation: {operation}")
+
+            content = f"Calculation result: {num1} {operation} {num2} = {result}"
+            color = "green"
+            emoji = "abacus"
+
+        except ValueError as e:
+            content = f"Calculation error: {e}"
+            color = "red"
+            emoji = "warning"
+
+        return Interaction(
+            role=Interaction.Role.TOOL,
+            content=content,
+            title="Calculator Result",
+            color=color,
+            emoji=emoji,
+        )
+
+    ```
+
+## Integration with PBA
+
+PBA automatically discovers tools placed in the `agent/tools/` directory when it starts (specifically, via `Tool.load()` called within `Agent.__init__`).
+
+1.  **Automatic Loading:** When the `Agent` is initialized, it scans the tools directory.
+2.  **Schema Generation:** For each discovered function (like `calculator`), PBA uses PSE's capabilities (`callable_to_schema`) to generate a JSON Schema based on the function's signature (arguments, type hints) and docstring.
+3.  **State Machine Update:** The generated schema is added to the list of available tools within the `ToolCallState`. The `AgentStateMachine` (and thus the underlying PSE engine) is configured with this updated list.
+4.  **Prompt Update:** The tool's name, description (from the docstring), and schema are automatically included in the system prompt section describing available tools.
+
+Now, when the agent decides it needs to perform a calculation during its Planning Phase, it can generate a `ToolCall` targeting the `calculator` tool within the `ToolCallState`. PSE will ensure the generated call includes `num1`, `num2`, and optionally `operation` with the correct types, guaranteeing a valid call to your Python function.
+
+## Next Steps
+
+*   Explore the existing tools in `agent/tools/` for more examples.
+*   Consider using Pydantic models for complex tool arguments; PBA integrates seamlessly with them for schema generation.
+*   Learn about adding tools dynamically via [MCP](../extending/model-context-protocol.md) (Content Pending).
+
+---
+pba-docs/docs/extending/index.md
+---
+# Extending the Proxy Base Agent
+
+The Proxy Base Agent (PBA) is designed as a foundation. While it provides a robust core loop for planning and action, its true power lies in its extensibility. You can tailor PBA to specific tasks and domains by adding custom capabilities and modifying its core behavior.
+
+## Key Extension Points
+
+There are several ways to extend and customize PBA:
+
+1.  **[Custom Tools](./custom-tools.md):**
+    *   **What:** Define new Python functions that the agent can call to interact with external APIs, databases, or perform specialized computations.
+    *   **Why:** This is the most common way to add new capabilities and ground the agent in specific data or services relevant to your application.
+    *   **How:** Create a Python file in `agent/tools/`, define your function with type hints and a docstring. PBA automatically discovers it, generates a schema, and makes it available to the `ToolCallState`.
+
+2.  **[Custom States](./custom-states.md) (Content Pending):**
+    *   **What:** Define entirely new `AgentState` classes with their own unique logic, prompts, delimiters, and internal PSE `StateMachine` for structure enforcement.
+    *   **Why:** Allows you to add distinct phases or modes of operation to the agent beyond the default Planning/Action states (e.g., a "Summarization" state, a "User Feedback" state).
+    *   **How:** Subclass `agent.state.AgentState`, implement the required properties (`state_machine`, `state_prompt`), and integrate it into the main `AgentStateMachine`.
+
+3.  **[Custom State Graphs](./custom-state-graphs.md) (Content Pending):**
+    *   **What:** Modify the main `AgentStateMachine` definition in `agent/state_machine.py`.
+    *   **Why:** Change the agent's core workflow. You could alter the planning loop, add parallel action paths, introduce conditional transitions, or create entirely different high-level agent architectures.
+    *   **How:** Directly edit the `state_graph` dictionary within the `AgentStateMachine` class, defining new states and transitions using existing or custom `AgentState` instances. Requires understanding PSE `StateMachine` composition.
+
+4.  **[Model Context Protocol (MCP)](./model-context-protocol.md) (Content Pending):**
+    *   **What:** Connect the agent to external MCP servers at runtime.
+    *   **Why:** Dynamically load tools and capabilities from other services without modifying the agent's core code. Enables building distributed, adaptive agent systems.
+    *   **How:** Use the built-in `list_mcp_servers` and `add_mcp_server` tools. PBA handles the connection and dynamic reconfiguration of the `ToolCallState`.
+
+## Choosing the Right Extension Method
+
+*   For adding specific actions or API interactions: Start with **Custom Tools**.
+*   For adding new distinct phases or modes to the agent's workflow: Use **Custom States** and modify the **State Graph**.
+*   For fundamentally changing the agent's core execution loop: Modify the **State Graph**.
+*   For integrating external, dynamically available capabilities: Use **MCP**.
+
+By leveraging these extension points, you can transform the Proxy Base Agent from a general foundation into a specialized agent tailored precisely to your needs.
+
+---
+pba-docs/docs/extending/model-context-protocol.md
+---
+# Model Context Protocol (MCP) Integration
+
+The Proxy Base Agent (PBA) supports dynamic extension of its capabilities at runtime through the **Model Context Protocol (MCP)**. MCP allows PBA to connect to external servers that offer specialized tools and functionalities.
+
+## What is MCP?
+
+MCP is a standardized protocol designed for language models and agents to interact with external services and tools securely and efficiently. An MCP server exposes a set of tools, each with a defined schema, that connected agents can invoke.
+
+Think of MCP servers as plug-and-play capability providers for your agent.
+
+## How PBA Uses MCP
+
+PBA integrates with MCP through a built-in workflow facilitated by specific tools and internal mechanisms:
+
+1.  **Discovery (`list_mcp_servers` Tool):** The agent can use the built-in `list_mcp_servers` tool to discover available MCP servers defined in its configuration (typically `agent/mcp/servers/servers_list.json`). This tool returns information about each server, including its name, description, and identifier.
+2.  **Connection (`add_mcp_server` Tool):** Based on its planning and the information from `list_mcp_servers`, the agent can decide to connect to a specific server using the built-in `add_mcp_server` tool, providing the server's unique identifier.
+3.  **Runtime Integration:** When `add_mcp_server` is called:
+    *   PBA's `MCPHost` establishes a connection to the server using an `MCPClient`.
+    *   The agent retrieves the list of tools offered by that server.
+    *   These external tools are converted into standard PBA `Tool` objects.
+    *   The agent calls its internal `add_tools()` method.
+    *   Crucially, `add_tools()` triggers `agent.configure()`, which **rebuilds the `AgentStateMachine` and reconfigures the underlying PSE `StructuringEngine`** with the updated list of tools (including the newly added ones from the MCP server).
+4.  **Reliable Usage:** Once connected and configured, the tools from the MCP server are seamlessly available within the agent's `ToolCallState`. The agent can generate calls to these tools, and PSE provides the **same guarantee of structural validity** for these dynamically added tools as it does for locally defined tools.
+
+## Benefits of MCP Integration
+
+*   **Dynamic Adaptability:** Add or remove agent capabilities without restarting or modifying the agent's core code.
+*   **Extensibility:** Easily integrate specialized third-party services or internal microservices.
+*   **Modularity:** Keep specialized logic separate from the core agent framework.
+*   **Reliability:** Dynamically added tools still benefit from PSE's schema enforcement guarantees.
+
+## Managing Servers
+
+*   Available servers are defined in `agent/mcp/servers/servers_list.json`. You can add definitions for custom or private MCP servers here.
+*   MCP servers may require specific environment variables for authentication or configuration. PBA attempts to pass these from the agent's environment to the server process during connection (see `agent/mcp/client.py`). Ensure necessary variables are set in the agent's environment.
+
+MCP provides a powerful mechanism for creating adaptive and highly capable agents by decoupling core logic from specialized, dynamically loaded functionalities.
+
+---
+pba-docs/docs/api/agent.md
+---
+# Agent Class
+
+The `agent.agent.Agent` class is the central component of the Proxy Base Agent framework. It orchestrates the interaction between the language model, the defined state machine, tools, memory, and the user interface.
+
+```python
+class Agent:
+    def __init__(
+        self,
+        name: str,
+        system_prompt_name: str,
+        interface: Interface,
+        inference: LocalInference,
+        seed: int | None = None,
+        tools: list[Tool] | list[str] | None = None,
+        python_interpreter: bool = False,
+        max_planning_loops: int = 3,
+        force_planning: bool = True,
+        character_max: int | None = None,
+        include_pause_button: bool = True,
+        **inference_kwargs,
+    ):
+        # ... implementation ...
+```
+
+## Initialization (`__init__`)
+
+The constructor initializes the agent with its core configuration.
+
+**Parameters:**
+
+*   `name` (`str`): A human-readable name for this specific agent instance (e.g., "ResearchAssistant", "CodeHelper").
+*   `system_prompt_name` (`str`): The filename (without extension) of the system prompt template located in `agent/llm/prompts/`. This prompt defines the agent's core instructions, personality, and includes placeholders for state machine details and tools.
+*   `interface` (`Interface`): An instance of a class implementing the `agent.interface.Interface` abstract base class (e.g., `CLIInterface`). This handles all input/output with the user.
+*   `inference` (`LocalInference`): An instance of `agent.llm.local.LocalInference`, which manages the connection to the local LLM backend (via a `Frontend`) and holds the `StructuringEngine`.
+*   `seed` (`int | None`, optional): A seed for the random number generator used during LLM sampling, allowing for reproducible outputs. Defaults to a random integer if `None`.
+*   `tools` (`list[Tool] | list[str] | None`, optional): Specifies the tools available to the agent. Can be a list of instantiated `Tool` objects, a list of tool filenames (strings) to load from `agent/tools/`, or `None` to load all tools found in that directory. Defaults to `None`.
+*   `python_interpreter` (`bool`, optional): If `True`, enables the `Python` action state, allowing the agent to generate and execute Python code snippets. Defaults to `False`.
+*   `max_planning_loops` (`int`, optional): The maximum number of times the agent can cycle through its planning states (`Thinking`, `Scratchpad`, `InnerMonologue`) before being forced to transition to the action phase. Defaults to `3`.
+*   `force_planning` (`bool`, optional): If `True`, the agent *must* complete at least one planning loop before taking action. If `False`, the agent can potentially skip planning and go directly to an action if the LLM deems it appropriate. Defaults to `True`.
+*   `character_max` (`int | None`, optional): An approximate maximum character limit enforced within certain states (like planning states) via the underlying PSE `StateMachine`. Defaults to `None` (often handled by state-specific defaults).
+*   `include_pause_button` (`bool`, optional): If `True`, sets up a keyboard listener (using `pynput`) to allow pausing/resuming agent generation by pressing the spacebar. Defaults to `True`.
+*   `**inference_kwargs`: Additional keyword arguments passed directly to the `LocalInference` instance and subsequently to the LLM backend during generation (e.g., `temp`, `max_tokens`, `cache_system_prompt`).
+
+## Key Methods
+
+### `async loop()`
+
+Starts the main interactive loop of the agent.
+
+1.  Prompts the user for input via the configured `interface`.
+2.  Adds the user's message to the agent's `memory`.
+3.  Enters a processing cycle (`while self.can_act:`):
+    *   Calls `generate_action()` to get the next structured output from the LLM (guided by PSE and the `AgentStateMachine`).
+    *   Calls `take_action()` to interpret the structured output, execute the corresponding logic (log planning state, call tool, run Python), and update memory.
+    *   Increments the internal step counter.
+4.  Repeats the processing cycle until `self.can_act` becomes `False` (e.g., max steps reached, or an action state signals completion like `send_message` with `wait_for_response=True`).
+5.  Recursively calls `loop()` to wait for the next user input.
+
+### `configure(set_system_prompt: bool = False)`
+
+(Re)configures the agent's state machine and PSE engine. This is called initially during `__init__` and also whenever tools are added/removed (e.g., via MCP).
+
+1.  Creates a new `AgentStateMachine` instance based on the current set of `tools`, `python_interpreter` setting, and planning parameters (`max_planning_loops`, `force_planning`).
+2.  Configures the underlying `StructuringEngine` (`self.inference.engine`) with this new `AgentStateMachine`.
+3.  Optionally updates the system prompt in the agent's `memory` if `set_system_prompt` is `True`.
+
+### `add_tools(new_tools: list[Tool], reset_system_prompt: bool = False)`
+
+Adds new tools to the agent's available toolset.
+
+1.  Updates the internal `self.tools` dictionary.
+2.  Calls `configure(reset_system_prompt=reset_system_prompt)` to rebuild the `AgentStateMachine`, reconfigure the PSE engine with the updated tool schemas, and optionally refresh the system prompt in memory to include the new tools.
+
+*(Other methods like `generate_action`, `take_action`, `use_tool` handle the internal processing steps within the loop.)*
+
+---
+pba-docs/docs/api/index.md
+---
+# API Reference
+
+This section provides detailed reference documentation for the core classes and components of the Proxy Base Agent (PBA).
+
+Understanding these APIs is essential for extending PBA, integrating it into larger systems, or customizing its behavior at a code level.
+
+## Key Components
+
+*   **[Agent](./agent.md):** The main orchestrator class managing the agent's lifecycle, state, memory, tools, and interaction with the LLM backend.
+*   **[Tool & ToolCall](./tool.md) (Content Pending):** Classes defining external capabilities (`Tool`) and the structure for invoking them (`ToolCall`).
+*   **[AgentState](./state.md) (Content Pending):** The base class for defining individual states within the agent's state machine and the default states provided by PBA.
+
+*(Note: This API reference is currently under development. More detailed documentation for each component will be added.)*
+
+---
+pba-docs/docs/api/state.md
+---
+# AgentState API Reference
+
+The `agent.state.AgentState` class is the abstract base class for defining individual states within the Proxy Base Agent's (PBA) state machine.
+
+## `AgentState` (Abstract Base Class)
+
+All specific states (like `Thinking`, `ToolCallState`, etc.) inherit from this class.
+
+```python
+from abc import ABC, abstractmethod
+from pse_core.state_machine import StateMachine
+
+class AgentState(ABC):
+    def __init__(
+        self,
+        identifier: str,
+        readable_name: str,
+        delimiters: tuple[str, str],
+        color: str,
+        emoji: str,
+    ):
+        self.identifier = identifier
+        self.readable_name = readable_name
+        self.delimiters = delimiters
+        self.color = color
+        self.emoji = emoji
+
+    @property
+    @abstractmethod
+    def state_machine(self) -> StateMachine:
+        # Must return a configured PSE StateMachine
+        pass
+
+    @property
+    @abstractmethod
+    def state_prompt(self) -> str:
+        # Must return instructions for the LLM
+        pass
+
+    def format(self, string: str) -> str:
+        # Helper to wrap content in delimiters
+        return f"{self.delimiters[0]}{string}{self.delimiters[1]}"
+
+    def readable_format(self, string: str) -> str:
+        # Helper for UI formatting (default: markdown code block)
+        return f"```markdown\n{string}\n```"
+
+    def __str__(self) -> str:
+        # Used for generating the system prompt section
+        return f"{self.readable_name.title()}: {self.state_prompt}"
+
+```
+
+**Key Attributes:**
+
+*   `identifier` (`str`): Unique machine-readable name (e.g., `"thinking"`). Used as keys in the main `AgentStateMachine` graph and for identifying output segments.
+*   `readable_name` (`str`): Human-friendly name for UI display (e.g., `"Thinking"`).
+*   `delimiters` (`tuple[str, str]`): Start and end strings the LLM uses to enclose content generated for this state. PSE uses these within the nested `state_machine`.
+*   `color` (`str`): [Rich](https://rich.readthedocs.io/en/latest/style.html#color) color name for styling in the CLI.
+*   `emoji` (`str`): Emoji character for styling in the CLI.
+
+**Abstract Properties (Must be Implemented by Subclasses):**
+
+*   `state_machine` (`property -> StateMachine`): Must return a configured instance of a `pse_core.StateMachine` (or a subclass like `FencedFreeformStateMachine`, `JsonStateMachine`, etc.). This machine defines and enforces the structure of the content *within* this state. It's crucial to set `sm.identifier = self.identifier` on the returned state machine instance so PBA can correctly associate generated output segments.
+*   `state_prompt` (`property -> str`): Must return a string containing instructions for the LLM. This text is incorporated into the main system prompt and should explain the purpose of this state, how to use its delimiters, and the expected content/structure.
+
+## Default PBA States
+
+PBA provides the following built-in states inheriting from `AgentState`:
+
+**Planning States:**
+
+*   `agent.state.planning.thinking.Thinking`: For deliberate reasoning. Uses `FencedFreeformStateMachine`.
+*   `agent.state.planning.scratchpad.Scratchpad`: For temporary notes. Uses `FencedFreeformStateMachine`.
+*   `agent.state.planning.inner_monologue.InnerMonologue`: For detailed internal narrative. Uses `FencedFreeformStateMachine`.
+
+**Action States:**
+
+*   `agent.state.action.tool_call.ToolCallState`: For invoking tools. Dynamically builds a `JsonStateMachine` based on available tool schemas.
+*   `agent.state.action.python.Python`: For executing Python code. Uses an `EncapsulatedStateMachine` wrapping a `PythonStateMachine` (from PSE grammar types).
+
+Refer to the source code of these classes for examples of how to implement the `state_machine` and `state_prompt` properties.
+
+---
+pba-docs/docs/api/tool.md
+---
+# Tool & ToolCall API Reference
+
+These classes define how external capabilities (Tools) are represented and invoked within the Proxy Base Agent (PBA).
+
+## `agent.tools.Tool`
+
+Represents a callable capability available to the agent.
+
+```python
+class Tool:
+    def __init__(
+        self,
+        name: str,
+        description: str | None = None,
+        callable: Callable | None = None,
+        schema: dict[str, Any] | None = None,
+        mcp_server: str | None = None,
+    ):
+        # ... implementation ...
+
+    async def call(self, caller: Any, **kwargs) -> Any:
+        # ... implementation ...
+
+    @staticmethod
+    def from_file(filepath: str) -> Tool | None:
+        # ... implementation ...
+
+    @staticmethod
+    def load(
+        filepath: str | None = None,
+        file_name: str | list[str] | None = None,
+    ) -> list[Tool]:
+        # ... implementation ...
+
+    def to_dict(self) -> dict[str, Any]:
+        # ... implementation ...
+
+    @staticmethod
+    def from_mcp_tool(mcp_tool: MCPTool, server_id: str) -> Tool:
+        # ... implementation ...
+```
+
+**Initialization (`__init__`)**
+
+*   `name` (`str`): The unique identifier for the tool (e.g., `calculator`, `send_message`). This name is used by the LLM in the `ToolCallState`.
+*   `description` (`str | None`, optional): A natural language description of the tool's purpose and usage. Used in the system prompt. If derived from a callable, this is often taken from the docstring.
+*   `callable` (`Callable | None`, optional): The actual Python function (sync or async) that implements the tool's logic. If provided, the `schema` is usually auto-generated.
+*   `schema` (`dict[str, Any] | None`, optional): A JSON Schema dictionary describing the tool's input parameters (`arguments`). If `callable` is provided, this is auto-generated using `callable_to_schema`. If `callable` is *not* provided (e.g., for an MCP tool where the implementation is remote), this schema *must* be provided.
+*   `mcp_server` (`str | None`, optional): If this tool is provided by an external MCP server, this attribute stores the server's identifier.
+
+**Key Methods**
+
+*   `async call(self, caller: Any, **kwargs) -> Any`: Executes the tool. It handles both sync and async `callable`s. The `caller` argument (typically the `Agent` instance) is passed as `self` to the underlying callable. `**kwargs` are the arguments extracted from the LLM's tool call.
+*   `to_dict() -> dict`: Generates a JSON Schema representation suitable for inclusion in the `ToolCallState`'s schema definition and the system prompt. It wraps the tool's argument `schema` within a structure that also requires an `intention` field from the LLM.
+*   `load(...)` (staticmethod): Discovers and loads tools from Python files in a specified directory (defaults to `agent/tools/`).
+*   `from_file(...)` (staticmethod): Loads a single tool from a specific Python file.
+*   `from_mcp_tool(...)` (staticmethod): Converts a tool definition received via the MCP protocol into a PBA `Tool` instance.
+
+## `agent.tools.ToolCall`
+
+A Pydantic `BaseModel` representing a structured request from the LLM to invoke a tool. PSE guarantees that the output within the `ToolCallState` conforms to this structure (or specifically, the structure generated by `Tool.to_dict()`).
+
+```python
+class ToolCall(BaseModel):
+    intention: str
+    name: str
+    arguments: dict[str, Any] | None = None```
+
+**Fields:**
+
+*   `intention` (`str`): A description generated by the LLM explaining *why* it is calling the tool and what it intends to achieve. This provides valuable context for understanding the agent's reasoning.
+*   `name` (`str`): The exact name of the `Tool` to be invoked. Must match the `name` attribute of one of the loaded `Tool` instances.
+*   `arguments` (`dict[str, Any] | None`, optional): A dictionary containing the arguments for the tool call. The structure and types within this dictionary must conform to the `schema` defined for the specified `Tool`. PSE enforces this conformance.
+
+PBA uses the `ToolCall` model to parse the validated JSON output from the `ToolCallState` before passing the `name` and `arguments` to the `Agent.use_tool` method for execution.
+
+---
+
+
+---
+pba-docs/docs/frontends/index.md
+---
+# LLM Frontends
+
+The Proxy Base Agent (PBA) is designed to work with different local Large Language Model (LLM) inference backends. This flexibility is achieved through the **Frontend** abstraction layer.
+
+## The Frontend Abstraction
+
+The `agent.llm.frontend.Frontend` class defines an abstract interface that decouples the core agent logic from the specifics of how LLM inference is performed. Any backend wanting to integrate with PBA needs to implement this interface.
+
+Key responsibilities of a Frontend implementation include:
+
+*   Loading the specified LLM and its associated tokenizer.
+*   Providing a standardized `inference()` method that takes a tokenized prompt and yields generated token IDs one by one (or in small chunks).
+*   Integrating with PBA's `StructuringEngine` by accepting it as an argument to `inference()` and applying its `process_logits` and `sample` methods within the generation loop.
+*   Optionally supporting KV caching for performance optimization (`supports_reusing_prompt_cache()`, `save_cache_to_file()`, `load_cache_from_file()`).
+
+## Supported Frontends
+
+PBA currently includes built-in support for the following frontends:
+
+*   **[MLX](./mlx.md):** Optimized for Apple Silicon (M-series chips), leveraging the MLX framework for efficient local inference. (Content Pending)
+*   **[PyTorch](./pytorch.md):** Supports running models using PyTorch on CPUs or GPUs (NVIDIA/AMD). (Content Pending)
+
+## Choosing a Frontend
+
+The appropriate frontend is typically selected during the interactive setup wizard (`python -m agent`) based on your hardware and the format of the local model you choose.
+
+*   If you are on an Apple Silicon Mac, **MLX** is generally recommended for best performance.
+*   If you are on Linux/Windows or have a compatible GPU, **PyTorch** is a common choice.
+
+The `agent.llm.local.LocalInference` class manages the selected `Frontend` instance for the `Agent`.
+
+---
+pba-docs/docs/frontends/mlx.md
+---
+# MLX Frontend
+
+The MLX frontend allows the Proxy Base Agent (PBA) to run inference using Large Language Models optimized for Apple Silicon (M-series chips) via the [MLX framework](https://github.com/ml-explore/mlx).
+
+## Overview
+
+MLX is a NumPy-like array framework designed by Apple for efficient machine learning on Apple Silicon. The `agent.llm.frontend.mlx.MLXInference` class implements the `Frontend` interface for MLX models.
+
+**Key Features:**
+
+*   **Optimized Performance:** Leverages the unified memory architecture and Neural Engine (ANE) of Apple Silicon for fast local inference.
+*   **Model Compatibility:** Works with models converted to the MLX format (often available on Hugging Face hubs like `mlx-community`).
+*   **KV Caching:** Supports efficient Key-Value caching, including saving/loading system prompt caches to disk for faster startup (`supports_reusing_prompt_cache()` returns `True`).
+*   **PSE Integration:** Seamlessly integrates with the `StructuringEngine` for constrained generation during the `generate_step` process.
+
+## Usage
+
+1.  **Installation:** Ensure you have the necessary MLX dependencies installed. This is typically handled by installing PBA with the `[mlx]` extra:
+    ```bash
+    pip install proxy-base-agent[mlx]
+    # or
+    uv pip install proxy-base-agent[mlx]
+    ```
+    You also need the `mlx-lm` package:
+    ```bash
+    pip install mlx-lm
+    # or
+    uv pip install mlx-lm
+    ```
+
+2.  **Model Selection:** During the PBA setup wizard (`python -m agent`), choose a model compatible with MLX (e.g., from the `mlx-community` hub on Hugging Face or one you have converted locally). Select "MLX" as the inference backend when prompted.
+
+3.  **Configuration:** The `LocalInference` class will automatically instantiate `MLXInference` when an MLX model path and the MLX frontend are selected. Relevant `inference_kwargs` (like `temp`, `seed`, `max_tokens`, caching options) passed to the `Agent` constructor will be used during generation.
+
+## How it Works
+
+*   **Loading:** `MLXInference` uses `mlx_proxy.utils.load_model` to load the model and `agent.llm.tokenizer.Tokenizer.load` for the tokenizer.
+*   **Inference Loop:** The `inference()` method uses `mlx_proxy.generate_step.generate_step`, passing the `engine.process_logits` function to the `logits_processors` argument and a sampler created via `engine.sample` wrapping `mlx_proxy.samplers.make_sampler`.
+*   **Caching:** It utilizes `mlx_proxy.cache.BaseCache` for KV caching and implements the `save_cache_to_file` and `load_cache_from_file` methods using `safetensors` for persistent prompt caching.
+
+The MLX frontend provides an efficient way to run PBA locally on Apple Silicon hardware.
+
+---
+pba-docs/docs/frontends/pytorch.md
+---
+# PyTorch Frontend
+
+The PyTorch frontend enables the Proxy Base Agent (PBA) to utilize Large Language Models loaded via the popular [PyTorch](https://pytorch.org/) framework and Hugging Face `transformers`.
+
+## Overview
+
+This frontend uses the `agent.llm.frontend.torch.TorchInference` class, which integrates with standard PyTorch models (like `LlamaForCausalLM` or other `transformers` models) and the PSE `StructuringEngine`.
+
+**Key Features:**
+
+*   **Broad Compatibility:** Works with a wide range of Hugging Face `transformers` models compatible with PyTorch.
+*   **Hardware Flexibility:** Runs on CPUs or GPUs (NVIDIA, AMD) supported by PyTorch.
+*   **PSE Integration:** Uses the `PSETorchMixin` from the `pse` library to easily integrate the `StructuringEngine`'s `process_logits` and `sample` methods into the standard `transformers` `generate()` workflow.
+
+## Usage
+
+1.  **Installation:** Ensure you have PyTorch and the necessary `transformers` dependencies installed. This is typically handled by installing PBA with the `[torch]` extra:
+    ```bash
+    pip install proxy-base-agent[torch]
+    # or
+    uv pip install proxy-base-agent[torch]
+    ```
+    You may need to install a specific version of PyTorch separately depending on your hardware (CPU/CUDA/ROCm). See the [PyTorch installation guide](https://pytorch.org/get-started/locally/).
+
+2.  **Model Selection:** During the PBA setup wizard (`python -m agent`), choose a model compatible with PyTorch (most standard Hugging Face models). Select "PyTorch" as the inference backend when prompted.
+
+3.  **Configuration:** The `LocalInference` class will automatically instantiate `TorchInference` when a PyTorch-compatible model path and the PyTorch frontend are selected. Relevant `inference_kwargs` (like `temp`, `seed`, `max_tokens`, `top_k`, `top_p`) passed to the `Agent` constructor will be used by the `model.generate()` method.
+
+## How it Works
+
+*   **Loading:** `TorchInference` loads the model using `transformers.AutoModelForCausalLM.from_pretrained` (specifically via the `PSE_Torch` class which incorporates the `PSETorchMixin`) and the tokenizer using `agent.llm.tokenizer.Tokenizer.load`.
+*   **Mixin Integration:** The `PSETorchMixin` modifies the model's `_sample` method (used by `generate` when `do_sample=True`) to:
+    *   Include `engine.process_logits` in the `logits_processor` list.
+    *   Use `engine.sample` (wrapping a basic multinomial sampler or argmax) for token selection.
+*   **Inference Loop:** The `inference()` method sets up a `TextIteratorStreamer` and runs `model.generate()` in a separate thread, yielding tokens as they become available from the streamer.
+*   **Caching:** Currently, the PyTorch frontend in PBA **does not** implement persistent KV cache saving/loading to disk like the MLX frontend (`supports_reusing_prompt_cache()` returns `False`). Standard `transformers` in-memory KV caching during generation *is* used if enabled (`use_cache=True`).
+
+The PyTorch frontend offers broad model compatibility for running PBA on various hardware configurations.
+
+---
+pba-docs/docs/getting-started/installation.md
+---
+# Installation
+
+This guide covers installing the Proxy Base Agent (PBA) and its dependencies.
+
+## Prerequisites
+
+*   **Python:** Version 3.10 or higher.
+*   **Operating System:** Linux, macOS, or Windows.
+*   **LLM Backend:** You need a compatible local LLM setup. PBA currently supports:
+    *   [MLX](https://github.com/ml-explore/mlx) (for Apple Silicon Macs)
+    *   [PyTorch](https://pytorch.org/) (CPU or GPU)
+    *(Support for other backends may be added in the future).*
+*   **Hardware:** Requirements depend heavily on the LLM you choose to run locally. Ensure your system meets the minimum requirements for your selected model.
+
+## Installation Methods
+
+Choose the method that best suits your needs:
+
+### Method 1: Using `pip` (Recommended)
+
+This is the simplest way to install the latest stable release of PBA from PyPI.
+
+```bash
+# Install the core PBA package
+pip install proxy-base-agent
+
+# --- Framework Extras ---
+# Install extras for the LLM backend you intend to use:
+
+# For MLX (Apple Silicon):
+pip install proxy-base-agent[mlx]
+
+# For PyTorch:
+pip install proxy-base-agent[torch]
+# (Ensure you have a compatible PyTorch version installed separately if needed)
+```
+
+### Method 2: Using `uv` (Fast Alternative)
+
+If you use `uv`, Astral's fast package manager:
+
+```bash
+# Install the core PBA package
+uv pip install proxy-base-agent
+
+# --- Framework Extras ---
+# For MLX (Apple Silicon):
+uv pip install proxy-base-agent[mlx]
+
+# For PyTorch:
+uv pip install proxy-base-agent[torch]
+```
+
+### Method 3: From Source (Development / Latest Features)
+
+Install directly from the GitHub repository for development or to get the absolute latest code (potentially unstable).
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/TheProxyCompany/proxy-base-agent.git
+    cd proxy-base-agent
+    ```
+
+2.  **Install in Editable Mode:**
+    We recommend using a virtual environment.
+
+    *   **Using `pip`:**
+        ```bash
+        # Install core package and common dev dependencies
+        pip install -e ".[dev]"
+
+        # Install specific framework extras if needed
+        pip install -e ".[mlx]"
+        # or
+        pip install -e ".[torch]"
+        ```
+    *   **Using `uv`:**
+        ```bash
+        # Install core package and common dev dependencies
+        uv pip install -e ".[dev]"
+
+        # Install specific framework extras if needed
+        uv pip install -e ".[mlx]"
+        # or
+        uv pip install -e ".[torch]"
+        ```
+    The `-e` flag installs the package in "editable" mode, meaning changes you make to the source code will be reflected immediately when you run the agent.
+
+## Verifying Installation
+
+After installation, you should be able to run the agent's setup wizard:
+
+```bash
+python -m agent
+```
+
+If the wizard starts without import errors, the installation was successful.
+
+## Next Steps
+
+*   Follow the [Quickstart Guide](./quickstart.md) to run the agent and interact with it.
+*   Explore the [Core Concepts](../concepts/index.md) to understand how PBA works.
+
+If you encounter issues, please open an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
 
 ---
 pba-docs/docs/getting-started/quickstart.md

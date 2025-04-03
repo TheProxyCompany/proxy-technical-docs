@@ -16,6 +16,11 @@ theme:
       scheme: default
       primary: custom
       accent: custom
+      define:
+        # Green
+        primary: "#024645"
+        # Beige
+        accent: "#DAD0AF"
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
@@ -25,16 +30,23 @@ theme:
       scheme: slate
       primary: custom
       accent: custom
+      define:
+        # Green
+        primary: "#024645"
+        # Beige
+        accent: "#DAD0AF"
       toggle:
         icon: material/brightness-4
         name: Switch to system preference
   features:
     - navigation.expand
+    - navigation.footer
     - navigation.indexes
     - navigation.instant
     - navigation.instant.prefetch
     - navigation.instant.progress
     - navigation.prune
+    - navigation.sections
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.tracking
@@ -79,13 +91,12 @@ nav:
     - Agent States: concepts/states.md
     - Tools: concepts/tools.md
     - PSE Integration: concepts/pse-integration.md
-    # - State Graph: concepts/state-graph.md # Placeholder
   - Extending the Agent:
     - index.md
     - Custom Tools: extending/custom-tools.md
-    # - Custom States: extending/custom-states.md # Placeholder
-    # - Custom State Graphs: extending/custom-state-graphs.md # Placeholder
-    # - Model Context Protocol: extending/model-context-protocol.md # Placeholder
+    - Custom States: extending/custom-states.md
+    - Custom State Graphs: extending/custom-state-graphs.md
+    - Model Context Protocol: extending/model-context-protocol.md
   - LLM Frontends:
       - index.md
       - MLX: frontends/mlx.md
@@ -93,9 +104,8 @@ nav:
   - API Reference:
     - index.md
     - Agent Class: api/agent.md
-    # - Tool & ToolCall: api/tool.md # Placeholder
-    # - AgentState: api/state.md # Placeholder
-  # - Troubleshooting: troubleshooting.md # Placeholder
+    - Tool & ToolCall: api/tool.md
+    - AgentState: api/state.md
 
 extra:
   generator: false

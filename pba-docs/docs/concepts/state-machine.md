@@ -6,7 +6,7 @@ The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical 
 
 The default PBA state machine defines a fundamental operational cycle:
 
-1.  **Planning Phase:** The agent first enters a planning loop. Here, it utilizes internal states like `Thinking`, `Scratchpad`, and `InnerMonologue` to analyze the task, break down problems, and formulate a strategy. The agent can cycle through these planning states multiple times (configurable) to refine its approach. PSE ensures the content generated within these states adheres to their defined delimiters (e.g., ```thinking ... ```).
+1.  **Planning Phase:** The agent first evaluates the task. If planning is needed (or forced), it enters a planning loop. Within each loop iteration, it chooses one of the available planning states (`Thinking`, `Scratchpad`, `InnerMonologue`) to analyze the task, break down problems, or formulate strategy. The agent can cycle through this planning loop multiple times (configurable) to refine its approach. PSE ensures the content generated within these states adheres to their defined delimiters (e.g., ```thinking ... ```).
 
 2.  **Action Phase:** Once planning is sufficient, the agent transitions to the action phase. It selects *one* available action state, such as `ToolCallState` (to use an external tool) or `Python` (to execute code). PSE guarantees that the output for the chosen action state conforms to the required structure (e.g., a valid JSON schema for the selected tool call).
 

@@ -23,7 +23,7 @@ Each tool is defined with:
 A key differentiator for PBA is how it handles tool interactions using the Proxy Structuring Engine (PSE):
 
 1.  **Tool Selection:** During the Planning Phase, the agent reasons about which tool (if any) is needed to accomplish the current task.
-2.  **Structured Invocation:** When the agent transitions to the `ToolCallState`, it must generate output conforming to the JSON schema of *one* of the available tools. PSE *enforces* this structure at runtime.
+2.  **Structured Invocation:** When the agent transitions to the `ToolCallState`, it must generate output conforming to the JSON schema of *one* of the available tools (including specifying its `intention` and the tool `name` and `arguments`). PSE *enforces* this structure at runtime.
 3.  **Guaranteed Schema:** This means the agent *cannot* hallucinate non-existent tools or provide arguments that don't match the required types or format for the selected tool. Malformed tool calls are prevented *before* they happen.
 4.  **Execution:** PBA receives the guaranteed-valid tool call structure (name and arguments) and executes the corresponding tool implementation.
 5.  **Result Processing:** The tool's output (often formatted as an `Interaction` object) is returned to the agent's memory and informs the next step in its process.

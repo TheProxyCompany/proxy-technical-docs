@@ -487,7 +487,7 @@ If the wizard starts without import errors, the installation was successful.
 *   Follow the [Quickstart Guide](./quickstart.md) to run the agent and interact with it.
 *   Explore the [Core Concepts](../concepts/index.md) to understand how PBA works.
 
-If you encounter issues, please check the [Troubleshooting Guide](../troubleshooting.md) (Content Pending) or open an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
+If you encounter issues, please open an issue on [GitHub](https://github.com/TheProxyCompany/proxy-base-agent/issues).
 
 ---
 pba-docs/docs/getting-started/quickstart.md

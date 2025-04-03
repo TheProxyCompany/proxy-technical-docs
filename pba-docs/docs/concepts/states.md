@@ -21,7 +21,7 @@ The standard PBA includes several pre-defined states grouped into Planning and A
 
 These states are used within the agent's planning loop for internal reasoning and strategy formulation. The content generated here is typically *not* shown directly to the user.
 
-*   **`Thinking`:** For deliberate, analytical thought processes. Simulates conscious reflection and reasoning. Uses a `FencedFreeformStateMachine` to allow relatively unstructured text within its delimiters.
+*   **`Thinking`:** For deliberate, analytical thought processes (System 2 thinking). Simulates conscious reflection, reasoning about the task, and planning the next steps. Uses a `FencedFreeformStateMachine` to allow relatively unstructured text within its delimiters.
 *   **`Scratchpad`:** For quick notes, temporary calculations, or outlining steps. Mimics jotting down ideas. Also uses a `FencedFreeformStateMachine`.
 *   **`InnerMonologue`:** For more detailed, narrative-style internal dialogue. Allows the agent to explore nuances and build a coherent mental model. Uses a `FencedFreeformStateMachine`.
 
@@ -44,4 +44,4 @@ This ensures that even the agent's internal steps and action requests are struct
 
 ## Extending with Custom States
 
-You can define and integrate your own custom `AgentState` classes to add unique capabilities or modify the agent's workflow. See [Custom States](../extending/custom-states.md) (Content Pending).
+You can define and integrate your own custom `AgentState` classes to add unique capabilities or modify the agent's workflow. See [Custom States](../extending/custom-states.md).

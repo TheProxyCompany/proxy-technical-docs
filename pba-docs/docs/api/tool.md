@@ -50,7 +50,7 @@ class Tool:
 
 **Key Methods**
 
-*   `async call(self, caller: Any, **kwargs) -> Any`: Executes the tool. It handles both sync and async `callable`s. The `caller` argument (typically the `Agent` instance) is passed as `self` to the underlying callable. `**kwargs` are the arguments extracted from the LLM's tool call.
+*   `async call(self, caller: Any, **kwargs) -> Any`: Executes the tool's underlying `callable`. It handles both synchronous and asynchronous functions. The `caller` argument (which is the `Agent` instance invoking the tool) is automatically passed as the *first* argument (conventionally named `self`) to the tool's `callable` function. `**kwargs` are the arguments extracted from the LLM's tool call, matching the tool's defined `schema`.
 *   `to_dict() -> dict`: Generates a JSON Schema representation suitable for inclusion in the `ToolCallState`'s schema definition and the system prompt. It wraps the tool's argument `schema` within a structure that also requires an `intention` field from the LLM.
 *   `load(...)` (staticmethod): Discovers and loads tools from Python files in a specified directory (defaults to `agent/tools/`).
 *   `from_file(...)` (staticmethod): Loads a single tool from a specific Python file.

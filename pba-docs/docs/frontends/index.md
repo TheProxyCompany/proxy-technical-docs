@@ -17,8 +17,8 @@ Key responsibilities of a Frontend implementation include:
 
 PBA currently includes built-in support for the following frontends:
 
-*   **[MLX](./mlx.md):** Optimized for Apple Silicon (M-series chips), leveraging the MLX framework for efficient local inference. (Content Pending)
-*   **[PyTorch](./pytorch.md):** Supports running models using PyTorch on CPUs or GPUs (NVIDIA/AMD). (Content Pending)
+*   **[MLX](./mlx.md):** Optimized for Apple Silicon (M-series chips), leveraging the MLX framework for efficient local inference.
+*   **[PyTorch](./pytorch.md):** Supports running models using PyTorch on CPUs or GPUs (NVIDIA/AMD).
 
 ## Choosing a Frontend
 
