@@ -77,4 +77,4 @@ To make the agent use your custom state, you need to modify the main `AgentState
 3.  **Add to `self.states`:** Add the instance to the `self.states` dictionary in `AgentStateMachine.__init__` so the agent recognizes its identifier.
 4.  **Modify State Graph:** Update the `state_graph` dictionary to include transitions *to* and *from* your new state. For example, you might add it as an option in the Planning phase or as a distinct step after the Action phase.
 
-See [Custom State Graphs](./custom-state-graphs.md) (Content Pending) for more details on modifying the agent's core workflow.
+See [Custom State Graphs](./custom-state-graphs.md) for more details on modifying the agent's core workflow.

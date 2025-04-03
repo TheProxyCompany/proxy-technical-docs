@@ -20,7 +20,7 @@ Each step in the agent's HSM is represented by an **Agent State**. These states 
 
 Each state uses its own nested PSE `StateMachine` to define and enforce the structure of the content generated *within* that state.
 
-[Learn more about States](./states.md) (Content Pending)
+[Learn more about States](./states.md)
 
 ## 3. Tools
 
@@ -47,6 +47,6 @@ PBA supports dynamic tool integration at runtime using the Model Context Protoco
 *   **Adaptability:** Agents can connect to MCP servers to gain access to new tools without restarting or retraining.
 *   **Reliability:** Tools loaded via MCP are integrated into the `ToolCallState` and benefit from the same PSE-guaranteed schema enforcement.
 
-[Learn more about MCP Integration](../extending/model-context-protocol.md) (Content Pending)
+[Learn more about MCP Integration](../extending/model-context-protocol.md)
 
 These core concepts work together to create an agent framework focused on engineered reliability, control, and adaptability.

@@ -94,4 +94,4 @@ Now, when the agent decides it needs to perform a calculation during its Plannin
 
 *   Explore the existing tools in `agent/tools/` for more examples.
 *   Consider using Pydantic models for complex tool arguments; PBA integrates seamlessly with them for schema generation.
-*   Learn about adding tools dynamically via [MCP](../extending/model-context-protocol.md) (Content Pending).
+*   Learn about adding tools dynamically via [MCP](../extending/model-context-protocol.md).

@@ -36,4 +36,4 @@ You can easily extend PBA's capabilities by adding your own custom tools. See th
 
 ## Model Context Protocol (MCP)
 
-PBA also supports dynamically loading tools at runtime from external servers using the Model Context Protocol (MCP). These tools are integrated seamlessly and benefit from the same PSE schema guarantees. See [MCP Integration](../extending/model-context-protocol.md) (Content Pending).
+PBA also supports dynamically loading tools at runtime from external servers using the Model Context Protocol (MCP). These tools are integrated seamlessly and benefit from the same PSE schema guarantees. See [MCP Integration](../extending/model-context-protocol.md).

@@ -54,5 +54,5 @@ Experiment with different prompts to see how the agent plans, uses tools (if ava
 ## Next Steps
 
 *   Explore the [Core Concepts](../concepts/index.md) to understand the underlying architecture.
-*   Learn how to add [Custom Tools](../extending/custom-tools.md) (Content Pending).
-*   Configure different [LLM Frontends](../frontends/index.md) (Content Pending).
+*   Learn how to add [Custom Tools](../extending/custom-tools.md).
+*   Configure different [LLM Frontends](../frontends/index.md).
