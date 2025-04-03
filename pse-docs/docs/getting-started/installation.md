@@ -9,6 +9,8 @@ We recommend using uv to install PSE:
 uv pip install pse
 ```
 
+*(This installs the `pse` Python library and its required dependency `pse-core`, which contains the pre-compiled C++ engine.)*
+
 You can also install PSE using pip:
 
 ```bash
@@ -71,7 +73,7 @@ pip install jax jaxlib pse
 
 ## System Requirements
 
-- **Python**: 3.8 or higher
+- **Python**: 3.10 or higher
 - **Operating Systems**:
   - Linux (Ubuntu 20.04+, Debian 11+, etc.)
   - macOS (11.0+)

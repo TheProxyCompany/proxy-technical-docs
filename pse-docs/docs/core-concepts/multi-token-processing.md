@@ -8,7 +8,7 @@ Grammars often require specific keywords, operators, or phrases (e.g., `"functio
 
 ## How Multi-Token Processing Optimizes
 
-When MTP is enabled (`multi_token_sampling=True` in the `StructuringEngine`, the default), PSE attempts to identify these unambiguous multi-token sequences:
+When MTP is enabled (`multi_token_sampling=True` in the `StructuringEngine`, default is `False`), PSE attempts to identify these unambiguous multi-token sequences:
 
 1.  **Identify Required Sequence:** PSE determines the valid continuation strings required by the current state(s) of the grammar (e.g., only `"metacognition"` is allowed next).
 2.  **Tokenize Sequence:** It finds the corresponding sequence of tokens from the model's vocabulary (e.g., `["meta", "cognition"]`).

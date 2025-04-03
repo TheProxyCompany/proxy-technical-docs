@@ -36,7 +36,7 @@ tokenizer = AutoTokenizer.from_pretrained("your-model-name")
 engine = StructuringEngine(tokenizer)
 
 # 3. Configure the engine with your schema
-engine.configure(User.schema())
+engine.configure(User)
 
 # 4. Integrate with your generation loop
 # (Example using Hugging Face Transformers)

@@ -34,13 +34,13 @@ $PYTHON_CMD -m mkdocs build
 cp -r assets/stylesheets/extra.css site/assets/stylesheets/ || echo "Warning: Assets copy failed"
 
 echo "Generating LLM-friendly documentation..."
-files-to-prompt docs/index.md pba-docs/docs pse-docs/docs > llm.txt
+files-to-prompt docs/index.md pba-docs/docs pse-docs/docs -e md > llm.txt
 cp llm.txt site/
 echo "LLM-friendly documentation generated successfully"
 
 # Build PSE documentation
 echo "Building PSE documentation..."
-files-to-prompt pse-docs/docs > pse-docs/docs/llm.txt
+files-to-prompt pse-docs/docs -e md > pse-docs/docs/llm.txt
 cd pse-docs
 $PYTHON_CMD -m mkdocs build || {
   echo "Warning: PSE docs build had errors, but continuing..."
@@ -59,7 +59,7 @@ fi
 
 # Build PBA documentation
 echo "Building PBA documentation..."
-files-to-prompt pba-docs/docs > pba-docs/docs/llm.txt
+files-to-prompt pba-docs/docs -e md > pba-docs/docs/llm.txt
 cd pba-docs
 $PYTHON_CMD -m mkdocs build || {
   echo "Warning: PBA docs build had errors, but continuing..."
