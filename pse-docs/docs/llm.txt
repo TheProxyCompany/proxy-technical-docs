@@ -230,53 +230,993 @@ Now that you've installed PSE, proceed to the [Quickstart](quickstart.md) guide 
 ---
 pse-docs/docs/getting-started/quickstart.md
 ---
-# Quickstart
+# Quickstart: Pydantic to Guaranteed JSON
 
-This quickstart guide will help you get up and running with PSE in just a few minutes.
+This guide demonstrates how to use the Proxy Structuring Engine (PSE) with a Hugging Face `transformers` model (using PyTorch) to generate JSON output guaranteed to match a Pydantic schema.
 
-We'll cover the basic workflow and show you how to generate structured outputs with your favorite language model.
+```python
+import torch
+from transformers import AutoTokenizer, LlamaForCausalLM
+from pydantic import BaseModel
 
-# Installation
+# Assuming PSE is installed:
+from pse import StructuringEngine
+from pse.util.torch_mixin import PSETorchMixin # Optional: Mixin for easy HF integration
 
-This quickstart assumes you have PSE installed on your machine.
+# 1. Define your desired output structure using Pydantic
+class UserProfile(BaseModel):
+    user_id: int
+    username: str
+    is_active: bool
+    roles: list[str]
 
-If you don't have PSE installed yet, follow the [installation instructions](installation.md) to get PSE installed on your machine.
+# 2. (Optional) Apply the PSE mixin to your Hugging Face model class
+#    This simplifies integration by adding the `engine` attribute and overriding `generate`.
+class PSE_Llama(PSETorchMixin, LlamaForCausalLM):
+    pass
 
-# Quickstart
+# 3. Load your model and tokenizer
+#    Replace with your desired model path.
+model_path = "meta-llama/Llama-3.2-1B-Instruct"
+tokenizer = AutoTokenizer.from_pretrained(model_path)
 
-Let's walk through a basic example of how to use PSE to generate structured outputs.
+# Use the mixed-in class or your base model class
+model = PSE_Llama.from_pretrained(
+    model_path,
+    torch_dtype=torch.bfloat16, # Use appropriate dtype for your model/hardware
+    device_map="auto"           # Load model efficiently across devices
+)
 
+# Ensure padding token is set for generation (important!)
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
+# Ensure the model config also reflects the pad token id
+if model.config.pad_token_id is None:
+     model.config.pad_token_id = tokenizer.pad_token_id
+
+# 4. Create the StructuringEngine instance.
+#    If using the mixin, it's automatically attached as `model.engine`.
+#    If not using the mixin, instantiate it separately:
+#    engine = StructuringEngine(tokenizer)
+model.engine = StructuringEngine(tokenizer) # Assumes mixin usage for simplicity
+
+# 5. Configure the engine with your Pydantic model.
+#    PSE compiles this into an efficient HSM representation.
+model.engine.configure(UserProfile)
+
+# 6. Create your prompt, instructing the LLM to generate the desired structure.
+prompt = f"Generate a user profile for user ID 999, username 'tester', active status true, roles ['qa', 'dev']. Output ONLY the JSON object."
+messages = [{"role": "user", "content": prompt}]
+input_ids = tokenizer.apply_chat_template(
+    messages,
+    return_tensors="pt",
+    add_generation_prompt=True # Crucial for instruction-following models
+).to(model.device)
+
+# 7. Generate using the engine's processor and sampler.
+#    If using the mixin, `model.generate` is already overridden.
+#    If not using the mixin, pass the engine hooks manually:
+#    output_ids = model.generate(
+#        input_ids,
+#        max_new_tokens=150,
+#        do_sample=True, # Or False for greedy decoding
+#        logits_processor=[engine.process_logits],
+#        sampler=engine.sample
+#    )
+output_ids = model.generate(
+    input_ids,
+    max_new_tokens=150,
+    do_sample=True # Example: using sampling
+    # No need to pass hooks explicitly if using the mixin
+)
+
+# 8. Decode and parse the guaranteed structured output
+#    Extract only the newly generated tokens, excluding the prompt.
+output_text = tokenizer.decode(output_ids[0][input_ids.shape[-1]:], skip_special_tokens=True)
+print("Raw Output (Guided by PSE):\n", output_text)
+
+# PSE guarantees this output can be parsed directly into your Pydantic model
+# Use the engine instance (model.engine if using mixin, or your separate instance)
+structured_output: UserProfile = model.engine.get_structured_output(UserProfile)
+
+# Verify the output
+if structured_output:
+    print("\nParsed Pydantic Object:\n", structured_output)
+    # Example Parsed Output:
+    # UserProfile(user_id=999, username='tester', is_active=True, roles=['qa', 'dev'])
+else:
+    print("\nFailed to generate structured output.")
+
+```
+
+This example shows the basic workflow: Define -> Configure -> Generate -> Parse. PSE ensures the `structured_output` reliably conforms to the `UserProfile` Pydantic model.
 
 ---
-pse-docs/docs/api/framework-adapters.md
+pse-docs/docs/guides/base-state-machines.md
 ---
-# Framework Adapters
+# Base State Machines
 
-PSE is designed to be framework-agnostic, supporting multiple machine learning frameworks through its adapter system. This page explains how to use PSE with different ML frameworks and how to optimize for each.
+While PSE excels at automatically converting Pydantic models, JSON Schemas, and function signatures into the necessary `StateMachine` structures, it also provides a set of fundamental, composable `StateMachine` base types. These allow developers to define custom grammars or control flows directly, offering more granular control when needed.
 
-## Supported Frameworks
+These base types are located in `pse.types.base` and are the building blocks used internally by the schema conversion logic. Understanding them is key to advanced usage and creating bespoke structuring logic.
 
-PSE officially supports the following frameworks:
+## Core Base Types
 
-- [PyTorch](#pytorch-adapter)
-- [MLX](#mlx-adapter)
-- [TensorFlow](#tensorflow-adapter)
-- [JAX](#jax-adapter)
+*   **`PhraseStateMachine`**:
+    *   **Purpose:** Matches an exact sequence of characters (a specific string).
+    *   **Use Case:** Defining keywords, delimiters, operators, or fixed string literals within a grammar.
+    *   **Example:** `PhraseStateMachine("true")`, `PhraseStateMachine("```json\n")`
 
-More documentation coming soon.
+*   **`CharacterStateMachine`**:
+    *   **Purpose:** Matches characters based on inclusion/exclusion rules (whitelist, blacklist, graylist) with optional length constraints (min/max characters).
+    *   **Use Case:** Defining patterns like integers (`whitelist_charset="0123456789"`), whitespace (`whitelist_charset=" \t\n\r"`), or general string content excluding specific characters (`blacklist_charset='"'`).
+    *   **Example:** `CharacterStateMachine(whitelist_charset="abc", char_limit=5)`
 
+*   **`ChainStateMachine`**:
+    *   **Purpose:** Executes a sequence of other `StateMachine`s in a specific, fixed order. Each machine in the chain must complete successfully before the next one starts.
+    *   **Use Case:** Defining structures where elements must appear sequentially, like a key-value pair (`StringStateMachine` -> `WhitespaceStateMachine` -> `PhraseStateMachine(":")` -> `WhitespaceStateMachine` -> `JsonStateMachine`).
+    *   **Example:** `ChainStateMachine([PhraseStateMachine("A"), PhraseStateMachine("B")])` requires "AB".
+
+*   **`AnyStateMachine`**:
+    *   **Purpose:** Accepts input that matches *any one* of the provided `StateMachine`s. It essentially represents a logical OR condition.
+    *   **Use Case:** Defining points in a grammar where multiple different structures are valid (e.g., a JSON value can be a string OR a number OR an object...). Used heavily in handling `anyOf` / `oneOf` in JSON Schema or `Union` types in Pydantic.
+    *   **Example:** `AnyStateMachine([StringStateMachine(), NumberStateMachine()])` accepts either a string or a number.
+
+*   **`LoopStateMachine`**:
+    *   **Purpose:** Repeats a single `StateMachine` a specified number of times (with optional min/max loop counts). Can include an optional separator `StateMachine` (like whitespace or a comma) between repetitions.
+    *   **Use Case:** Defining arrays/lists where an element pattern repeats, potentially separated by commas or whitespace.
+    *   **Example:** `LoopStateMachine(JsonStateMachine(), min_loop_count=1, whitespace_seperator=True)` matches one or more JSON values separated by optional whitespace.
+
+*   **`EncapsulatedStateMachine`**:
+    *   **Purpose:** Matches content that is wrapped by specific start and end delimiter strings. It uses an inner `StateMachine` to validate the content *between* the delimiters.
+    *   **Use Case:** Parsing content within specific tags or fences, like markdown code blocks (` ``` `) or custom XML-like tags.
+    *   **Example:** `EncapsulatedStateMachine(JsonStateMachine(), delimiters=("<json>", "</json>"))` matches valid JSON enclosed in `<json>` tags.
+
+*   **`WaitFor`**:
+    *   **Purpose:** Consumes arbitrary text until a specific nested `StateMachine` is successfully triggered. Useful for skipping preamble or freeform text before structured content begins.
+    *   **Use Case:** Allowing an LLM to "think" or write introductory text before starting a required structured block (like a JSON object fenced by ```json).
+    *   **Example:** `WaitFor(PhraseStateMachine("```json"))` consumes all text until it encounters "```json".
+
+## Composition
+
+The power of these base types lies in their composition. By nesting `Chain`, `Any`, `Loop`, etc., and using `Phrase` and `Character` for the terminal elements, developers can construct arbitrarily complex `StateMachine` graphs to represent sophisticated grammars and control flows directly in Python, going beyond the capabilities of standard schema definitions when necessary. The PBA's `AgentStateMachine` is a prime example of this compositional approach.
+
+---
+pse-docs/docs/guides/framework-adapters.md
+---
+# Framework Adapters (Mixins)
+
+To simplify integration with popular Python deep learning frameworks, the Proxy Structuring Engine (PSE) provides optional "mixin" classes. These mixins inherit from the framework's standard generation classes (like `transformers.GenerationMixin`) and override the necessary methods to automatically incorporate PSE's `process_logits` and `sample` hooks.
+
+Using a mixin means you don't need to manually pass `logits_processor=[engine.process_logits]` and `sampler=engine.sample` to your `model.generate()` calls.
+
+## Available Mixins
+
+*   **`pse.util.torch_mixin.PSETorchMixin`**: For PyTorch models using `transformers.GenerationMixin`.
+*   **`pse.util.tf_mixin.PSETFMixin`**: For TensorFlow models using `transformers.TFGenerationMixin`.
+*   **`pse.util.jax_mixin.PSEFlaxMixin`**: For JAX/Flax models using `transformers.FlaxGenerationMixin`.
+*   *(Note: MLX integration is often handled differently, see MLX examples)*
+
+## How to Use (PyTorch Example)
+
+1.  **Import:** Import the mixin alongside your base model class.
+    ```python
+    import torch
+    from transformers import LlamaForCausalLM
+    from pse.util.torch_mixin import PSETorchMixin
+    ```
+
+2.  **Create Mixed-in Class:** Define a new class that inherits from *both* the PSE mixin *and* your base model class. The order matters; typically, the mixin comes first.
+    ```python
+    class PSE_Llama(PSETorchMixin, LlamaForCausalLM):
+        pass
+    ```
+
+3.  **Instantiate Model:** Load your model using this new combined class.
+    ```python
+    model = PSE_Llama.from_pretrained(...)
+    ```
+
+4.  **Attach Engine:** Create your `StructuringEngine` instance and attach it to the model using the `engine` attribute name. The mixin expects to find the engine here.
+    ```python
+    from pse import StructuringEngine
+    # tokenizer = AutoTokenizer.from_pretrained(...)
+    model.engine = StructuringEngine(tokenizer)
+    ```
+
+5.  **Configure Engine:** Configure the engine with your desired schema.
+    ```python
+    # from pydantic import BaseModel
+    # class MySchema(BaseModel): ...
+    model.engine.configure(MySchema)
+    ```
+
+6.  **Generate:** Call `model.generate()` as usual. The mixin automatically uses `model.engine.process_logits` and `model.engine.sample`.
+    ```python
+    # input_ids = tokenizer(...)
+    output_ids = model.generate(input_ids, max_new_tokens=100, do_sample=True)
+    ```
+
+7.  **Retrieve Output:** Use the attached engine to get the structured output.
+    ```python
+    structured_output = model.engine.get_structured_output(MySchema)
+    ```
+
+## Benefits of Using Mixins
+
+*   **Cleaner Code:** Avoids repetitive passing of `logits_processor` and `sampler` arguments to `generate()`.
+*   **Seamless Integration:** Provides a more object-oriented way to associate the `StructuringEngine` with a specific model instance.
+*   **Framework Compatibility:** Ensures PSE hooks are applied correctly within the framework's generation loop.
+
+## Without Mixins
+
+If you prefer not to use mixins, you can integrate PSE manually:
+
+1.  Instantiate your base model and `StructuringEngine` separately.
+    ```python
+    # model = LlamaForCausalLM.from_pretrained(...)
+    # engine = StructuringEngine(tokenizer)
+    # engine.configure(MySchema)
+    ```
+2.  Pass the engine's methods directly to `generate()`:
+    ```python
+    output_ids = model.generate(
+        input_ids,
+        max_new_tokens=100,
+        do_sample=True,
+        logits_processor=[engine.process_logits], # Pass processor
+        sampler=engine.sample                  # Pass sampler
+    )
+    ```
+3.  Retrieve output using your separate engine instance:
+    ```python
+    # structured_output = engine.get_structured_output(MySchema)
+    ```
+
+While manual integration works perfectly well, the mixins offer a convenient shortcut for cleaner code, especially when working frequently with PSE and a specific model class.
+
+---
+pse-docs/docs/guides/schema-sources.md
+---
+# Defining Structure: Schema Sources
+
+The Proxy Structuring Engine (PSE) is designed to be flexible, allowing you to define the desired output structure using several common and convenient methods in Python. The `StructuringEngine.configure()` method accepts various types as its `structure` argument.
+
+## Supported Schema Sources
+
+1.  **Pydantic Models:**
+    *   **How:** Pass a Pydantic `BaseModel` class directly.
+    *   **Mechanism:** PSE introspects the model's fields, types, validators, default values, and descriptions to automatically generate the corresponding JSON Schema, which is then converted into a `StateMachine`. It respects nested models, standard Python types (`str`, `int`, `list`, `dict`, etc.), `Union`, `Optional`, `Literal`, and more. Field descriptions from the model or its docstring are used.
+    *   **Use Case:** Ideal when you already use Pydantic for data validation or prefer a Python-native way to define complex, typed structures. This is often the most convenient method for defining nested JSON objects.
+    *   **Example:**
+        ```python
+        from pydantic import BaseModel
+
+        class User(BaseModel):
+            name: str
+            id: int
+
+        engine.configure(User)
+        ```
+
+2.  **JSON Schema (Dictionary):**
+    *   **How:** Pass a Python dictionary representing a valid JSON Schema object.
+    *   **Mechanism:** PSE directly interprets the standard JSON Schema keywords (`type`, `properties`, `items`, `required`, `enum`, `pattern`, `minLength`, `format`, `anyOf`, `$ref`, etc.) and converts them into the equivalent `StateMachine` structure. It supports local `$defs` and `$ref` for defining and reusing schema components.
+    *   **Use Case:** Useful when working with existing JSON Schemas, integrating with systems that produce/consume JSON Schema, or when needing schema features not directly representable in Pydantic (though PSE's Pydantic conversion is quite comprehensive).
+    *   **Example:**
+        ```python
+        user_schema = {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "id": {"type": "integer"}
+            },
+            "required": ["name", "id"]
+        }
+        engine.configure(user_schema)
+        ```
+
+3.  **Function Signatures (Callable):**
+    *   **How:** Pass a Python function or callable.
+    *   **Mechanism:** PSE introspects the function's signature (parameter names, type hints, default values) and parses its docstring (using `docstring-parser`) to generate a JSON Schema representing the function's arguments. This schema is then converted to a `StateMachine`. It aims to produce a structure suitable for generating function call arguments.
+    *   **Use Case:** Convenient for generating structured arguments intended for calling a specific Python function, leveraging existing type hints and docstrings.
+    *   **Example:**
+        ```python
+        def get_weather(city: str, unit: str = "celsius"):
+            """Fetches weather for a city."""
+            # ... function body ...
+
+        engine.configure(get_weather)
+        # PSE will expect JSON like: {"city": "...", "unit": "..."}
+        ```
+
+4.  **Sequence of Schemas (`list` or `tuple`):**
+    *   **How:** Pass a list or tuple where each element is one of the above supported types (Pydantic model, JSON Schema dict, Callable).
+    *   **Mechanism:** PSE interprets this as an "anyOf" or "oneOf" condition. It generates the schema for each item in the sequence and combines them using an `AnyStateMachine`. The LLM output must conform to *at least one* of the provided schemas.
+    *   **Use Case:** When the LLM's output could validly take one of several different structures depending on the context or input.
+    *   **Example:**
+        ```python
+        from pydantic import BaseModel
+
+        class User(BaseModel): # ...
+        class Product(BaseModel): # ...
+
+        engine.configure([User, Product])
+        # PSE expects output matching either User OR Product schema
+        ```
+
+5.  **Direct `StateMachine` Instance:**
+    *   **How:** Pass an instance of a `StateMachine` class (either a base type like `ChainStateMachine` or a custom subclass).
+    *   **Mechanism:** PSE uses the provided `StateMachine` directly without any conversion.
+    *   **Use Case:** For advanced users who need fine-grained control over the grammar or want to implement complex, non-standard structures or control flows by composing base `StateMachine` types.
+    *   **Example:**
+        ```python
+        from pse.types.base import ChainStateMachine, PhraseStateMachine
+        custom_sm = ChainStateMachine([PhraseStateMachine("START"), PhraseStateMachine("END")])
+        engine.configure(custom_sm)
+        ```
+
+By supporting these diverse sources, PSE allows developers to choose the most natural and efficient way to define their desired output structure based on their existing code, data models, or specific grammatical requirements.
+
+---
+pse-docs/docs/api/state-machine.md
+---
+# StateMachine API
+
+This page details the API for the `pse_core.StateMachine` class, which is the base class for defining grammars and structures within PSE. While you often configure the `StructuringEngine` with higher-level schemas (Pydantic, JSON Schema), you can also create or subclass `StateMachine` directly for advanced control.
+
+```python
+class pse_core.StateMachine(
+    state_graph: StateGraph | None = None,
+    start_state: StateId = 0,
+    end_states: list[StateId] | None = None,
+    is_optional: bool = False,
+    is_case_sensitive: bool = True,
+    identifier: str | None = None
+)
+```
+
+Defines a grammar as a finite state machine graph.
+
+**Parameters:**
+
+*   **`state_graph`** (`StateGraph | None`, optional):
+    A dictionary mapping state IDs (`StateId`) to lists of transitions (`Edge`). An `Edge` is a tuple `(StateMachine, StateId)` representing a transition validated by the nested `StateMachine` leading to the target `StateId`. Defaults to an empty graph.
+*   **`start_state`** (`StateId`, optional):
+    The identifier of the initial state for this machine. Defaults to `0`.
+*   **`end_states`** (`list[StateId] | None`, optional):
+    A list of state IDs that represent valid completion points for this machine. Defaults to `["$"]`.
+*   **`is_optional`** (`bool`, optional):
+    If `True`, this entire state machine can be skipped during traversal. Defaults to `False`.
+*   **`is_case_sensitive`** (`bool`, optional):
+    If `True`, token matching within this machine (e.g., by nested `PhraseStateMachine`s) is case-sensitive. Defaults to `True`.
+*   **`identifier`** (`str | None`, optional):
+    A human-readable identifier for this state machine instance, useful for debugging and stateful output retrieval. Defaults to `None`.
+
+---
+
+## Methods
+
+### `get_new_stepper`
+
+```python
+get_new_stepper(
+    state: StateId | None = None
+) -> Stepper
+```
+
+Creates a new `Stepper` instance initialized to traverse this `StateMachine`.
+
+**Parameters:**
+
+*   **`state`** (`StateId | None`, optional):
+    The state ID to start the stepper at. If `None`, uses the machine's `start_state`. Defaults to `None`.
+
+**Returns:**
+
+*   (`Stepper`): A new stepper instance.
+
+---
+
+### `get_steppers`
+
+```python
+get_steppers(
+    state: StateId | None = None
+) -> list[Stepper]
+```
+
+Creates one or more initial `Stepper` instances for this machine. Can return multiple steppers if the starting state allows for different initial paths (e.g., via an `AnyStateMachine` transition).
+
+**Parameters:**
+
+*   **`state`** (`StateId | None`, optional):
+    The state ID to start the steppers at. If `None`, uses the machine's `start_state`. Defaults to `None`.
+
+**Returns:**
+
+*   (`list[Stepper]`): A list of new stepper instances.
+
+---
+
+### `get_edges`
+
+```python
+get_edges(
+    state: StateId
+) -> list[Edge]
+```
+
+Returns the list of outgoing transitions (`Edge` tuples) from the specified state.
+
+**Parameters:**
+
+*   **`state`** (`StateId`): The state ID to query.
+
+**Returns:**
+
+*   (`list[Edge]`): A list of `(StateMachine, StateId)` tuples representing valid transitions.
+
+---
+
+### `get_transitions`
+
+```python
+get_transitions(
+    stepper: Stepper
+) -> list[tuple[Stepper, StateId]]
+```
+
+Gets the possible initial sub-steppers and target states for transitions originating from the given stepper's current state.
+
+**Parameters:**
+
+*   **`stepper`** (`Stepper`): The stepper whose current state's transitions are being queried.
+
+**Returns:**
+
+*   (`list[tuple[Stepper, StateId]]`): A list where each tuple contains a new sub-stepper (for validating the transition) and the target state ID in the parent machine.
+
+---
+
+### `advance_stepper`
+
+```python
+advance_stepper(
+    stepper: Stepper,
+    token: str
+) -> list[Stepper]
+```
+
+Advances a given stepper by consuming a token string. This is primarily used internally by `Stepper.consume`.
+
+**Parameters:**
+
+*   **`stepper`** (`Stepper`): The stepper to advance.
+*   **`token`** (`str`): The token string to consume.
+
+**Returns:**
+
+*   (`list[Stepper]`): A list of new steppers representing the possible states after consuming the token.
+
+---
+
+### `branch_stepper`
+
+```python
+branch_stepper(
+    stepper: Stepper,
+    token: str | None = None
+) -> list[Stepper]
+```
+
+Creates multiple branched steppers from a given stepper, exploring different possible transitions simultaneously. Used internally by `Stepper.branch`.
+
+**Parameters:**
+
+*   **`stepper`** (`Stepper`): The stepper to branch from.
+*   **`token`** (`str | None`, optional): An optional token to consider when determining valid branches. Defaults to `None`.
+
+**Returns:**
+
+*   (`list[Stepper]`): A list of new steppers representing different branches.
+
+---
+
+### `advance_all` (Static Method)
+
+```python
+@staticmethod
+advance_all(
+    steppers: list[Stepper],
+    token: str,
+    vocab: TrieMap | None = None,
+    token_healing: bool = True
+) -> list[StepperDelta]
+```
+
+Advances multiple steppers simultaneously with a single token. Handles token healing if `vocab` is provided. This is primarily used internally by the `StructuringEngine`.
+
+**Parameters:**
+
+*   **`steppers`** (`list[Stepper]`): The list of active steppers to advance.
+*   **`token`** (`str`): The token string to consume.
+*   **`vocab`** (`TrieMap | None`, optional): The vocabulary TrieMap for token healing. Defaults to `None`.
+*   **`token_healing`** (`bool`, optional): Whether to enable token healing. Defaults to `True`.
+
+**Returns:**
+
+*   (`list[StepperDelta]`): A list of `StepperDelta` objects representing the results of the transitions for each input stepper.
+
+---
+
+### `advance_all_basic` (Static Method)
+
+```python
+@staticmethod
+advance_all_basic(
+    steppers: list[Stepper],
+    token: str
+) -> list[Stepper]
+```
+
+A simplified version of `advance_all` that only returns the resulting steppers, discarding metadata like healing status.
+
+**Parameters:**
+
+*   **`steppers`** (`list[Stepper]`): The list of active steppers to advance.
+*   **`token`** (`str`): The token string to consume.
+
+**Returns:**
+
+*   (`list[Stepper]`): A list of the resulting steppers after consuming the token.
+
+---
+
+## Properties
+
+*   **`state_graph`** (`StateGraph`):
+    The dictionary defining the state transitions. Read/write.
+*   **`start_state`** (`StateId`):
+    The identifier of the starting state. Read/write.
+*   **`end_states`** (`list[StateId]`):
+    The list of identifiers for valid end states. Read/write.
+*   **`is_optional`** (`bool`):
+    Whether the state machine is optional. Read/write.
+*   **`is_case_sensitive`** (`bool`):
+    Whether token matching should be case-sensitive. Read/write.
+*   **`identifier`** (`str | None`):
+    The human-readable identifier for this instance. Read/write.
+
+---
+pse-docs/docs/api/stepper.md
+---
+# Stepper API
+
+This page details the API for the `pse_core.Stepper` class. Steppers track the current position within a `StateMachine` during generation. Developers typically don't instantiate `Stepper`s directly but interact with them via the `StructuringEngine`. Understanding the `Stepper` API can be helpful for debugging or advanced customization.
+
+```python
+class pse_core.Stepper(
+    state_machine: StateMachine,
+    current_state: StateId | None = None
+)
+```
+
+Represents a position within a state machine and manages traversal.
+
+**Parameters:**
+
+*   **`state_machine`** (`StateMachine`):
+    The `StateMachine` instance this stepper will traverse.
+*   **`current_state`** (`StateId | None`, optional):
+    The initial state ID within the `state_machine`. If `None`, defaults to the `state_machine`'s `start_state`.
+
+---
+
+## Methods
+
+### `clone`
+
+```python
+clone() -> Stepper
+```
+
+Creates a deep copy of this stepper, including its current state, history, and associated sub-stepper (if any). Essential for exploring multiple grammar paths.
+
+**Returns:**
+
+*   (`Stepper`): A new `Stepper` instance identical to the original.
+
+---
+
+### `consume`
+
+```python
+consume(
+    token: str
+) -> list[Stepper]
+```
+
+Consumes a token string and advances the stepper's state according to its `StateMachine`. This is the primary method for processing tokens during generation, often called internally by the `StructuringEngine`. It handles transitions, sub-stepper management, and branching.
+
+**Parameters:**
+
+*   **`token`** (`str`): The token string to consume.
+
+**Returns:**
+
+*   (`list[Stepper]`): A list of new `Stepper` instances representing all possible valid states after consuming the token. Returns an empty list if the token leads to no valid states.
+
+---
+
+### `get_current_value`
+
+```python
+get_current_value() -> Any
+```
+
+Returns the accumulated value parsed from the raw string generated along the stepper's path so far. Attempts to parse as JSON (number, boolean, object, array) first, falling back to the raw string if JSON parsing fails.
+
+**Returns:**
+
+*   (`Any`): The parsed Python object (e.g., `int`, `float`, `bool`, `dict`, `list`) or the raw `str`. Returns `None` if no value has been accumulated.
+
+---
+
+### `get_raw_value`
+
+```python
+get_raw_value() -> str
+```
+
+Returns the raw, concatenated string output generated along the stepper's path (including history and any active sub-stepper) without attempting any parsing or type conversion.
+
+**Returns:**
+
+*   (`str`): The raw accumulated string.
+
+---
+
+### `get_valid_continuations`
+
+```python
+get_valid_continuations() -> list[str]
+```
+
+Returns a list of strings representing all valid token sequences that can legally follow the stepper's current state according to its `StateMachine`. Used by the `StructuringEngine` to determine which tokens to allow during logit processing.
+
+**Returns:**
+
+*   (`list[str]`): A list of valid continuation strings.
+
+---
+
+### `get_invalid_continuations`
+
+```python
+get_invalid_continuations() -> list[str]
+```
+
+Returns a list of strings that are explicitly *invalid* continuations from the current state. This is less commonly used than `get_valid_continuations` but can be implemented by custom `StateMachine` subclasses for specific exclusion rules.
+
+**Returns:**
+
+*   (`list[str]`): A list of invalid continuation strings.
+
+---
+
+### `has_reached_accept_state`
+
+```python
+has_reached_accept_state() -> bool
+```
+
+Checks if the stepper (and its sub-stepper, if active) is currently in a state designated as an `end_state` by its `StateMachine`.
+
+**Returns:**
+
+*   (`bool`): `True` if the stepper is in a valid terminal state, `False` otherwise.
+
+---
+
+### `can_accept_more_input`
+
+```python
+can_accept_more_input() -> bool
+```
+
+Checks if the stepper can consume more tokens based on the rules of its current `StateMachine` (e.g., character limits in a `CharacterStateMachine`).
+
+**Returns:**
+
+*   (`bool`): `True` if more input can be processed, `False` otherwise.
+
+---
+
+### `is_within_value`
+
+```python
+is_within_value() -> bool
+```
+
+Indicates if the stepper is currently in the process of accumulating characters for a specific value (e.g., inside a string literal, number, etc.), as opposed to being between structural elements.
+
+**Returns:**
+
+*   (`bool`): `True` if actively consuming value characters.
+
+---
+
+### `accepts_any_token`
+
+```python
+accepts_any_token() -> bool
+```
+
+Indicates if the stepper's current state allows *any* token as a valid continuation (often true for free-form text states).
+
+**Returns:**
+
+*   (`bool`): `True` if any token is currently valid.
+
+---
+
+### `get_identifier`
+
+```python
+get_identifier() -> str | None
+```
+
+Returns the identifier string associated with the stepper's current `StateMachine` or its active sub-stepper's `StateMachine`. Used by `get_stateful_structured_output`.
+
+**Returns:**
+
+*   (`str | None`): The identifier string, or `None`.
+
+---
+
+### `get_token_ids_history`
+
+```python
+get_token_ids_history() -> list[int]
+```
+
+Returns the sequence of token IDs that were consumed along the path taken by this stepper and its history. Used for accurate output reconstruction via `get_token_safe_output`.
+
+**Returns:**
+
+*   (`list[int]`): The list of consumed token IDs.
+
+---
+
+### `get_token_safe_output`
+
+```python
+get_token_safe_output(
+    decode_function: Callable[[list[int]], str]
+) -> str
+```
+
+Reconstructs the generated string output accurately by decoding the stored `token_ids_history` using the provided `decode_function`. This avoids potential errors from decoding the `raw_value` directly, especially if token healing occurred.
+
+**Parameters:**
+
+*   **`decode_function`** (`Callable[[list[int]], str]`): The tokenizer's decode function.
+
+**Returns:**
+
+*   (`str`): The accurately reconstructed output string.
+
+---
+
+## Properties
+
+*   **`state_machine`** (`StateMachine`):
+    The `StateMachine` this stepper is traversing. Read/write.
+*   **`current_state`** (`StateId`):
+    The current state ID within the `state_machine`. Read/write.
+*   **`target_state`** (`StateId | None`):
+    The target state ID for an in-progress transition. Read/write.
+*   **`sub_stepper`** (`Stepper | None`):
+    The active sub-stepper handling a nested `StateMachine` traversal, if any. Read/write.
+*   **`history`** (`list[Stepper]`):
+    The list of completed sub-steppers that led to the current state. Read/write.
+*   **`consumed_character_count`** (`int`):
+    The number of characters consumed along this stepper's path. Read/write.
+*   **`remaining_input`** (`str | None`):
+    Any portion of the last consumed token that was *not* processed by the current step. Read/write.
+*   **`_raw_value`** (`str | None`):
+    The raw accumulated string value. Use `get_raw_value()` for access. Read/write (internal use primarily).
 
 ---
 pse-docs/docs/api/structuring-engine.md
 ---
-# StructuringEngine API Reference
+# Structuring Engine API
 
-The `StructuringEngine` class is the primary interface for the Proxy Structuring Engine (PSE).
+This page details the API for the main `pse.StructuringEngine` class, which is the primary interface for using the Proxy Structuring Engine.
 
-It provides a powerful mechanism to enforce structured output generation from language models by using state machines to constrain token generation.
+```python
+class pse.StructuringEngine(
+    tokenizer: PreTrainedTokenizerFast | PreTrainedTokenizerBase,
+    whitelist_control_tokens: list[str] | None = None,
+    multi_token_sampling: bool = False,
+    max_resample_attempts: int = 5
+)
+```
 
-More documentation coming soon.
+Inherits from the core C++ `Engine`. Orchestrates token processing and interfaces with language models.
 
+**Parameters:**
+
+*   **`tokenizer`** (`PreTrainedTokenizerFast | PreTrainedTokenizerBase`):
+    An initialized tokenizer instance from the Hugging Face `transformers` library. Used to access the vocabulary, encode text to token IDs, and decode token IDs to text.
+*   **`whitelist_control_tokens`** (`list[str] | None`, optional):
+    A list of control token strings (e.g., `"<|eot_id|>"`) that should *not* be automatically masked by the engine, even if they might otherwise be considered invalid by the grammar near the end of generation. This prevents the engine from blocking essential control tokens like EOS. Defaults to `None`.
+*   **`multi_token_sampling`** (`bool`, optional):
+    Enables or disables the Multi-Token Processing optimization. When `True` (default in source, but shown as `False` here - *Correction: Default is `False` in provided `__init__` signature*), allows the engine to potentially return multiple tokens at once if an unambiguous multi-token sequence is required by the grammar. Defaults to `False`.
+*   **`max_resample_attempts`** (`int`, optional):
+    The maximum number of times the engine will ask the base sampler for a new token if the initially sampled token is invalid according to the grammar. Helps find a valid token when the probability mass is concentrated on invalid options. Defaults to `5`.
+
+---
+
+## Methods
+
+### `configure`
+
+```python
+configure(
+    structure: JSONSchemaSource | StateMachine,
+    **kwargs: Any
+) -> None
+```
+
+Configures the engine with the desired output structure. This translates the provided schema into the internal `StateMachine` representation used for enforcement.
+
+**Parameters:**
+
+*   **`structure`** (`JSONSchemaSource | StateMachine`):
+    The schema definition. Can be a Pydantic `BaseModel` class, a JSON Schema dictionary, a Python callable (function signature), a sequence (`list` or `tuple`) of these types (interpreted as `anyOf`), or a direct `StateMachine` instance. See [Schema Sources Guide](../guides/schema-sources.md).
+*   **`**kwargs`**:
+    Additional keyword arguments passed to the schema conversion process (e.g., `delimiters` or `buffer_length` when using `EncapsulatedStateMachine` or `WaitFor` implicitly or explicitly).
+
+---
+
+### `process_logits`
+
+```python
+process_logits(
+    input_ids: Any, # Framework-specific tensor/array
+    scores: Any     # Framework-specific tensor/array
+) -> Any          # Framework-specific tensor/array
+```
+
+The primary logits processing hook. This method should be added to the `logits_processor` list in your generation call. It queries the internal `Stepper`(s) to determine valid next tokens based on the `StateMachine` and masks the `scores` (logits) tensor, setting invalid token probabilities to negative infinity.
+
+**Parameters:**
+
+*   **`input_ids`**: The input token IDs tensor/array provided by the generation framework.
+*   **`scores`**: The logits tensor/array (typically shape `(batch_size, vocab_size)`) produced by the LLM for the current step.
+
+**Returns:**
+
+*   The modified logits tensor/array with invalid tokens masked.
+
+---
+
+### `sample`
+
+```python
+sample(
+    logprobs: Any, # Framework-specific tensor/array
+    sampler: Callable[..., Any]
+) -> Any       # Framework-specific tensor/array
+```
+
+The sampling hook. This method should be used as the `sampler` function in your generation call. It takes the processed logits (`logprobs`), calls the provided base `sampler` function, checks the validity of the sampled token(s), potentially resamples up to `max_resample_attempts`, handles multi-token processing, advances the internal `Stepper`(s), and returns the final chosen token ID(s).
+
+**Parameters:**
+
+*   **`logprobs`**: The processed logits tensor/array (shape `(batch_size, vocab_size)`) after `process_logits` has been applied.
+*   **`sampler`**: The base sampling function from your framework (e.g., `torch.multinomial`, `jax.random.categorical`, `tf.random.stateless_categorical`) which takes the logits and returns sampled token ID(s).
+
+**Returns:**
+
+*   A tensor/array containing the chosen token ID(s) for the current step.
+
+---
+
+### `get_structured_output`
+
+```python
+get_structured_output(
+    output_type: type[OutputType] | None = None,
+    raise_on_error: bool = False
+) -> OutputType | Any
+```
+
+Retrieves the final generated output string from the engine's state, parses it (primarily as JSON), and optionally validates/casts it to a specified Python type (like a Pydantic model).
+
+**Parameters:**
+
+*   **`output_type`** (`type[OutputType] | None`, optional):
+    The target Python type (e.g., a Pydantic `BaseModel` subclass) to parse and validate the output against. If `None`, the raw parsed JSON object (or string if JSON parsing fails) is returned. Defaults to `None`.
+*   **`raise_on_error`** (`bool`, optional):
+    If `True`, raises an error if JSON parsing or Pydantic validation fails. If `False`, logs the error and returns the raw string or partially parsed object. Defaults to `False`.
+
+**Returns:**
+
+*   An instance of `output_type` if provided and validation succeeds, otherwise the parsed JSON object, or the raw string if parsing fails and `raise_on_error` is `False`.
+
+---
+
+### `get_stateful_structured_output`
+
+```python
+get_stateful_structured_output(
+    output_type: type[OutputType] | None = None,
+    raise_on_error: bool = False
+) -> Iterator[tuple[str, OutputType | Any]]
+```
+
+Retrieves the generated output segmented by the state identifier that produced each part. Useful for complex state machines (like in PBA) where different parts of the output correspond to different logical steps (e.g., "thinking", "tool_call").
+
+**Parameters:**
+
+*   **`output_type`** (`type[OutputType] | None`, optional):
+    The target Python type to parse/validate each segment against (applied individually). Defaults to `None`.
+*   **`raise_on_error`** (`bool`, optional):
+    Whether to raise errors during parsing/validation of segments. Defaults to `False`.
+
+**Returns:**
+
+*   An iterator yielding tuples of `(state_identifier: str, parsed_output: OutputType | Any)`.
+
+---
+
+### `get_live_structured_output`
+
+```python
+get_live_structured_output() -> tuple[str, str] | None
+```
+
+Attempts to retrieve the *current*, potentially *incomplete* output being generated, along with the identifier of the state currently being processed. Useful for streaming or live display. Relies on `Stepper.get_token_safe_output`.
+
+**Returns:**
+
+*   A tuple `(state_identifier, current_output_string)` if available, otherwise `None`.
+
+---
+
+### `reset`
+
+```python
+reset(
+    hard_reset: bool = False
+) -> None
+```
+
+Resets the engine's internal state, clearing active `Stepper`s. If `hard_reset` is `True`, it also removes the configured `StateMachine`.
+
+**Parameters:**
+
+*   **`hard_reset`** (`bool`, optional): If `True`, removes the configured `StateMachine` in addition to resetting steppers. Defaults to `False`.
+
+---
+
+## Properties
+
+*   **`has_reached_accept_state`** (`bool`, read-only):
+    Returns `True` if any of the active `Stepper`s have reached a valid end state according to the configured `StateMachine`.
+*   **`state_machine`** (`StateMachine | None`):
+    The currently configured root `StateMachine` instance. Can be set directly or via `configure`.
+*   **`steppers`** (`list[Stepper]`):
+    The list of currently active `Stepper` objects representing the engine's state within the `StateMachine`. Can be read or set directly (advanced use).
+*   **`vocabulary`** (`TrieMap`, read-only):
+    The vocabulary map (string to token ID list) used by the engine, derived from the tokenizer.
+*   **`reverse_vocabulary`** (`dict[int, str]`, read-only):
+    The reverse vocabulary map (token ID to string).
+*   **`multi_token_mapping`** (`dict[int, list[int]]`):
+    The internal mapping used for multi-token processing. Can be read or set (advanced use).
 
 ---
 pse-docs/docs/api/state-machines/base.md
@@ -2217,18 +3157,123 @@ engine = StructuringEngine.configure(search_database)
 ---
 pse-docs/docs/core-concepts/core-architecture.md
 ---
-# PSE Core Architecture
+# Core Architecture
 
-The Proxy Structuring Engine is built on a high-performance C++ core that implements a novel non-deterministic finite state automaton (NFA) parsing algorithm. This page provides a detailed look at the internal architecture of PSE's core implementation, which is distributed as a precompiled binary via PyPI (pse-core).
+The Proxy Structuring Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
 
+```mermaid
+graph LR
+    A[User Schema Definition <br/>(Pydantic, JSON Schema, Custom SM)] --> B(StructuringEngine <br/> Python Interface);
+    C[LLM Backend <br/> (e.g., Transformers)] --> B;
+    D[Tokenizer] --> B;
+
+    subgraph PSE Core Logic
+        direction TB
+        B -- Configures --> E[StateMachine <br/> (Hierarchical State Graph)];
+        B -- Manages --> F[Steppers <br/> (Active State Navigators)];
+        E -- Defines Valid Transitions --> F;
+        F -- Queries Valid Tokens --> B;
+        B -- Modifies Logits --> C;
+        C -- Samples Token --> B;
+        B -- Advances Steppers --> F;
+        F -- Tracks History --> G[Output Reconstruction];
+    end
+
+    B -- Retrieves Final Output --> G;
+    G --> H[Guaranteed Structured Output <br/> (Python Object/String)];
+
+    style A fill:#DAD0AF,stroke:#024645,color:#024645
+    style H fill:#DAD0AF,stroke:#024645,color:#024645
+    style C fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    style D fill:#024645,stroke:#DAD0AF,color:#DAD0AF
+    style B fill:#0c5460,stroke:#DAD0AF,color:#DAD0AF
+    style E fill:#02323A,stroke:#DAD0AF,color:#DAD0AF
+    style F fill:#02323A,stroke:#DAD0AF,color:#DAD0AF
+    style G fill:#0c5460,stroke:#DAD0AF,color:#DAD0AF
+```
+
+## Key Components
+
+1.  **User Schema Definition:** Developers define the desired output structure using familiar Python tools like Pydantic models, standard JSON Schema, Python function signatures, or by composing PSE's base `StateMachine` types (`Chain`, `Loop`, etc.).
+2.  **`StructuringEngine` (Python Interface):** This is the main entry point. It takes the user's schema definition and the LLM's tokenizer. It translates the schema into the internal `StateMachine` representation and manages the interaction with the LLM during generation via the `process_logits` and `sample` hooks.
+3.  **`StateMachine` (Core Concept):** Represents the defined grammar as a hierarchical state graph. Each node is a state, and edges are transitions validated by potentially nested `StateMachine`s. This graph defines all valid sequences of tokens according to the structure.
+4.  **`Stepper` (Core Concept):** Represents an active position or hypothesis within the `StateMachine` graph. The `StructuringEngine` maintains one or more active `Stepper`s to track all possible valid paths through the grammar simultaneously. Steppers use the `StateMachine` to determine valid next moves.
+5.  **Tokenizer:** Provided by the user (typically from the LLM framework), used by the `StructuringEngine` to map between strings and token IDs for vocabulary lookups, token healing, and multi-token processing.
+6.  **LLM Backend:** The underlying language model (e.g., running via `transformers`). PSE integrates by intercepting the logits before sampling.
+7.  **Output Reconstruction:** After generation finishes (a `Stepper` reaches an end state), the `StructuringEngine` uses the `Stepper`'s history and tracked token IDs to reconstruct the final output string accurately and parse it into the desired Python object.
+
+## Runtime Enforcement Loop
+
+The core guarantee comes from the tight loop during generation:
+
+1.  LLM generates logits for the next token.
+2.  `StructuringEngine.process_logits` queries all active `Stepper`s for valid next tokens based on their current state in the `StateMachine`.
+3.  `process_logits` masks the logits, setting the probability of invalid tokens (those violating the grammar) to negative infinity.
+4.  `StructuringEngine.sample` takes the masked logits and uses a base sampler.
+5.  The sampled (guaranteed valid) token ID is used to advance the active `Stepper`s to their next state(s) via `Stepper.consume`.
+6.  This loop repeats until an end state is reached.
+
+This runtime enforcement ensures that every generated token strictly adheres to the structure defined by the `StateMachine`, eliminating the possibility of schema violations. Features like Token Healing and Multi-Token Processing add robustness and efficiency to this core loop.
+
+---
+pse-docs/docs/core-concepts/engine.md
+---
+# Engine
+
+The `StructuringEngine` (Python class `pse.StructuringEngine`, inheriting from the core `Engine`) is the central orchestrator within PSE. It acts as the primary interface for developers, managing the interaction between the language model, the defined structure (`StateMachine`), and the tokenization process.
+
+## Key Responsibilities
+
+*   **Configuration:** Accepts high-level schema definitions (Pydantic models, JSON Schema, function signatures, or custom `StateMachine` objects) via its `configure` method. It translates these definitions into the internal `StateMachine` representation used for enforcement.
+*   **LLM Integration:** Provides the necessary hooks (`process_logits`, `sample`) to integrate with language model generation loops (e.g., Hugging Face `transformers`).
+    *   `process_logits`: Modifies the LLM's output logit distribution at each step, masking tokens that would violate the structure defined by the current state(s) of the active `Stepper`(s). This is the core of the structural guarantee.
+    *   `sample`: Wraps the base sampling logic. It receives the processed logits, calls the base sampler, and then uses the sampled token ID(s) to advance the internal `Stepper`(s) according to the `StateMachine`. It handles multi-token processing and path selection (`StepperDelta`) internally.
+*   **State Management:** Maintains the set of active `Stepper` objects, representing all valid hypotheses about the structure being generated according to the `StateMachine`.
+*   **Tokenization Awareness:** Uses the provided tokenizer (e.g., from `transformers`) to map between token IDs and strings, enabling features like Token Healing and Multi-Token Processing by understanding the vocabulary.
+*   **Output Retrieval:** Provides methods (`get_structured_output`, `get_stateful_structured_output`) to retrieve the final generated string (reconstructed accurately using token history) and parse/validate it against the target schema (e.g., into a Pydantic model).
+
+## Role in PSE
+
+The `StructuringEngine` ties all the components of PSE together:
+
+1.  It takes the user-defined **Structure** (via `configure`).
+2.  It uses the **Tokenizer** to understand the LLM's vocabulary.
+3.  It manages the **Steppers** navigating the **StateMachine**.
+4.  It modifies the **LLM's Output** (logits) at runtime.
+5.  It handles **Sampling** and advances the state.
+6.  It provides the final, **Guaranteed Structured Output**.
+
+Developers primarily interact with the `StructuringEngine` instance to set up PSE and retrieve the results, while the underlying `StateMachine` and `Stepper` objects manage the detailed state traversal and validation internally.
 
 ---
 pse-docs/docs/core-concepts/multi-token-processing.md
 ---
 # Multi-Token Processing
 
-Multi-Token Processing (MTP) is an optional feature in PSE that can speed up generation when specific elements map to multiple tokens.
+Multi-Token Processing (MTP) is an optional optimization within the Proxy Structuring Engine (PSE) designed to accelerate generation when the grammar requires a specific sequence of characters that corresponds to multiple tokens in the language model's vocabulary.
 
+## The Problem: Inefficient Generation for Fixed Sequences
+
+Grammars often require specific keywords, operators, or phrases (e.g., `"function"`, `">="`, `"null"`). While PSE guarantees these are generated correctly, standard one-token-at-a-time generation can be inefficient if the sequence is long and represented by many tokens (e.g., `"metacognition"` might be tokenized as `["meta", "cognition"]`). If the grammar dictates that `"metacognition"` is the *only* valid continuation at a certain point, making the LLM generate `"meta"` and then separately generate `"cognition"` involves unnecessary steps.
+
+## How Multi-Token Processing Optimizes
+
+When MTP is enabled (`multi_token_sampling=True` in the `StructuringEngine`, the default), PSE attempts to identify these unambiguous multi-token sequences:
+
+1.  **Identify Required Sequence:** PSE determines the valid continuation strings required by the current state(s) of the grammar (e.g., only `"metacognition"` is allowed next).
+2.  **Tokenize Sequence:** It finds the corresponding sequence of tokens from the model's vocabulary (e.g., `["meta", "cognition"]`).
+3.  **Check for Ambiguity:** PSE checks if the *first* token of this sequence (e.g., `"meta"`) could *also* be the start of any *other* valid multi-token sequence allowed by the grammar at this exact point.
+4.  **Unambiguous Case - Proactive Return:** If the sequence is unambiguous (i.e., only `"metacognition"` can follow the sampling of `"meta"` according to the grammar), PSE can proactively return the *entire* sequence of tokens (`["meta", "cognition"]`) to the generation loop in a single step, even though the LLM only sampled the first one.
+5.  **Ambiguous Case - Cautious Return:** If the first token is ambiguous (e.g., the grammar allows both `"less_than"` represented by `["less", "_than"]` and `"less_than_or_equal_to"` represented by `["less", "_than", "_or", "_equal", "_to"]`), PSE will only return the common prefix sequence (`["less", "_than"]`) or potentially just the first sampled token (`"less"`). This avoids prematurely committing to the wrong grammatical path.
+
+## Benefits
+
+*   **Increased Efficiency:** Reduces the number of LLM forward passes required when the grammar dictates specific, unambiguous multi-token keywords or phrases.
+*   **Faster Generation:** Can significantly speed up the generation of boilerplate text, fixed syntax elements, or required keywords within the structured output.
+
+## User Experience
+
+This optimization works automatically behind the scenes when enabled. Users define their grammar using strings and high-level constructs; PSE handles the token-level analysis and potential multi-token returns to improve generation speed where possible without sacrificing the structural guarantee.
 
 ---
 pse-docs/docs/core-concepts/state-graph-traversal.md
@@ -2257,31 +3302,86 @@ PSE's state graph traversal algorithm extends traditional non-deterministic fini
 ---
 pse-docs/docs/core-concepts/state-machine.md
 ---
-# State Machine Architecture
+# State Machine
 
-More information coming soon.
+The `StateMachine` is the core component in PSE responsible for defining the structure or grammar that the language model's output must adhere to. It represents this structure as a graph where states are nodes and transitions between states are edges.
 
+## Key Concepts
+
+*   **Graph Structure:** A `StateMachine` defines a directed graph. Each node represents a specific point or state within the grammar (e.g., "expecting an opening brace," "inside a string," "expecting a comma or closing bracket").
+*   **States (`StateId`):** States are identified by either an integer or a string. Every state machine has a designated `start_state` and one or more `end_states` which signify a valid completion of the structure defined by that machine.
+*   **Transitions (`Edge`):** An edge represents a valid transition from one state to another. Crucially, each transition is associated with *another* `StateMachine` instance. This nested `StateMachine` must be successfully traversed (i.e., reach its end state) for the transition in the parent machine to be considered valid. This allows for hierarchical and recursive grammar definitions.
+*   **Hierarchy:** Because transitions are themselves `StateMachine`s, complex grammars (like nested JSON objects or code structures) can be built by composing smaller, simpler `StateMachine`s.
+*   **Traversal:** The actual process of moving through the state machine during generation is handled by `Stepper` objects (see [Stepper Concept](./stepper.md)). The `StateMachine` provides methods like `get_transitions` and `advance_stepper` that the `Stepper` uses to determine valid moves based on incoming tokens.
+*   **Properties:** State machines can have properties like `is_optional` (allowing the entire structure they define to be skipped) and `is_case_sensitive` (controlling token matching).
+
+## Role in PSE
+
+When you configure the `StructuringEngine` with a schema (like a Pydantic model or JSON Schema), PSE translates that schema into a root `StateMachine` object. This object, potentially composed of many nested `StateMachine`s, represents the complete grammar. The engine then uses this `StateMachine` graph at runtime to guide the LLM's token generation, ensuring the output strictly conforms to the defined structure. You can also build custom `StateMachine`s directly using PSE's base types for more complex control flows.
 
 ---
 pse-docs/docs/core-concepts/stepper.md
 ---
-# The Stepper System
+# Stepper
 
-More information coming soon.
+If the `StateMachine` defines the *state map*, the `Stepper` is the *navigator* that tracks the current position within that map during generation. It represents an active state or hypothesis about the structure being generated.
 
+## Key Concepts
+
+*   **Position Tracking:** A `Stepper` holds the `current_state` within its associated `StateMachine`. It knows where it is in the state graph.
+*   **Immutability:** Steppers generally follow an immutable pattern. Operations like consuming a token (`consume`) or branching (`branch`) typically return *new* `Stepper` instances representing the subsequent state(s), rather than modifying the original stepper. This is crucial for exploring multiple valid paths simultaneously in non-deterministic grammars.
+*   **Hierarchical Traversal:** When a `StateMachine` transition involves a nested `StateMachine`, the parent `Stepper` creates and manages a `sub_stepper` to traverse the nested machine. The parent stepper only advances its own state (`current_state` -> `target_state`) once the `sub_stepper` successfully reaches an end state.
+*   **History:** A `Stepper` maintains a `history` list, which stores the sequence of completed sub-steppers that led to its current state. This allows reconstruction of the generated structure.
+*   **Value Accumulation:** Steppers accumulate the raw string output (`_raw_value`) corresponding to the path they've taken. Methods like `get_current_value` can parse this raw string into appropriate Python types (though final parsing is usually handled by the `StructuringEngine`).
+*   **State Checks:** Steppers provide methods to query their status:
+    *   `has_reached_accept_state()`: Checks if the stepper (and its sub-stepper, if active) is currently in a valid end state according to its `StateMachine`.
+    *   `can_accept_more_input()`: Checks if further tokens can be consumed based on grammar rules (e.g., character limits).
+    *   `is_within_value()`: Indicates if the stepper is actively consuming characters for a specific value (e.g., inside a string literal).
+    *   `get_valid_continuations()`: Returns the set of strings that are valid next steps from the current state.
+*   **Interaction with StateMachine:** Steppers use their associated `StateMachine` to determine valid transitions (`get_transitions`) and to advance their state (`advance_stepper`).
+
+## Role in PSE
+
+During generation, the `StructuringEngine` maintains a list of active `Stepper` objects. When processing logits, it queries these steppers (via `get_valid_continuations`) to determine which tokens are allowed next. When sampling a token, the engine uses the steppers' `consume` method to generate the next set of active steppers, reflecting the updated positions in the grammar graph. The engine manages potentially multiple active steppers simultaneously to handle grammatical ambiguity, eventually selecting the best path based on criteria like reaching an accept state and token probabilities (see `StepperDelta`).
 
 ---
 pse-docs/docs/core-concepts/token-healing.md
 ---
 # Token Healing
 
-Token healing is an error recovery mechanism in PSE that enables robust handling of tokenization mismatches between language model tokens and grammar rules.
+Token Healing is a robustness feature within the Proxy Structuring Engine (PSE) designed to handle minor discrepancies between the exact token generated by the Language Model (LLM) and the canonical token expected by the grammar (StateMachine). It allows PSE to recover gracefully when the generated token contains slight variations (like extra spaces or minor artifacts) but still clearly corresponds to a valid structural continuation.
 
-## What is Token Healing?
+## The Problem: Tokenization Artifacts
 
-Token healing allows PSE to recover from situations where a model generates tokens that don't perfectly align with the grammar's expected tokens. Instead of rejecting these tokens outright, PSE can "heal" them by finding valid prefixes and continuing generation.
+LLMs operate on tokens, and sometimes the tokenization process introduces subtle variations compared to the clean strings defined in a grammar.
 
-More information coming soon.
+*Example:*
+*   A `StateMachine` expects the exact string `"example"` as the next valid token.
+*   The vocabulary contains a canonical token for `"example"` (e.g., ID 456).
+*   However, due to tokenization quirks, the LLM might generate a slightly different token, like ID 123, which decodes to `" example "` (with leading/trailing spaces).
 
+Without Token Healing, when the engine receives `" example "`, the `StateMachine` might only consume the `"example"` part, leaving the spaces as `remaining_input`. This could potentially cause the generation path to be incorrectly penalized or discarded, even though the LLM likely intended to produce the correct structural element. Standard multi-token sequences (like generating `"exam"` then `"ple"` to form `"example"`) are handled naturally by the Stepper's recursive consumption and are *not* the target of Token Healing.
+
+## How Token Healing Works
+
+Token Healing activates specifically when a call to `stepper->consume(token)` results in a stepper state where `remaining_input` is *not* null. This indicates the provided `token` was longer than what the current `StateMachine` step could fully process.
+
+1.  **Partial Consumption:** The `StateMachine` consumes the longest valid prefix it can from the input `token`. The unconsumed part is left as `remaining_input`.
+2.  **Prefix Identification:** The portion of the input `token` that *was* successfully consumed is identified (let's call this `consumed_prefix`).
+3.  **Vocabulary Lookup:** PSE performs an efficient lookup in the vocabulary (the HAT-trie provided to the `Engine`) using `vocab->longest_prefix(consumed_prefix)`. This search finds the longest token string stored in the vocabulary that *starts with* `consumed_prefix`.
+4.  **Canonical Match Found:** If the lookup finds such a token in the vocabulary (let's call it `canonical_token`), PSE assumes this `canonical_token` was the LLM's true intention.
+5.  **Healing Applied:**
+    *   A new `StepperDelta` is created, associating the transition with the `canonical_token` string found in the vocabulary (not the original, slightly deviant input `token`).
+    *   This `StepperDelta` is marked with `was_healed = true`.
+    *   The `remaining_input` on the resulting `Stepper` is cleared, as the healing process assumes the full `canonical_token` was intended and processed.
+6.  **Path Selection:** When choosing the best path forward (`StepperDelta::choose_best_path`), the engine prioritizes paths that did *not* require healing (`was_healed = false`). Healing serves as a fallback to recover potentially valid paths that would otherwise be discarded due to minor token deviations.
+
+## Benefits
+
+*   **Resilience to Tokenization Noise:** Makes generation robust against common tokenization artifacts like inconsistent spacing around words or punctuation.
+*   **Reduced False Negatives:** Prevents valid generation paths from being prematurely abandoned due to minor, recoverable token mismatches.
+*   **Improved Reliability:** Increases the overall success rate of generating complex, guaranteed structures, especially with models or tokenizers prone to minor inconsistencies.
+
+Token Healing enhances PSE's practical reliability by bridging the gap between the precise requirements of the `StateMachine` and the sometimes noisy reality of token-based LLM generation. It operates automatically when a vocabulary is provided to the engine.
 
 ---

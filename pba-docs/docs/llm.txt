@@ -63,18 +63,18 @@ flowchart TD
 
 ### Planning Phase
 
-The agent engages in iterative reasoning through multiple cognitive states:
+The agent first enters a planning loop, choosing between internal states to reason about the task:
 
-- **Thinking**: High-level reasoning and goal setting.
-- **Scratchpad**: Intermediate notes and working memory.
-- **Inner Monologue**: Reflective reasoning and self-assessment.
+*   **Thinking**: Deliberate analysis and planning.
+*   **Scratchpad**: Quick notes and working memory.
+*   **Inner Monologue**: Detailed self-reflection and narrative reasoning.
 
 ### Action Phase
 
-After sufficient planning, the agent transitions to executing actions:
+Once planning is complete, the agent selects an action to interact with the environment:
 
-- **Tool Calls**: Interaction with external APIs or custom tools.
-- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+*   **Tool Calls**: Invokes external tools or APIs via guaranteed schemas.
+*   **Python Code Execution**: (Optional) Runs Python code snippets.
 
 ### State Graph
 
@@ -87,7 +87,7 @@ PBA leverages PSE to deliver capabilities beyond conventional agent frameworks:
 
 *   🧠 **True Stateful Execution:** Define and enforce complex workflows using an explicit HSM (Plan ➔ Act). PSE guarantees state consistency.
 *   ✅ **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated arguments via schema validation *during generation*.
-*   ⚡ **Dynamic Runtime Adaptation (MCP):** Integrate new tools on-the-fly via the Model Context Protocol with guaranteed reliability.
+*   ⚡ **Dynamic Runtime Adaptation (MCP):** Connect to external MCP servers to integrate new tools on-the-fly. PBA dynamically updates its configuration, allowing immediate, reliable use of new capabilities.
 *   ⚙️ **Predictable Control Flow:** Explicitly define agent reasoning patterns and action sequences for deterministic behavior.
 *   🔌 **Universal LLM Compatibility:** Designed for local models using various backends (MLX, PyTorch supported).
 *   🧩 **Modular & Extensible:** Build bespoke agents by adding custom tools, states, or modifying the core HSM architecture.
@@ -194,18 +194,18 @@ flowchart TD
 
 ### Planning Phase
 
-The agent engages in iterative reasoning through multiple cognitive states:
+The agent first enters a planning loop, choosing between internal states to reason about the task:
 
-- **Thinking**: High-level reasoning and goal setting.
-- **Scratchpad**: Intermediate notes and working memory.
-- **Inner Monologue**: Reflective reasoning and self-assessment.
+*   **Thinking**: Deliberate analysis and planning.
+*   **Scratchpad**: Quick notes and working memory.
+*   **Inner Monologue**: Detailed self-reflection and narrative reasoning.
 
 ### Action Phase
 
-After sufficient planning, the agent transitions to executing actions:
+Once planning is complete, the agent selects an action to interact with the environment:
 
-- **Tool Calls**: Interaction with external APIs or custom tools.
-- **Python Code Execution**: Direct execution of Python scripts for complex tasks.
+*   **Tool Calls**: Invokes external tools or APIs via guaranteed schemas.
+*   **Python Code Execution**: (Optional) Runs Python code snippets.
 
 ### State Graph
 
@@ -218,7 +218,7 @@ PBA leverages PSE to deliver capabilities beyond conventional agent frameworks:
 
 *   🧠 **True Stateful Execution:** Define and enforce complex workflows using an explicit HSM (Plan ➔ Act). PSE guarantees state consistency.
 *   ✅ **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated arguments via schema validation *during generation*.
-*   ⚡ **Dynamic Runtime Adaptation (MCP):** Integrate new tools on-the-fly via the Model Context Protocol with guaranteed reliability.
+*   ⚡ **Dynamic Runtime Adaptation (MCP):** Connect to external MCP servers to integrate new tools on-the-fly. PBA dynamically updates its configuration, allowing immediate, reliable use of new capabilities.
 *   ⚙️ **Predictable Control Flow:** Explicitly define agent reasoning patterns and action sequences for deterministic behavior.
 *   🔌 **Universal LLM Compatibility:** Designed for local models using various backends (MLX, PyTorch supported).
 *   🧩 **Modular & Extensible:** Build bespoke agents by adding custom tools, states, or modifying the core HSM architecture.
@@ -282,8 +282,8 @@ Key responsibilities of a Frontend implementation include:
 
 PBA currently includes built-in support for the following frontends:
 
-*   **[MLX](./mlx.md):** Optimized for Apple Silicon (M-series chips), leveraging the MLX framework for efficient local inference. (Content Pending)
-*   **[PyTorch](./pytorch.md):** Supports running models using PyTorch on CPUs or GPUs (NVIDIA/AMD). (Content Pending)
+*   **[MLX](./mlx.md):** Optimized for Apple Silicon (M-series chips), leveraging the MLX framework for efficient local inference.
+*   **[PyTorch](./pytorch.md):** Supports running models using PyTorch on CPUs or GPUs (NVIDIA/AMD).
 
 ## Choosing a Frontend
 
@@ -548,8 +548,9 @@ Experiment with different prompts to see how the agent plans, uses tools (if ava
 ## Next Steps
 
 *   Explore the [Core Concepts](../concepts/index.md) to understand the underlying architecture.
-*   Learn how to add [Custom Tools](../extending/custom-tools.md) (Content Pending).
-*   Configure different [LLM Frontends](../frontends/index.md) (Content Pending).
+*   Learn how to add [Custom Tools](../extending/custom-tools.md).
+*   Configure different [LLM Frontends](../frontends/index.md).
+
 
 ---
 pba-docs/docs/concepts/index.md
@@ -576,7 +577,7 @@ Each step in the agent's HSM is represented by an **Agent State**. These states 
 
 Each state uses its own nested PSE `StateMachine` to define and enforce the structure of the content generated *within* that state.
 
-[Learn more about States](./states.md) (Content Pending)
+[Learn more about States](./states.md)
 
 ## 3. Tools
 
@@ -603,9 +604,10 @@ PBA supports dynamic tool integration at runtime using the Model Context Protoco
 *   **Adaptability:** Agents can connect to MCP servers to gain access to new tools without restarting or retraining.
 *   **Reliability:** Tools loaded via MCP are integrated into the `ToolCallState` and benefit from the same PSE-guaranteed schema enforcement.
 
-[Learn more about MCP Integration](../extending/model-context-protocol.md) (Content Pending)
+[Learn more about MCP Integration](../extending/model-context-protocol.md)
 
 These core concepts work together to create an agent framework focused on engineered reliability, control, and adaptability.
+
 
 ---
 pba-docs/docs/concepts/pse-integration.md
@@ -640,6 +642,8 @@ For a deeper understanding of the underlying mechanisms:
 
 *   Refer to the [Proxy Structuring Engine Documentation](https://docs.theproxycompany.com/pse/) for details on PSE's core concepts (HSM, Steppers, Engine, Token Healing).
 
+This tight integration ensures not only that the agent follows the correct high-level steps but also that each individual step (like a tool call or code generation) is structurally sound, drastically reducing runtime errors and increasing overall system reliability.
+
 ---
 pba-docs/docs/concepts/state-machine.md
 ---
@@ -651,7 +655,7 @@ The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical 
 
 The default PBA state machine defines a fundamental operational cycle:
 
-1.  **Planning Phase:** The agent first enters a planning loop. Here, it utilizes internal states like `Thinking`, `Scratchpad`, and `InnerMonologue` to analyze the task, break down problems, and formulate a strategy. The agent can cycle through these planning states multiple times (configurable) to refine its approach. PSE ensures the content generated within these states adheres to their defined delimiters (e.g., ```thinking ... ```).
+1.  **Planning Phase:** The agent first evaluates the task. If planning is needed (or forced), it enters a planning loop. Within each loop iteration, it chooses one of the available planning states (`Thinking`, `Scratchpad`, `InnerMonologue`) to analyze the task, break down problems, or formulate strategy. The agent can cycle through this planning loop multiple times (configurable) to refine its approach. PSE ensures the content generated within these states adheres to their defined delimiters (e.g., ```thinking ... ```).
 
 2.  **Action Phase:** Once planning is sufficient, the agent transitions to the action phase. It selects *one* available action state, such as `ToolCallState` (to use an external tool) or `Python` (to execute code). PSE guarantees that the output for the chosen action state conforms to the required structure (e.g., a valid JSON schema for the selected tool call).
 
@@ -730,7 +734,7 @@ The standard PBA includes several pre-defined states grouped into Planning and A
 
 These states are used within the agent's planning loop for internal reasoning and strategy formulation. The content generated here is typically *not* shown directly to the user.
 
-*   **`Thinking`:** For deliberate, analytical thought processes. Simulates conscious reflection and reasoning. Uses a `FencedFreeformStateMachine` to allow relatively unstructured text within its delimiters.
+*   **`Thinking`:** For deliberate, analytical thought processes (System 2 thinking). Simulates conscious reflection, reasoning about the task, and planning the next steps. Uses a `FencedFreeformStateMachine` to allow relatively unstructured text within its delimiters.
 *   **`Scratchpad`:** For quick notes, temporary calculations, or outlining steps. Mimics jotting down ideas. Also uses a `FencedFreeformStateMachine`.
 *   **`InnerMonologue`:** For more detailed, narrative-style internal dialogue. Allows the agent to explore nuances and build a coherent mental model. Uses a `FencedFreeformStateMachine`.
 
@@ -753,7 +757,7 @@ This ensures that even the agent's internal steps and action requests are struct
 
 ## Extending with Custom States
 
-You can define and integrate your own custom `AgentState` classes to add unique capabilities or modify the agent's workflow. See [Custom States](../extending/custom-states.md) (Content Pending).
+You can define and integrate your own custom `AgentState` classes to add unique capabilities or modify the agent's workflow. See [Custom States](../extending/custom-states.md).
 
 ---
 pba-docs/docs/concepts/tools.md
@@ -783,7 +787,7 @@ Each tool is defined with:
 A key differentiator for PBA is how it handles tool interactions using the Proxy Structuring Engine (PSE):
 
 1.  **Tool Selection:** During the Planning Phase, the agent reasons about which tool (if any) is needed to accomplish the current task.
-2.  **Structured Invocation:** When the agent transitions to the `ToolCallState`, it must generate output conforming to the JSON schema of *one* of the available tools. PSE *enforces* this structure at runtime.
+2.  **Structured Invocation:** When the agent transitions to the `ToolCallState`, it must generate output conforming to the JSON schema of *one* of the available tools (including specifying its `intention` and the tool `name` and `arguments`). PSE *enforces* this structure at runtime.
 3.  **Guaranteed Schema:** This means the agent *cannot* hallucinate non-existent tools or provide arguments that don't match the required types or format for the selected tool. Malformed tool calls are prevented *before* they happen.
 4.  **Execution:** PBA receives the guaranteed-valid tool call structure (name and arguments) and executes the corresponding tool implementation.
 5.  **Result Processing:** The tool's output (often formatted as an `Interaction` object) is returned to the agent's memory and informs the next step in its process.
@@ -796,7 +800,8 @@ You can easily extend PBA's capabilities by adding your own custom tools. See th
 
 ## Model Context Protocol (MCP)
 
-PBA also supports dynamically loading tools at runtime from external servers using the Model Context Protocol (MCP). These tools are integrated seamlessly and benefit from the same PSE schema guarantees. See [MCP Integration](../extending/model-context-protocol.md) (Content Pending).
+PBA also supports dynamically loading tools at runtime from external servers using the Model Context Protocol (MCP). These tools are integrated seamlessly and benefit from the same PSE schema guarantees. See [MCP Integration](../extending/model-context-protocol.md).
+
 
 ---
 pba-docs/docs/extending/custom-state-graphs.md
@@ -963,7 +968,8 @@ To make the agent use your custom state, you need to modify the main `AgentState
 3.  **Add to `self.states`:** Add the instance to the `self.states` dictionary in `AgentStateMachine.__init__` so the agent recognizes its identifier.
 4.  **Modify State Graph:** Update the `state_graph` dictionary to include transitions *to* and *from* your new state. For example, you might add it as an option in the Planning phase or as a distinct step after the Action phase.
 
-See [Custom State Graphs](./custom-state-graphs.md) (Content Pending) for more details on modifying the agent's core workflow.
+See [Custom State Graphs](./custom-state-graphs.md) for more details on modifying the agent's core workflow.
+
 
 ---
 pba-docs/docs/extending/custom-tools.md
@@ -1064,7 +1070,8 @@ Now, when the agent decides it needs to perform a calculation during its Plannin
 
 *   Explore the existing tools in `agent/tools/` for more examples.
 *   Consider using Pydantic models for complex tool arguments; PBA integrates seamlessly with them for schema generation.
-*   Learn about adding tools dynamically via [MCP](../extending/model-context-protocol.md) (Content Pending).
+*   Learn about adding tools dynamically via [MCP](../extending/model-context-protocol.md).
+
 
 ---
 pba-docs/docs/extending/index.md
@@ -1082,17 +1089,17 @@ There are several ways to extend and customize PBA:
     *   **Why:** This is the most common way to add new capabilities and ground the agent in specific data or services relevant to your application.
     *   **How:** Create a Python file in `agent/tools/`, define your function with type hints and a docstring. PBA automatically discovers it, generates a schema, and makes it available to the `ToolCallState`.
 
-2.  **[Custom States](./custom-states.md) (Content Pending):**
+2.  **[Custom States](./custom-states.md):**
     *   **What:** Define entirely new `AgentState` classes with their own unique logic, prompts, delimiters, and internal PSE `StateMachine` for structure enforcement.
     *   **Why:** Allows you to add distinct phases or modes of operation to the agent beyond the default Planning/Action states (e.g., a "Summarization" state, a "User Feedback" state).
     *   **How:** Subclass `agent.state.AgentState`, implement the required properties (`state_machine`, `state_prompt`), and integrate it into the main `AgentStateMachine`.
 
-3.  **[Custom State Graphs](./custom-state-graphs.md) (Content Pending):**
+3.  **[Custom State Graphs](./custom-state-graphs.md):**
     *   **What:** Modify the main `AgentStateMachine` definition in `agent/state_machine.py`.
     *   **Why:** Change the agent's core workflow. You could alter the planning loop, add parallel action paths, introduce conditional transitions, or create entirely different high-level agent architectures.
     *   **How:** Directly edit the `state_graph` dictionary within the `AgentStateMachine` class, defining new states and transitions using existing or custom `AgentState` instances. Requires understanding PSE `StateMachine` composition.
 
-4.  **[Model Context Protocol (MCP)](./model-context-protocol.md) (Content Pending):**
+4.  **[Model Context Protocol (MCP)](./model-context-protocol.md):**
     *   **What:** Connect the agent to external MCP servers at runtime.
     *   **Why:** Dynamically load tools and capabilities from other services without modifying the agent's core code. Enables building distributed, adaptive agent systems.
     *   **How:** Use the built-in `list_mcp_servers` and `add_mcp_server` tools. PBA handles the connection and dynamic reconfiguration of the `ToolCallState`.
@@ -1185,7 +1192,7 @@ The constructor initializes the agent with its core configuration.
 *   `interface` (`Interface`): An instance of a class implementing the `agent.interface.Interface` abstract base class (e.g., `CLIInterface`). This handles all input/output with the user.
 *   `inference` (`LocalInference`): An instance of `agent.llm.local.LocalInference`, which manages the connection to the local LLM backend (via a `Frontend`) and holds the `StructuringEngine`.
 *   `seed` (`int | None`, optional): A seed for the random number generator used during LLM sampling, allowing for reproducible outputs. Defaults to a random integer if `None`.
-*   `tools` (`list[Tool] | list[str] | None`, optional): Specifies the tools available to the agent. Can be a list of instantiated `Tool` objects, a list of tool filenames (strings) to load from `agent/tools/`, or `None` to load all tools found in that directory. Defaults to `None`.
+*   `tools` (`list[Tool] | list[str] | None`, optional): Specifies the tools available to the agent. Can be a list of instantiated `Tool` objects, a list of tool filenames (strings) to load from `agent/tools/`, or `None` to automatically load all tools found in the default `agent/tools/` directory. Defaults to `None` (load all).
 *   `python_interpreter` (`bool`, optional): If `True`, enables the `Python` action state, allowing the agent to generate and execute Python code snippets. Defaults to `False`.
 *   `max_planning_loops` (`int`, optional): The maximum number of times the agent can cycle through its planning states (`Thinking`, `Scratchpad`, `InnerMonologue`) before being forced to transition to the action phase. Defaults to `3`.
 *   `force_planning` (`bool`, optional): If `True`, the agent *must* complete at least one planning loop before taking action. If `False`, the agent can potentially skip planning and go directly to an action if the LLM deems it appropriate. Defaults to `True`.
@@ -1237,8 +1244,8 @@ Understanding these APIs is essential for extending PBA, integrating it into lar
 ## Key Components
 
 *   **[Agent](./agent.md):** The main orchestrator class managing the agent's lifecycle, state, memory, tools, and interaction with the LLM backend.
-*   **[Tool & ToolCall](./tool.md) (Content Pending):** Classes defining external capabilities (`Tool`) and the structure for invoking them (`ToolCall`).
-*   **[AgentState](./state.md) (Content Pending):** The base class for defining individual states within the agent's state machine and the default states provided by PBA.
+*   **[Tool & ToolCall](./tool.md):** Classes defining external capabilities (`Tool`) and the structure for invoking them (`ToolCall`).
+*   **[AgentState](./state.md):** The base class for defining individual states within the agent's state machine and the default states provided by PBA.
 
 *(Note: This API reference is currently under development. More detailed documentation for each component will be added.)*
 
@@ -1383,7 +1390,7 @@ class Tool:
 
 **Key Methods**
 
-*   `async call(self, caller: Any, **kwargs) -> Any`: Executes the tool. It handles both sync and async `callable`s. The `caller` argument (typically the `Agent` instance) is passed as `self` to the underlying callable. `**kwargs` are the arguments extracted from the LLM's tool call.
+*   `async call(self, caller: Any, **kwargs) -> Any`: Executes the tool's underlying `callable`. It handles both synchronous and asynchronous functions. The `caller` argument (which is the `Agent` instance invoking the tool) is automatically passed as the *first* argument (conventionally named `self`) to the tool's `callable` function. `**kwargs` are the arguments extracted from the LLM's tool call, matching the tool's defined `schema`.
 *   `to_dict() -> dict`: Generates a JSON Schema representation suitable for inclusion in the `ToolCallState`'s schema definition and the system prompt. It wraps the tool's argument `schema` within a structure that also requires an `intention` field from the LLM.
 *   `load(...)` (staticmethod): Discovers and loads tools from Python files in a specified directory (defaults to `agent/tools/`).
 *   `from_file(...)` (staticmethod): Loads a single tool from a specific Python file.
