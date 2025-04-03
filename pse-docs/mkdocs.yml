@@ -83,19 +83,28 @@ nav:
     - Quickstart: getting-started/quickstart.md
 
   - Core Concepts:
-    # - State Machine Architecture: core-concepts/state-machine.md
-    # - Core Architecture: core-concepts/core-architecture.md
-    - State Graph Traversal Algorithm: core-concepts/state-graph-traversal.md
-    # - Stepper System: core-concepts/stepper.md
-    # - Token Healing: core-concepts/token-healing.md
-    # - Multi-Token Processing: core-concepts/multi-token-processing.md
+    - State Machine Architecture: core-concepts/state-machine.md
+    - Core Architecture: core-concepts/core-architecture.md
+    - State Graph Traversal: core-concepts/state-graph-traversal.md
+    - Stepper System: core-concepts/stepper.md
+    - Token Healing: core-concepts/token-healing.md
+    - Multi-Token Processing: core-concepts/multi-token-processing.md
+    - Engine: core-concepts/engine.md
 
   - API Reference:
+    - Structuring Engine: api/structuring-engine.md
+    - State Machine: api/state-machine.md
+    - Stepper: api/stepper.md
     - State Machines:
       - Base State Machines: api/state-machines/base.md
       - Data Type State Machines: api/state-machines/datatypes.md
       - Format-Specific State Machines: api/state-machines/formats.md
       - Schema Sources: api/state-machines/schema-sources.md
+      
+  - Guides:
+    - Base State Machines: guides/base-state-machines.md
+    - Framework Adapters: guides/framework-adapters.md
+    - Schema Sources: guides/schema-sources.md
 
 plugins:
   - search

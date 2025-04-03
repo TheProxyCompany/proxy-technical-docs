@@ -86,23 +86,23 @@ nav:
     - Installation: getting-started/installation.md
     - Quickstart: getting-started/quickstart.md
   - Core Concepts:
-    - index.md
+    - Overview: concepts/index.md
     - State Machine: concepts/state-machine.md
     - Agent States: concepts/states.md
     - Tools: concepts/tools.md
     - PSE Integration: concepts/pse-integration.md
   - Extending the Agent:
-    - index.md
+    - Overview: extending/index.md
     - Custom Tools: extending/custom-tools.md
     - Custom States: extending/custom-states.md
     - Custom State Graphs: extending/custom-state-graphs.md
     - Model Context Protocol: extending/model-context-protocol.md
   - LLM Frontends:
-      - index.md
+      - Overview: frontends/index.md
       - MLX: frontends/mlx.md
       - PyTorch: frontends/pytorch.md
   - API Reference:
-    - index.md
+    - Overview: api/index.md
     - Agent Class: api/agent.md
     - Tool & ToolCall: api/tool.md
     - AgentState: api/state.md
