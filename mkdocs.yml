@@ -98,7 +98,7 @@ plugins:
             cards_layout_dir: layouts
             cards_layout: custom
             cards_layout_options:
-              background_image: assets/tpc-logo.png
+              background_image: assets/docs-logo.png
               background_color: transparent
               title: The Proxy Company
               description: The Proxy Company's Technical Documentation
