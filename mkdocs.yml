@@ -100,8 +100,8 @@ plugins:
             cards_layout_options:
               background_image: assets/docs-logo.png
               background_color: transparent
-              title: The Proxy Company
-              description: The Proxy Company's Technical Documentation
+              title: The Proxy Company's Technical Documentation
+              description: Officially supported documentation for the Proxy Structuring Engine and Proxy Base Agent
               color: "#024645"
 
 # For Vercel deployment
