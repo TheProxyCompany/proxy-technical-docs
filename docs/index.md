@@ -22,7 +22,7 @@ This documentation will help you understand and utilize our technologies effecti
 -   :material-robot-outline: __Proxy Base Agent (PBA)__
 
     ---
-    A foundational agent built on top of the Proxy Structuring Engine. We share it as a research preview and invite developers to experiment with it.
+    A foundation for building reliable, stateful AI agents using the Proxy Structuring Engine.
 
     [:octicons-book-24: PBA Documentation](/pba/){: .md-button .md-button--primary }
 

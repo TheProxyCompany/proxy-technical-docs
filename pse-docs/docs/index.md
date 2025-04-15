@@ -12,12 +12,12 @@ It compiles rules and schemas into efficient hierarchical state machines that dy
 - **Agent Frameworks** - Constrain agent actions and reasoning (see [Proxy Base Agent](https://github.com/TheProxyCompany/proxy-base-agent))
 
 ## Key Points
-- **Dynamic Validation** - A hierarchical state machine validates each token generated, ensuring correctness during generation
-- **Token Healing** - Automatically recovers from tokenization mismatches, maintaining structural integrity
-- **Parallel Generation** - Explores multiple potential output paths concurrently, maximizing quality within constraints
-- **Minimal Overhead** - Adds less than 20ms per token, making it suitable for latency-sensitive applications
-- **Schema Versatility** - Supports JSON Schema, Pydantic models, custom grammars, and custom state machines for maximum flexibility
-- **Framework Agnostic** - Integrates with PyTorch, MLX, TensorFlow, JAX, and more
+- **100% Structural Guarantee** - Eliminate schema violations, parsing errors, and malformed outputs. Enables reliable downstream processing and state management.
+- **Handles Complexity & Recursion** - Reliably generate deeply nested JSON, valid code, or custom recursive formats via the core HSM engine.
+- **Flexible Schema Definition** - Configure instantly using Pydantic models, JSON Schema, Python function signatures, or compose custom structures with pse.types.
+- **Robust & Resilient** - Built-in Token Healing recovers from minor tokenization artifacts. Principled path selection resolves ambiguity deterministically.
+- **High-Performance C++ Core** - Optimized HSM engine delivers guaranteed structure with minimal latency (~20ms/token overhead).
+- **Model & Framework Agnostic** - Integrates with any local LLM stack via standard generation hooks. Optional mixins simplify transformers integration.
 
 ## Getting Started
 
