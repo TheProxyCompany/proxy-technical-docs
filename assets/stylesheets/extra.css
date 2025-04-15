@@ -15,6 +15,7 @@
   /* Custom button colors */
   --md-button-bg-color: var(--md-primary-fg-color);
   --md-button-text-color: var(--md-accent-fg-color);
+  --md-mermaid-label-fg-color: var(--md-accent-fg-color);
 
   /* Footer colors */
   --md-footer-bg-color: var(--md-primary-fg-color);
@@ -31,6 +32,7 @@
   --md-default-bg-color: #121212;
   --md-default-bg-color--light: #1e1e1e;
   --md-typeset-a-color: var(--md-accent-fg-color);
+  --md-mermaid-label-fg-color: var(--md-accent-fg-color);
 
   /* Footer dark mode */
   --md-footer-bg-color: var(--md-primary-fg-color--light);
@@ -84,7 +86,7 @@
 [data-md-color-scheme="default"] .md-nav--primary .md-nav__link,
 [data-md-color-scheme="default"] .md-nav--secondary .md-nav__link,
 [data-md-color-scheme="default"] .md-sidebar .md-nav__link {
-  color: var(--md-primary-fg-color--dark);
+  color: var(--md-primary-fg-color);
 }
 
 /* Search results */
@@ -137,6 +139,10 @@
 .md-typeset table:not([class]) th {
   background-color: var(--md-primary-fg-color);
   color: var(--md-accent-fg-color);
+}
+
+.nodeLabel {
+  color: var(--md-accent-fg-color) !important;
 }
 
 html {
