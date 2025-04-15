@@ -1,3 +1,7 @@
+---
+hide:
+  - navigation
+---
 # The Proxy Company Documentation
 
 Welcome to the technical documentation for The Proxy Company.
