@@ -160,6 +160,16 @@
   justify-content: space-between;
 }
 
+.nodeLabel p {
+  color: unset !important;
+}
+
+.cluster span {
+  color: var(--md-primary-fg-color) !important;
+  border-color: var(--md-primary-fg-color) !important;
+  background-color: black !important;
+}
+
 html {
   background-color: #024645;
   scroll-behavior: smooth;
