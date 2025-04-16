@@ -46,7 +46,7 @@ flowchart TD
     Action --> Finish([Finish])
 
     linkStyle 2,3,4,5,6 stroke:#DAD0AF,stroke-width:2px;
-    classDef phase fill:#02464550, border-color:#DAD0AF, color:#024645
+    classDef phase fill:#024645, border-color:#DAD0AF, color:#024645
     classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:diamond
     classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF
     classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:stadium

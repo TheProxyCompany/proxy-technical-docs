@@ -11,7 +11,7 @@ flowchart TD
     B <-- "Modifies Logits <br/> Sample Next Token" --> C
     D[Tokenizer] <-- Tokenizer Aware Structure --> B
 
-    subgraph PSE
+    subgraph PSE[" "]
         direction TB
         B -- Configures --> E["StateMachine <br/> (Hierarchical State Graph)"]
         E -- Defines Valid Transitions --> F["Steppers <br/> (Active State Navigators)"]
