@@ -83,8 +83,8 @@ nav:
     - Quickstart: getting-started/quickstart.md
 
   - Core Concepts:
-    - State Machine Architecture: core-concepts/state-machine.md
     - Core Architecture: core-concepts/core-architecture.md
+    - State Machine Architecture: core-concepts/state-machine.md
     - State Graph Traversal: core-concepts/state-graph-traversal.md
     - Stepper System: core-concepts/stepper.md
     - Token Healing: core-concepts/token-healing.md
@@ -100,7 +100,7 @@ nav:
       - Data Type State Machines: api/state-machines/datatypes.md
       - Format-Specific State Machines: api/state-machines/formats.md
       - Schema Sources: api/state-machines/schema-sources.md
-      
+
   - Guides:
     - Base State Machines: guides/base-state-machines.md
     - Framework Adapters: guides/framework-adapters.md
