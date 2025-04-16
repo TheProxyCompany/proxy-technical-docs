@@ -81,7 +81,7 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 nav:
-  - Overview: index.md
+  - Proxy Base Agent: index.md
   - Getting Started:
     - Installation: getting-started/installation.md
     - Quickstart: getting-started/quickstart.md

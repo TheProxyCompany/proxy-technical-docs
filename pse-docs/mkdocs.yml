@@ -77,11 +77,10 @@ extra_css:
   - ../assets/stylesheets/extra.css
 
 nav:
-  - Proxy Structuring Engine:
-    - index.md
+  - Proxy Structuring Engine: index.md
+  - Getting Started:
     - Installation: getting-started/installation.md
     - Quickstart: getting-started/quickstart.md
-
   - Core Concepts:
     - Core Architecture: core-concepts/core-architecture.md
     - State Machine Architecture: core-concepts/state-machine.md
