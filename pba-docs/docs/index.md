@@ -45,7 +45,7 @@ flowchart TD
 
     Action --> Finish([Finish])
 
-    classDef phase fill:#013433,stroke:#DAD0AF,border-color:#DAD0AF
+    classDef phase stroke:#DAD0AF,border-color:#DAD0AF
     classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:diamond
     classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF
     classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:stadium
