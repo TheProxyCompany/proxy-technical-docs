@@ -24,7 +24,7 @@ This documentation will help you understand and utilize our technologies effecti
 -   :material-robot-outline: __Proxy Base Agent (PBA)__
 
     ---
-    A foundational agent built on top of the Proxy Structuring Engine. We share it as a research preview and invite developers to experiment with it.
+    A foundation for building reliable, stateful AI agents using the Proxy Structuring Engine.
 
     [:octicons-book-24: PBA Documentation](/pba/){: .md-button .md-button--primary }
 
@@ -124,12 +124,11 @@ It can be extended and modified to support more complex agentic behaviors.
 
 PBA leverages PSE to deliver capabilities beyond conventional agent frameworks:
 
-*   **True Stateful Execution:** Define and enforce complex workflows using an explicit HSM (Plan �� Act). PSE guarantees state consistency.
-*   **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated arguments via schema validation *during generation*.
-*   **Dynamic Runtime Adaptation (MCP):** Connect to external MCP servers to integrate new tools on-the-fly. PBA dynamically updates its configuration, allowing immediate, reliable use of new capabilities.
-*   **Predictable Control Flow:** Explicitly define agent reasoning patterns and action sequences for deterministic behavior.
-*   **Universal LLM Compatibility:** Designed for local models using various backends (MLX, PyTorch supported).
-*   **Modular & Extensible:** Build bespoke agents by adding custom tools, states, or modifying the core HSM architecture.
+*   **Guaranteed Stateful Execution:** Define agent workflows as explicit HSMs (e.g., Plan ➔ Act). PSE ensures the LLM follows the defined states and transitions precisely.
+*   **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated function arguments. PSE guarantees tool calls match their required schema during generation.
+*   **Dynamic Runtime Adaptation (MCP):** Connect to external Model Context Protocol (MCP) servers on-the-fly. PBA instantly integrates new tools and capabilities with the same structural guarantees, no restarts needed.
+*   **Model & Framework Agnostic:** Run reliable agents locally using your preferred LLMs and backends (MLX, PyTorch supported).
+*   **Modular & Extensible:** Build specialized agents by adding custom tools, defining new states, or modifying the core HSM architecture.
 
 ## Installation & Quickstart
 
@@ -1335,12 +1334,12 @@ It compiles rules and schemas into efficient hierarchical state machines that dy
 - **Agent Frameworks** - Constrain agent actions and reasoning (see [Proxy Base Agent](https://github.com/TheProxyCompany/proxy-base-agent))
 
 ## Key Points
-- **Dynamic Validation** - A hierarchical state machine validates each token generated, ensuring correctness during generation
-- **Token Healing** - Automatically recovers from tokenization mismatches, maintaining structural integrity
-- **Parallel Generation** - Explores multiple potential output paths concurrently, maximizing quality within constraints
-- **Minimal Overhead** - Adds less than 20ms per token, making it suitable for latency-sensitive applications
-- **Schema Versatility** - Supports JSON Schema, Pydantic models, custom grammars, and custom state machines for maximum flexibility
-- **Framework Agnostic** - Integrates with PyTorch, MLX, TensorFlow, JAX, and more
+- **100% Structural Guarantee** - Eliminate schema violations, parsing errors, and malformed outputs. Enables reliable downstream processing and state management.
+- **Handles Complexity & Recursion** - Reliably generate deeply nested JSON, valid code, or custom recursive formats via the core HSM engine.
+- **Flexible Schema Definition** - Configure instantly using Pydantic models, JSON Schema, Python function signatures, or compose custom structures with pse.types.
+- **Robust & Resilient** - Built-in Token Healing recovers from minor tokenization artifacts. Principled path selection resolves ambiguity deterministically.
+- **High-Performance C++ Core** - Optimized HSM engine delivers guaranteed structure with minimal latency (~20ms/token overhead).
+- **Model & Framework Agnostic** - Integrates with any local LLM stack via standard generation hooks. Optional mixins simplify transformers integration.
 
 ## Getting Started
 
@@ -4500,34 +4499,36 @@ pse-docs/docs/core-concepts/core-architecture.md
 The Proxy Structuring Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
 
 ```mermaid
-graph LR
-    A[User Schema Definition <br/>(Pydantic, JSON Schema, Custom SM)] --> B(StructuringEngine <br/> Python Interface);
-    C[LLM Backend <br/> (e.g., Transformers)] --> B;
-    D[Tokenizer] --> B;
+flowchart TD
+    A[User Schema Definition (Pydantic, JSON Schema, Custom SM)] --> B(StructuringEngine Python Interface)
+    C[LLM Backend (e.g., Transformers)] --> B
+    D[Tokenizer] --> B
 
     subgraph PSE Core Logic
         direction TB
-        B -- Configures --> E[StateMachine <br/> (Hierarchical State Graph)];
-        B -- Manages --> F[Steppers <br/> (Active State Navigators)];
-        E -- Defines Valid Transitions --> F;
-        F -- Queries Valid Tokens --> B;
-        B -- Modifies Logits --> C;
-        C -- Samples Token --> B;
-        B -- Advances Steppers --> F;
-        F -- Tracks History --> G[Output Reconstruction];
+        B -- Configures --> E[StateMachine <br/> (Hierarchical State Graph)]
+        B -- Manages --> F[Steppers <br/> (Active State Navigators)]
+        E -- Defines Valid Transitions --> F
+        F -- Queries Valid Tokens --> B
+        B -- Modifies Logits --> C
+        C -- Samples Token --> B
+        B -- Advances Steppers --> F
+        F -- Tracks History --> G[Output Reconstruction]
     end
 
-    B -- Retrieves Final Output --> G;
-    G --> H[Guaranteed Structured Output <br/> (Python Object/String)];
+    B -- Retrieves Final Output --> G
+    G --> H[Guaranteed Structured Output <br/> (Python Object/String)]
 
-    style A fill:#DAD0AF,stroke:#024645,color:#024645
-    style H fill:#DAD0AF,stroke:#024645,color:#024645
-    style C fill:#024645,stroke:#DAD0AF,color:#DAD0AF
-    style D fill:#024645,stroke:#DAD0AF,color:#DAD0AF
-    style B fill:#0c5460,stroke:#DAD0AF,color:#DAD0AF
-    style E fill:#02323A,stroke:#DAD0AF,color:#DAD0AF
-    style F fill:#02323A,stroke:#DAD0AF,color:#DAD0AF
-    style G fill:#0c5460,stroke:#DAD0AF,color:#DAD0AF
+    class A,H terminal;
+    class B,G phase;
+    class C,D,E,F state;
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460,border-color:#024645;
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:diamond;
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF;
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:stadium;
+
+    linkStyle default stroke:#024645;
 ```
 
 ## Key Components
@@ -4552,6 +4553,7 @@ The core guarantee comes from the tight loop during generation:
 6.  This loop repeats until an end state is reached.
 
 This runtime enforcement ensures that every generated token strictly adheres to the structure defined by the `StateMachine`, eliminating the possibility of schema violations. Features like Token Healing and Multi-Token Processing add robustness and efficiency to this core loop.
+
 
 ---
 pse-docs/docs/core-concepts/engine.md

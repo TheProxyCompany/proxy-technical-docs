@@ -3,34 +3,36 @@
 The Proxy Structuring Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
 
 ```mermaid
-graph LR
-    A[User Schema Definition <br/>(Pydantic, JSON Schema, Custom SM)] --> B(StructuringEngine <br/> Python Interface);
-    C[LLM Backend <br/> (e.g., Transformers)] --> B;
-    D[Tokenizer] --> B;
+flowchart LR
+    A["User Schema Definition (Pydantic, JSON Schema, Custom SM)"] --> B("StructuringEngine Python Interface")
+    C["LLM Backend (e.g., Transformers)"] --> B
+    D[Tokenizer] --> B
 
     subgraph PSE Core Logic
         direction TB
-        B -- Configures --> E[StateMachine <br/> (Hierarchical State Graph)];
-        B -- Manages --> F[Steppers <br/> (Active State Navigators)];
-        E -- Defines Valid Transitions --> F;
-        F -- Queries Valid Tokens --> B;
-        B -- Modifies Logits --> C;
-        C -- Samples Token --> B;
-        B -- Advances Steppers --> F;
-        F -- Tracks History --> G[Output Reconstruction];
+        B -- Configures --> E["StateMachine <br/> (Hierarchical State Graph)"]
+        B -- Manages --> F["Steppers <br/> (Active State Navigators)"]
+        E -- Defines Valid Transitions --> F
+        F -- Queries Valid Tokens --> B
+        B -- Modifies Logits --> C
+        C -- Samples Token --> B
+        B -- Advances Steppers --> F
+        F -- Tracks History --> G[Output Reconstruction]
     end
 
-    B -- Retrieves Final Output --> G;
-    G --> H[Guaranteed Structured Output <br/> (Python Object/String)];
+    B -- Retrieves Final Output --> G
+    G --> H["Guaranteed Structured Output(Python Object/String)"]
 
-    style A fill:#DAD0AF,stroke:#024645,color:#024645
-    style H fill:#DAD0AF,stroke:#024645,color:#024645
-    style C fill:#024645,stroke:#DAD0AF,color:#DAD0AF
-    style D fill:#024645,stroke:#DAD0AF,color:#DAD0AF
-    style B fill:#0c5460,stroke:#DAD0AF,color:#DAD0AF
-    style E fill:#02323A,stroke:#DAD0AF,color:#DAD0AF
-    style F fill:#02323A,stroke:#DAD0AF,color:#DAD0AF
-    style G fill:#0c5460,stroke:#DAD0AF,color:#DAD0AF
+    class A,H terminal;
+    class B,G phase;
+    class C,D,E,F state;
+
+    classDef phase fill:#DAD0AF,stroke:#0c5460,border-color:#024645;
+    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:diamond;
+    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF;
+    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:stadium;
+
+    linkStyle default stroke:#024645
 ```
 
 ## Key Components

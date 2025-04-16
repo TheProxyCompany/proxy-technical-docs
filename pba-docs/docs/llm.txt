@@ -85,12 +85,11 @@ It can be extended and modified to support more complex agentic behaviors.
 
 PBA leverages PSE to deliver capabilities beyond conventional agent frameworks:
 
-*   **True Stateful Execution:** Define and enforce complex workflows using an explicit HSM (Plan �� Act). PSE guarantees state consistency.
-*   **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated arguments via schema validation *during generation*.
-*   **Dynamic Runtime Adaptation (MCP):** Connect to external MCP servers to integrate new tools on-the-fly. PBA dynamically updates its configuration, allowing immediate, reliable use of new capabilities.
-*   **Predictable Control Flow:** Explicitly define agent reasoning patterns and action sequences for deterministic behavior.
-*   **Universal LLM Compatibility:** Designed for local models using various backends (MLX, PyTorch supported).
-*   **Modular & Extensible:** Build bespoke agents by adding custom tools, states, or modifying the core HSM architecture.
+*   **Guaranteed Stateful Execution:** Define agent workflows as explicit HSMs (e.g., Plan ➔ Act). PSE ensures the LLM follows the defined states and transitions precisely.
+*   **100% Reliable Tool Use:** Eliminate runtime errors from malformed API calls or hallucinated function arguments. PSE guarantees tool calls match their required schema during generation.
+*   **Dynamic Runtime Adaptation (MCP):** Connect to external Model Context Protocol (MCP) servers on-the-fly. PBA instantly integrates new tools and capabilities with the same structural guarantees, no restarts needed.
+*   **Model & Framework Agnostic:** Run reliable agents locally using your preferred LLMs and backends (MLX, PyTorch supported).
+*   **Modular & Extensible:** Build specialized agents by adding custom tools, defining new states, or modifying the core HSM architecture.
 
 ## Installation & Quickstart
 
