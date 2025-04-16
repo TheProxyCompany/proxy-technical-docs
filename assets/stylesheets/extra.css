@@ -2,7 +2,7 @@
 :root {
   /* Accent brand colors - used in both modes */
   --md-accent-fg-color: #DAD0AF;
-  --md-accent-fg-color--transparent: rgba(218, 208, 175, 0.1);
+  --md-accent-fg-color--transparent: #DAD0AF;
 }
 
 /* Light mode (default) */
@@ -154,9 +154,12 @@
 }
 
 .cards > ul > li {
+  display: flex !important;
+  flex-direction: column;
   max-width: 400px;
-  border-color: var(--md-button-bg-color--light) !important;
-
+  justify-content: space-between;
+  align-items: start;
+  height: 100%;
 }
 
 html {

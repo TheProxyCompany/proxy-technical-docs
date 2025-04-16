@@ -16,14 +16,12 @@ This documentation will help you understand and utilize our technologies effecti
 
 -   :material-engine-outline: __Proxy Structuring Engine (PSE)__
 
-    ---
-    Dynamically structure language models to produce outputs that adhere to specific requirements without sacrificing their creative capabilities.
+    Dynamically structure language models to adhere to specific requirements without sacrificing their creative capabilities.
 
     [:octicons-book-24: PSE Documentation](/pse/){: .md-button .md-button--primary }
 
 -   :material-robot-outline: __Proxy Base Agent (PBA)__
 
-    ---
     A foundation for building reliable, stateful AI agents using the Proxy Structuring Engine.
 
     [:octicons-book-24: PBA Documentation](/pba/){: .md-button .md-button--primary }
@@ -86,7 +84,7 @@ flowchart TD
 
     Action --> Finish([Finish])
 
-    classDef phase fill:#01343350,stroke:#DAD0AF,border-color:#DAD0AF
+    classDef phase fill:#013433,stroke:#DAD0AF,border-color:#DAD0AF
     classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:diamond
     classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF
     classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:stadium
@@ -4518,7 +4516,7 @@ flowchart TD
     class PSE phase;
     class B,C,D,E,F state;
 
-    classDef phase fill:#01343350, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF;
+    classDef phase fill:#013433, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF;
     classDef decision fill:#024645, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF,shape:diamond;
     classDef state fill:#024645, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF;
     classDef terminal fill:#024645, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF,shape:stadium;
