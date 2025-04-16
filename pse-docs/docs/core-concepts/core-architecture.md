@@ -3,36 +3,31 @@
 The Proxy Structuring Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
 
 ```mermaid
-flowchart LR
-    A["User Schema Definition (Pydantic, JSON Schema, Custom SM)"] --> B("StructuringEngine Python Interface")
-    C["LLM Backend (e.g., Transformers)"] --> B
-    D[Tokenizer] --> B
+flowchart TD
+    A["User Schema Definition (Pydantic, JSON Schema, Custom SM)"]
+    B("Structuring Engine <br/> (Python Interface)")
+    A --> B
+    C["Language Model Backend (e.g., PyTorch, MLX, etc.)"]
+    B <-- "Modifies Logits <br/> Sample Next Token" --> C
+    D[Tokenizer] <-- Tokenizer Aware Structure --> B
 
-    subgraph PSE Core Logic
+    subgraph PSE
         direction TB
         B -- Configures --> E["StateMachine <br/> (Hierarchical State Graph)"]
-        B -- Manages --> F["Steppers <br/> (Active State Navigators)"]
-        E -- Defines Valid Transitions --> F
-        F -- Queries Valid Tokens --> B
-        B -- Modifies Logits --> C
-        C -- Samples Token --> B
-        B -- Advances Steppers --> F
-        F -- Tracks History --> G[Output Reconstruction]
+        E -- Defines Valid Transitions --> F["Steppers <br/> (Active State Navigators)"]
+        B <-- "Advances Steppers <br/> Update State" --> F
     end
 
-    B -- Retrieves Final Output --> G
-    G --> H["Guaranteed Structured Output(Python Object/String)"]
+    F -- "Final Output" --> H["Guaranteed Structured Output"]
 
     class A,H terminal;
-    class B,G phase;
-    class C,D,E,F state;
+    class PSE phase;
+    class B,C,D,E,F state;
 
-    classDef phase fill:#DAD0AF,stroke:#0c5460,border-color:#024645;
-    classDef decision fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:diamond;
-    classDef state fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF;
-    classDef terminal fill:#024645,stroke:#DAD0AF,color:#DAD0AF,border-color:#DAD0AF,shape:stadium;
-
-    linkStyle default stroke:#024645
+    classDef phase fill:#013433, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF;
+    classDef decision fill:#024645, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF,shape:diamond;
+    classDef state fill:#024645, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF;
+    classDef terminal fill:#024645, stroke:#DAD0AF, border-color:#DAD0AF, color:#DAD0AF,shape:stadium;
 ```
 
 ## Key Components

@@ -15,7 +15,8 @@
   /* Custom button colors */
   --md-button-bg-color: var(--md-primary-fg-color);
   --md-button-text-color: var(--md-accent-fg-color);
-  --md-mermaid-label-fg-color: var(--md-accent-fg-color);
+  --md-mermaid-edge-color: #024645;
+  --md-mermaid-label-fg-color: #DAD0AF;
 
   /* Footer colors */
   --md-footer-bg-color: var(--md-primary-fg-color);
@@ -32,7 +33,8 @@
   --md-default-bg-color: #121212;
   --md-default-bg-color--light: #1e1e1e;
   --md-typeset-a-color: var(--md-accent-fg-color);
-  --md-mermaid-label-fg-color: var(--md-accent-fg-color);
+  --md-mermaid-edge-color: var(--md-accent-fg-color);
+  --md-mermaid-label-fg-color: #DAD0AF;
 
   /* Footer dark mode */
   --md-footer-bg-color: var(--md-primary-fg-color--light);
