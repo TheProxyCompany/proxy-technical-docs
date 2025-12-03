@@ -1,6 +1,6 @@
 # Quickstart: Pydantic to Guaranteed JSON
 
-This guide demonstrates how to use the Proxy Structuring Engine (PSE) with a Hugging Face `transformers` model (using PyTorch) to generate JSON output guaranteed to match a Pydantic schema.
+This guide demonstrates how to use the Proxy State Engine (PSE) with a Hugging Face `transformers` model (using PyTorch) to generate JSON output guaranteed to match a Pydantic schema.
 
 ```python
 import torch

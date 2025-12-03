@@ -12,7 +12,7 @@ This documentation will help you understand and utilize our technologies effecti
 
 <div class="grid cards" markdown>
 
--   :material-engine-outline: __Proxy Structuring Engine (PSE)__
+-   :material-engine-outline: __Proxy State Engine (PSE)__
 
     Dynamically structure language models to adhere to specific requirements without sacrificing their creative capabilities.
 
@@ -20,7 +20,7 @@ This documentation will help you understand and utilize our technologies effecti
 
 -   :material-robot-outline: __Proxy Base Agent (PBA)__
 
-    A foundation for building reliable, stateful AI agents using the Proxy Structuring Engine.
+    A foundation for building reliable, stateful AI agents using the Proxy State Engine.
 
     [:octicons-book-24: PBA Documentation](/pba/){: .md-button .md-button--primary }
 

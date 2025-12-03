@@ -1,6 +1,6 @@
-# Proxy Structuring Engine
+# Proxy State Engine
 
-The **Proxy Structuring Engine** (PSE) is a system for dynamically constrained natural language generation.
+The **Proxy State Engine** (PSE) is a system for dynamically constrained natural language generation.
 
 It compiles rules and schemas into efficient hierarchical state machines that dynamically filter token probabilities during generation, guaranteeing structurally valid outputs while preserving natural language fluency.
 

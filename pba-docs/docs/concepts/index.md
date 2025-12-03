@@ -6,7 +6,7 @@ The Proxy Base Agent (PBA) is built upon several core concepts that enable its r
 
 PBA's behavior is not driven by simple prompt chains, but by a formal **Hierarchical State Machine (HSM)**. This machine defines distinct phases (like Planning and Action) and specific states (like Thinking, Tool Call) the agent transitions through.
 
-*   **Reliability:** The HSM structure, enforced by the underlying Proxy Structuring Engine (PSE), guarantees that the agent follows the defined workflow predictably.
+*   **Reliability:** The HSM structure, enforced by the underlying Proxy State Engine (PSE), guarantees that the agent follows the defined workflow predictably.
 *   **Control:** Developers have explicit control over the agent's execution flow.
 
 [Learn more about the State Machine](./state-machine.md)
@@ -31,7 +31,7 @@ Tools are external capabilities the agent can invoke during its Action Phase. Th
 
 [Learn more about Tools](./tools.md)
 
-## 4. Proxy Structuring Engine (PSE) Integration
+## 4. Proxy State Engine (PSE) Integration
 
 PSE is the foundational technology that makes PBA's reliability possible.
 

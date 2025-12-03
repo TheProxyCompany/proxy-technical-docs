@@ -3,7 +3,7 @@
   "description": "Technical Documentation for The Proxy Company's Technology",
   "products": [
     {
-      "name": "Proxy Structuring Engine",
+      "name": "Proxy State Engine",
       "slug": "pse",
       "description": "A state machine-based engine for structured LLM outputs",
       "url": "/pse/"
@@ -11,7 +11,7 @@
     {
       "name": "Proxy Base Agent",
       "slug": "pba",
-      "description": "A foundation agent built with the Proxy Structuring Engine",
+      "description": "A foundation agent built with the Proxy State Engine",
       "url": "/pba/"
     }
   ],

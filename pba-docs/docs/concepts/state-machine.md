@@ -1,6 +1,6 @@
 # State Machine
 
-The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical State Machine (HSM)**. Unlike traditional agents that rely heavily on prompt chaining, PBA uses this state machine, enforced by the underlying Proxy Structuring Engine (PSE), to ensure reliable and predictable execution flow.
+The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical State Machine (HSM)**. Unlike traditional agents that rely heavily on prompt chaining, PBA uses this state machine, enforced by the underlying Proxy State Engine (PSE), to ensure reliable and predictable execution flow.
 
 ## The Core Loop: Plan -> Act
 

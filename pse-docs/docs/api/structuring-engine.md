@@ -1,6 +1,6 @@
 # Structuring Engine API
 
-This page details the API for the main `pse.StructuringEngine` class, which is the primary interface for using the Proxy Structuring Engine.
+This page details the API for the main `pse.StructuringEngine` class, which is the primary interface for using the Proxy State Engine.
 
 ```python
 class pse.StructuringEngine(

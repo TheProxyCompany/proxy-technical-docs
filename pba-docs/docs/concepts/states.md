@@ -9,7 +9,7 @@ Every `AgentState` in PBA typically includes:
 *   **Identifier:** A unique machine-readable name (e.g., `thinking`, `tool_call`).
 *   **Readable Name:** A human-friendly name for display (e.g., "Thinking", "External Tool Use").
 *   **Delimiters:** A pair of strings (e.g., `("```thinking\n", "\n```")`) used by the agent to signal the start and end of content generated within that state.
-*   **State Machine (via PSE):** A nested Proxy Structuring Engine (PSE) `StateMachine` that defines and enforces the *structure* of the content allowed *within* that state.
+*   **State Machine (via PSE):** A nested Proxy State Engine (PSE) `StateMachine` that defines and enforces the *structure* of the content allowed *within* that state.
 *   **State Prompt:** Instructions provided to the LLM explaining the purpose of the state and how to use its delimiters and structure.
 *   **UI Properties:** Color and emoji for visual representation in interfaces.
 

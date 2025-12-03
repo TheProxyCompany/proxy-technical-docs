@@ -1,6 +1,6 @@
 # Framework Adapters (Mixins)
 
-To simplify integration with popular Python deep learning frameworks, the Proxy Structuring Engine (PSE) provides optional "mixin" classes. These mixins inherit from the framework's standard generation classes (like `transformers.GenerationMixin`) and override the necessary methods to automatically incorporate PSE's `process_logits` and `sample` hooks.
+To simplify integration with popular Python deep learning frameworks, the Proxy State Engine (PSE) provides optional "mixin" classes. These mixins inherit from the framework's standard generation classes (like `transformers.GenerationMixin`) and override the necessary methods to automatically incorporate PSE's `process_logits` and `sample` hooks.
 
 Using a mixin means you don't need to manually pass `logits_processor=[engine.process_logits]` and `sampler=engine.sample` to your `model.generate()` calls.
 

@@ -1,6 +1,6 @@
 # State Graph Traversal
 
-The core of the Proxy Structuring Engine's (PSE) reliability and efficiency lies in its unique approach to navigating the grammar defined by the `StateMachine`. Unlike traditional parsing methods that might rely on backtracking, PSE employs a parallel, forward-only traversal algorithm that explores all valid structural possibilities simultaneously.
+The core of the Proxy State Engine's (PSE) reliability and efficiency lies in its unique approach to navigating the grammar defined by the `StateMachine`. Unlike traditional parsing methods that might rely on backtracking, PSE employs a parallel, forward-only traversal algorithm that explores all valid structural possibilities simultaneously.
 
 ## Core Principles
 

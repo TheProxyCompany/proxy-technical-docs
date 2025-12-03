@@ -1,6 +1,6 @@
 # Defining Structure: Schema Sources
 
-The Proxy Structuring Engine (PSE) is designed to be flexible, allowing you to define the desired output structure using several common and convenient methods in Python. The `StructuringEngine.configure()` method accepts various types as its `structure` argument.
+The Proxy State Engine (PSE) is designed to be flexible, allowing you to define the desired output structure using several common and convenient methods in Python. The `StructuringEngine.configure()` method accepts various types as its `structure` argument.
 
 ## Supported Schema Sources
 

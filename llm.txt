@@ -14,7 +14,7 @@ This documentation will help you understand and utilize our technologies effecti
 
 <div class="grid cards" markdown>
 
--   :material-engine-outline: __Proxy Structuring Engine (PSE)__
+-   :material-engine-outline: __Proxy State Engine (PSE)__
 
     Dynamically structure language models to adhere to specific requirements without sacrificing their creative capabilities.
 
@@ -22,7 +22,7 @@ This documentation will help you understand and utilize our technologies effecti
 
 -   :material-robot-outline: __Proxy Base Agent (PBA)__
 
-    A foundation for building reliable, stateful AI agents using the Proxy Structuring Engine.
+    A foundation for building reliable, stateful AI agents using the Proxy State Engine.
 
     [:octicons-book-24: PBA Documentation](/pba/){: .md-button .md-button--primary }
 
@@ -39,7 +39,7 @@ pba-docs/docs/index.md
 ---
 # Proxy Base Agent
 
-The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
+The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy State Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
 
 The base agent is designed to **rapidly prototype and develop LLM-powered agents** with a focus on **local execution, stateful interactions, and extensibility**.
 
@@ -464,7 +464,7 @@ The Proxy Base Agent (PBA) is built upon several core concepts that enable its r
 
 PBA's behavior is not driven by simple prompt chains, but by a formal **Hierarchical State Machine (HSM)**. This machine defines distinct phases (like Planning and Action) and specific states (like Thinking, Tool Call) the agent transitions through.
 
-*   **Reliability:** The HSM structure, enforced by the underlying Proxy Structuring Engine (PSE), guarantees that the agent follows the defined workflow predictably.
+*   **Reliability:** The HSM structure, enforced by the underlying Proxy State Engine (PSE), guarantees that the agent follows the defined workflow predictably.
 *   **Control:** Developers have explicit control over the agent's execution flow.
 
 [Learn more about the State Machine](./state-machine.md)
@@ -489,7 +489,7 @@ Tools are external capabilities the agent can invoke during its Action Phase. Th
 
 [Learn more about Tools](./tools.md)
 
-## 4. Proxy Structuring Engine (PSE) Integration
+## 4. Proxy State Engine (PSE) Integration
 
 PSE is the foundational technology that makes PBA's reliability possible.
 
@@ -515,7 +515,7 @@ pba-docs/docs/concepts/pse-integration.md
 ---
 # PSE Integration: The Engine Behind Reliability
 
-The Proxy Base Agent (PBA) achieves its reliability and stateful execution guarantees through its deep integration with the **Proxy Structuring Engine (PSE)**. While PBA defines the high-level agent workflow and states, PSE provides the low-level runtime enforcement mechanism.
+The Proxy Base Agent (PBA) achieves its reliability and stateful execution guarantees through its deep integration with the **Proxy State Engine (PSE)**. While PBA defines the high-level agent workflow and states, PSE provides the low-level runtime enforcement mechanism.
 
 ## How PBA Uses PSE
 
@@ -541,7 +541,7 @@ PSE's runtime logit masking and state tracking provide the technical foundation 
 
 For a deeper understanding of the underlying mechanisms:
 
-*   Refer to the [Proxy Structuring Engine Documentation](https://docs.theproxycompany.com/pse/) for details on PSE's core concepts (HSM, Steppers, Engine, Token Healing).
+*   Refer to the [Proxy State Engine Documentation](https://docs.theproxycompany.com/pse/) for details on PSE's core concepts (HSM, Steppers, Engine, Token Healing).
 
 This tight integration ensures not only that the agent follows the correct high-level steps but also that each individual step (like a tool call or code generation) is structurally sound, drastically reducing runtime errors and increasing overall system reliability.
 
@@ -550,7 +550,7 @@ pba-docs/docs/concepts/state-machine.md
 ---
 # State Machine
 
-The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical State Machine (HSM)**. Unlike traditional agents that rely heavily on prompt chaining, PBA uses this state machine, enforced by the underlying Proxy Structuring Engine (PSE), to ensure reliable and predictable execution flow.
+The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical State Machine (HSM)**. Unlike traditional agents that rely heavily on prompt chaining, PBA uses this state machine, enforced by the underlying Proxy State Engine (PSE), to ensure reliable and predictable execution flow.
 
 ## The Core Loop: Plan -> Act
 
@@ -623,7 +623,7 @@ Every `AgentState` in PBA typically includes:
 *   **Identifier:** A unique machine-readable name (e.g., `thinking`, `tool_call`).
 *   **Readable Name:** A human-friendly name for display (e.g., "Thinking", "External Tool Use").
 *   **Delimiters:** A pair of strings (e.g., `("```thinking\n", "\n```")`) used by the agent to signal the start and end of content generated within that state.
-*   **State Machine (via PSE):** A nested Proxy Structuring Engine (PSE) `StateMachine` that defines and enforces the *structure* of the content allowed *within* that state.
+*   **State Machine (via PSE):** A nested Proxy State Engine (PSE) `StateMachine` that defines and enforces the *structure* of the content allowed *within* that state.
 *   **State Prompt:** Instructions provided to the LLM explaining the purpose of the state and how to use its delimiters and structure.
 *   **UI Properties:** Color and emoji for visual representation in interfaces.
 
@@ -685,7 +685,7 @@ Each tool is defined with:
 
 ## Reliable Tool Interaction via PSE
 
-A key differentiator for PBA is how it handles tool interactions using the Proxy Structuring Engine (PSE):
+A key differentiator for PBA is how it handles tool interactions using the Proxy State Engine (PSE):
 
 1.  **Tool Selection:** During the Planning Phase, the agent reasons about which tool (if any) is needed to accomplish the current task.
 2.  **Structured Invocation:** When the agent transitions to the `ToolCallState`, it must generate output conforming to the JSON schema of *one* of the available tools (including specifying its `intention` and the tool `name` and `arguments`). PSE *enforces* this structure at runtime.
@@ -881,7 +881,7 @@ Adding custom tools is one of the primary ways to extend the capabilities of the
 
 ## Defining a Tool
 
-A tool in PBA is essentially a Python function with type hints and a docstring, which PBA uses to automatically generate the necessary schema for the Proxy Structuring Engine (PSE).
+A tool in PBA is essentially a Python function with type hints and a docstring, which PBA uses to automatically generate the necessary schema for the Proxy State Engine (PSE).
 
 **Steps to Create a Custom Tool:**
 
@@ -1317,9 +1317,9 @@ PBA uses the `ToolCall` model to parse the validated JSON output from the `ToolC
 ---
 pse-docs/docs/index.md
 ---
-# Proxy Structuring Engine
+# Proxy State Engine
 
-The **Proxy Structuring Engine** (PSE) is a system for dynamically constrained natural language generation.
+The **Proxy State Engine** (PSE) is a system for dynamically constrained natural language generation.
 
 It compiles rules and schemas into efficient hierarchical state machines that dynamically filter token probabilities during generation, guaranteeing structurally valid outputs while preserving natural language fluency.
 
@@ -1384,7 +1384,7 @@ pse-docs/docs/getting-started/installation.md
 ---
 # Installation
 
-This guide will help you install the Proxy Structuring Engine (PSE) and set up your environment for development.
+This guide will help you install the Proxy State Engine (PSE) and set up your environment for development.
 
 ## Standard Installation
 
@@ -1481,7 +1481,7 @@ pse-docs/docs/getting-started/quickstart.md
 ---
 # Quickstart: Pydantic to Guaranteed JSON
 
-This guide demonstrates how to use the Proxy Structuring Engine (PSE) with a Hugging Face `transformers` model (using PyTorch) to generate JSON output guaranteed to match a Pydantic schema.
+This guide demonstrates how to use the Proxy State Engine (PSE) with a Hugging Face `transformers` model (using PyTorch) to generate JSON output guaranteed to match a Pydantic schema.
 
 ```python
 import torch
@@ -1720,7 +1720,7 @@ pse-docs/docs/guides/framework-adapters.md
 ---
 # Framework Adapters (Mixins)
 
-To simplify integration with popular Python deep learning frameworks, the Proxy Structuring Engine (PSE) provides optional "mixin" classes. These mixins inherit from the framework's standard generation classes (like `transformers.GenerationMixin`) and override the necessary methods to automatically incorporate PSE's `process_logits` and `sample` hooks.
+To simplify integration with popular Python deep learning frameworks, the Proxy State Engine (PSE) provides optional "mixin" classes. These mixins inherit from the framework's standard generation classes (like `transformers.GenerationMixin`) and override the necessary methods to automatically incorporate PSE's `process_logits` and `sample` hooks.
 
 Using a mixin means you don't need to manually pass `logits_processor=[engine.process_logits]` and `sampler=engine.sample` to your `model.generate()` calls.
 
@@ -1814,7 +1814,7 @@ pse-docs/docs/guides/schema-sources.md
 ---
 # Defining Structure: Schema Sources
 
-The Proxy Structuring Engine (PSE) is designed to be flexible, allowing you to define the desired output structure using several common and convenient methods in Python. The `StructuringEngine.configure()` method accepts various types as its `structure` argument.
+The Proxy State Engine (PSE) is designed to be flexible, allowing you to define the desired output structure using several common and convenient methods in Python. The `StructuringEngine.configure()` method accepts various types as its `structure` argument.
 
 ## Supported Schema Sources
 
@@ -2367,7 +2367,7 @@ pse-docs/docs/api/structuring-engine.md
 ---
 # Structuring Engine API
 
-This page details the API for the main `pse.StructuringEngine` class, which is the primary interface for using the Proxy Structuring Engine.
+This page details the API for the main `pse.StructuringEngine` class, which is the primary interface for using the Proxy State Engine.
 
 ```python
 class pse.StructuringEngine(
@@ -4493,7 +4493,7 @@ pse-docs/docs/core-concepts/core-architecture.md
 ---
 # Core Architecture
 
-The Proxy Structuring Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
+The Proxy State Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
 
 ```mermaid
 flowchart TD
@@ -4580,7 +4580,7 @@ pse-docs/docs/core-concepts/multi-token-processing.md
 ---
 # Multi-Token Processing
 
-Multi-Token Processing (MTP) is an optional optimization within the Proxy Structuring Engine (PSE) designed to accelerate generation when the grammar requires a specific sequence of characters that corresponds to multiple tokens in the language model's vocabulary.
+Multi-Token Processing (MTP) is an optional optimization within the Proxy State Engine (PSE) designed to accelerate generation when the grammar requires a specific sequence of characters that corresponds to multiple tokens in the language model's vocabulary.
 
 ## The Problem: Inefficient Generation for Fixed Sequences
 
@@ -4610,7 +4610,7 @@ pse-docs/docs/core-concepts/state-graph-traversal.md
 ---
 # State Graph Traversal
 
-The core of the Proxy Structuring Engine's (PSE) reliability and efficiency lies in its unique approach to navigating the grammar defined by the `StateMachine`. Unlike traditional parsing methods that might rely on backtracking, PSE employs a parallel, forward-only traversal algorithm that explores all valid structural possibilities simultaneously.
+The core of the Proxy State Engine's (PSE) reliability and efficiency lies in its unique approach to navigating the grammar defined by the `StateMachine`. Unlike traditional parsing methods that might rely on backtracking, PSE employs a parallel, forward-only traversal algorithm that explores all valid structural possibilities simultaneously.
 
 ## Core Principles
 
@@ -4688,7 +4688,7 @@ pse-docs/docs/core-concepts/token-healing.md
 ---
 # Token Healing
 
-Token Healing is a robustness feature within the Proxy Structuring Engine (PSE) designed to handle minor discrepancies between the exact token generated by the Language Model (LLM) and the canonical token expected by the grammar (StateMachine). It allows PSE to recover gracefully when the generated token contains slight variations (like extra spaces or minor artifacts) but still clearly corresponds to a valid structural continuation.
+Token Healing is a robustness feature within the Proxy State Engine (PSE) designed to handle minor discrepancies between the exact token generated by the Language Model (LLM) and the canonical token expected by the grammar (StateMachine). It allows PSE to recover gracefully when the generated token contains slight variations (like extra spaces or minor artifacts) but still clearly corresponds to a valid structural continuation.
 
 ## The Problem: Tokenization Artifacts
 

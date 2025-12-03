@@ -1,6 +1,6 @@
 # Core Architecture
 
-The Proxy Structuring Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
+The Proxy State Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
 
 ```mermaid
 flowchart TD

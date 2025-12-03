@@ -1,8 +1,8 @@
 pse-docs/docs/index.md
 ---
-# Proxy Structuring Engine
+# Proxy State Engine
 
-The **Proxy Structuring Engine** (PSE) is a system for dynamically constrained natural language generation.
+The **Proxy State Engine** (PSE) is a system for dynamically constrained natural language generation.
 
 It compiles rules and schemas into efficient hierarchical state machines that dynamically filter token probabilities during generation, guaranteeing structurally valid outputs while preserving natural language fluency.
 
@@ -67,7 +67,7 @@ pse-docs/docs/getting-started/installation.md
 ---
 # Installation
 
-This guide will help you install the Proxy Structuring Engine (PSE) and set up your environment for development.
+This guide will help you install the Proxy State Engine (PSE) and set up your environment for development.
 
 ## Standard Installation
 
@@ -164,7 +164,7 @@ pse-docs/docs/getting-started/quickstart.md
 ---
 # Quickstart: Pydantic to Guaranteed JSON
 
-This guide demonstrates how to use the Proxy Structuring Engine (PSE) with a Hugging Face `transformers` model (using PyTorch) to generate JSON output guaranteed to match a Pydantic schema.
+This guide demonstrates how to use the Proxy State Engine (PSE) with a Hugging Face `transformers` model (using PyTorch) to generate JSON output guaranteed to match a Pydantic schema.
 
 ```python
 import torch
@@ -403,7 +403,7 @@ pse-docs/docs/guides/framework-adapters.md
 ---
 # Framework Adapters (Mixins)
 
-To simplify integration with popular Python deep learning frameworks, the Proxy Structuring Engine (PSE) provides optional "mixin" classes. These mixins inherit from the framework's standard generation classes (like `transformers.GenerationMixin`) and override the necessary methods to automatically incorporate PSE's `process_logits` and `sample` hooks.
+To simplify integration with popular Python deep learning frameworks, the Proxy State Engine (PSE) provides optional "mixin" classes. These mixins inherit from the framework's standard generation classes (like `transformers.GenerationMixin`) and override the necessary methods to automatically incorporate PSE's `process_logits` and `sample` hooks.
 
 Using a mixin means you don't need to manually pass `logits_processor=[engine.process_logits]` and `sampler=engine.sample` to your `model.generate()` calls.
 
@@ -497,7 +497,7 @@ pse-docs/docs/guides/schema-sources.md
 ---
 # Defining Structure: Schema Sources
 
-The Proxy Structuring Engine (PSE) is designed to be flexible, allowing you to define the desired output structure using several common and convenient methods in Python. The `StructuringEngine.configure()` method accepts various types as its `structure` argument.
+The Proxy State Engine (PSE) is designed to be flexible, allowing you to define the desired output structure using several common and convenient methods in Python. The `StructuringEngine.configure()` method accepts various types as its `structure` argument.
 
 ## Supported Schema Sources
 
@@ -1050,7 +1050,7 @@ pse-docs/docs/api/structuring-engine.md
 ---
 # Structuring Engine API
 
-This page details the API for the main `pse.StructuringEngine` class, which is the primary interface for using the Proxy Structuring Engine.
+This page details the API for the main `pse.StructuringEngine` class, which is the primary interface for using the Proxy State Engine.
 
 ```python
 class pse.StructuringEngine(
@@ -3176,7 +3176,7 @@ pse-docs/docs/core-concepts/core-architecture.md
 ---
 # Core Architecture
 
-The Proxy Structuring Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
+The Proxy State Engine (PSE) achieves its structural guarantees through a layered architecture that tightly integrates grammar definition, state tracking, and language model interaction at runtime.
 
 ```mermaid
 flowchart TD
@@ -3263,7 +3263,7 @@ pse-docs/docs/core-concepts/multi-token-processing.md
 ---
 # Multi-Token Processing
 
-Multi-Token Processing (MTP) is an optional optimization within the Proxy Structuring Engine (PSE) designed to accelerate generation when the grammar requires a specific sequence of characters that corresponds to multiple tokens in the language model's vocabulary.
+Multi-Token Processing (MTP) is an optional optimization within the Proxy State Engine (PSE) designed to accelerate generation when the grammar requires a specific sequence of characters that corresponds to multiple tokens in the language model's vocabulary.
 
 ## The Problem: Inefficient Generation for Fixed Sequences
 
@@ -3293,7 +3293,7 @@ pse-docs/docs/core-concepts/state-graph-traversal.md
 ---
 # State Graph Traversal
 
-The core of the Proxy Structuring Engine's (PSE) reliability and efficiency lies in its unique approach to navigating the grammar defined by the `StateMachine`. Unlike traditional parsing methods that might rely on backtracking, PSE employs a parallel, forward-only traversal algorithm that explores all valid structural possibilities simultaneously.
+The core of the Proxy State Engine's (PSE) reliability and efficiency lies in its unique approach to navigating the grammar defined by the `StateMachine`. Unlike traditional parsing methods that might rely on backtracking, PSE employs a parallel, forward-only traversal algorithm that explores all valid structural possibilities simultaneously.
 
 ## Core Principles
 
@@ -3371,7 +3371,7 @@ pse-docs/docs/core-concepts/token-healing.md
 ---
 # Token Healing
 
-Token Healing is a robustness feature within the Proxy Structuring Engine (PSE) designed to handle minor discrepancies between the exact token generated by the Language Model (LLM) and the canonical token expected by the grammar (StateMachine). It allows PSE to recover gracefully when the generated token contains slight variations (like extra spaces or minor artifacts) but still clearly corresponds to a valid structural continuation.
+Token Healing is a robustness feature within the Proxy State Engine (PSE) designed to handle minor discrepancies between the exact token generated by the Language Model (LLM) and the canonical token expected by the grammar (StateMachine). It allows PSE to recover gracefully when the generated token contains slight variations (like extra spaces or minor artifacts) but still clearly corresponds to a valid structural continuation.
 
 ## The Problem: Tokenization Artifacts
 

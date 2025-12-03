@@ -4,7 +4,7 @@ Adding custom tools is one of the primary ways to extend the capabilities of the
 
 ## Defining a Tool
 
-A tool in PBA is essentially a Python function with type hints and a docstring, which PBA uses to automatically generate the necessary schema for the Proxy Structuring Engine (PSE).
+A tool in PBA is essentially a Python function with type hints and a docstring, which PBA uses to automatically generate the necessary schema for the Proxy State Engine (PSE).
 
 **Steps to Create a Custom Tool:**
 

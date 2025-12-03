@@ -20,7 +20,7 @@ Each tool is defined with:
 
 ## Reliable Tool Interaction via PSE
 
-A key differentiator for PBA is how it handles tool interactions using the Proxy Structuring Engine (PSE):
+A key differentiator for PBA is how it handles tool interactions using the Proxy State Engine (PSE):
 
 1.  **Tool Selection:** During the Planning Phase, the agent reasons about which tool (if any) is needed to accomplish the current task.
 2.  **Structured Invocation:** When the agent transitions to the `ToolCallState`, it must generate output conforming to the JSON schema of *one* of the available tools (including specifying its `intention` and the tool `name` and `arguments`). PSE *enforces* this structure at runtime.

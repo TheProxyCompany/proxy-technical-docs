@@ -2,7 +2,7 @@ pba-docs/docs/index.md
 ---
 # Proxy Base Agent
 
-The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy Structuring Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
+The **Proxy Base Agent (PBA)** is a foundation agent built with the **Proxy State Engine (PSE)**, which provides the underlying framework for managing the agent's state, controlling the flow of execution, and interacting with the language model.
 
 The base agent is designed to **rapidly prototype and develop LLM-powered agents** with a focus on **local execution, stateful interactions, and extensibility**.
 
@@ -427,7 +427,7 @@ The Proxy Base Agent (PBA) is built upon several core concepts that enable its r
 
 PBA's behavior is not driven by simple prompt chains, but by a formal **Hierarchical State Machine (HSM)**. This machine defines distinct phases (like Planning and Action) and specific states (like Thinking, Tool Call) the agent transitions through.
 
-*   **Reliability:** The HSM structure, enforced by the underlying Proxy Structuring Engine (PSE), guarantees that the agent follows the defined workflow predictably.
+*   **Reliability:** The HSM structure, enforced by the underlying Proxy State Engine (PSE), guarantees that the agent follows the defined workflow predictably.
 *   **Control:** Developers have explicit control over the agent's execution flow.
 
 [Learn more about the State Machine](./state-machine.md)
@@ -452,7 +452,7 @@ Tools are external capabilities the agent can invoke during its Action Phase. Th
 
 [Learn more about Tools](./tools.md)
 
-## 4. Proxy Structuring Engine (PSE) Integration
+## 4. Proxy State Engine (PSE) Integration
 
 PSE is the foundational technology that makes PBA's reliability possible.
 
@@ -478,7 +478,7 @@ pba-docs/docs/concepts/pse-integration.md
 ---
 # PSE Integration: The Engine Behind Reliability
 
-The Proxy Base Agent (PBA) achieves its reliability and stateful execution guarantees through its deep integration with the **Proxy Structuring Engine (PSE)**. While PBA defines the high-level agent workflow and states, PSE provides the low-level runtime enforcement mechanism.
+The Proxy Base Agent (PBA) achieves its reliability and stateful execution guarantees through its deep integration with the **Proxy State Engine (PSE)**. While PBA defines the high-level agent workflow and states, PSE provides the low-level runtime enforcement mechanism.
 
 ## How PBA Uses PSE
 
@@ -504,7 +504,7 @@ PSE's runtime logit masking and state tracking provide the technical foundation 
 
 For a deeper understanding of the underlying mechanisms:
 
-*   Refer to the [Proxy Structuring Engine Documentation](https://docs.theproxycompany.com/pse/) for details on PSE's core concepts (HSM, Steppers, Engine, Token Healing).
+*   Refer to the [Proxy State Engine Documentation](https://docs.theproxycompany.com/pse/) for details on PSE's core concepts (HSM, Steppers, Engine, Token Healing).
 
 This tight integration ensures not only that the agent follows the correct high-level steps but also that each individual step (like a tool call or code generation) is structurally sound, drastically reducing runtime errors and increasing overall system reliability.
 
@@ -513,7 +513,7 @@ pba-docs/docs/concepts/state-machine.md
 ---
 # State Machine
 
-The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical State Machine (HSM)**. Unlike traditional agents that rely heavily on prompt chaining, PBA uses this state machine, enforced by the underlying Proxy Structuring Engine (PSE), to ensure reliable and predictable execution flow.
+The Proxy Base Agent's (PBA) behavior is governed by an explicit **Hierarchical State Machine (HSM)**. Unlike traditional agents that rely heavily on prompt chaining, PBA uses this state machine, enforced by the underlying Proxy State Engine (PSE), to ensure reliable and predictable execution flow.
 
 ## The Core Loop: Plan -> Act
 
@@ -586,7 +586,7 @@ Every `AgentState` in PBA typically includes:
 *   **Identifier:** A unique machine-readable name (e.g., `thinking`, `tool_call`).
 *   **Readable Name:** A human-friendly name for display (e.g., "Thinking", "External Tool Use").
 *   **Delimiters:** A pair of strings (e.g., `("```thinking\n", "\n```")`) used by the agent to signal the start and end of content generated within that state.
-*   **State Machine (via PSE):** A nested Proxy Structuring Engine (PSE) `StateMachine` that defines and enforces the *structure* of the content allowed *within* that state.
+*   **State Machine (via PSE):** A nested Proxy State Engine (PSE) `StateMachine` that defines and enforces the *structure* of the content allowed *within* that state.
 *   **State Prompt:** Instructions provided to the LLM explaining the purpose of the state and how to use its delimiters and structure.
 *   **UI Properties:** Color and emoji for visual representation in interfaces.
 
@@ -648,7 +648,7 @@ Each tool is defined with:
 
 ## Reliable Tool Interaction via PSE
 
-A key differentiator for PBA is how it handles tool interactions using the Proxy Structuring Engine (PSE):
+A key differentiator for PBA is how it handles tool interactions using the Proxy State Engine (PSE):
 
 1.  **Tool Selection:** During the Planning Phase, the agent reasons about which tool (if any) is needed to accomplish the current task.
 2.  **Structured Invocation:** When the agent transitions to the `ToolCallState`, it must generate output conforming to the JSON schema of *one* of the available tools (including specifying its `intention` and the tool `name` and `arguments`). PSE *enforces* this structure at runtime.
@@ -844,7 +844,7 @@ Adding custom tools is one of the primary ways to extend the capabilities of the
 
 ## Defining a Tool
 
-A tool in PBA is essentially a Python function with type hints and a docstring, which PBA uses to automatically generate the necessary schema for the Proxy Structuring Engine (PSE).
+A tool in PBA is essentially a Python function with type hints and a docstring, which PBA uses to automatically generate the necessary schema for the Proxy State Engine (PSE).
 
 **Steps to Create a Custom Tool:**
 

@@ -1,6 +1,6 @@
 # Multi-Token Processing
 
-Multi-Token Processing (MTP) is an optional optimization within the Proxy Structuring Engine (PSE) designed to accelerate generation when the grammar requires a specific sequence of characters that corresponds to multiple tokens in the language model's vocabulary.
+Multi-Token Processing (MTP) is an optional optimization within the Proxy State Engine (PSE) designed to accelerate generation when the grammar requires a specific sequence of characters that corresponds to multiple tokens in the language model's vocabulary.
 
 ## The Problem: Inefficient Generation for Fixed Sequences
 

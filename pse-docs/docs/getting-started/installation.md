@@ -1,6 +1,6 @@
 # Installation
 
-This guide will help you install the Proxy Structuring Engine (PSE) and set up your environment for development.
+This guide will help you install the Proxy State Engine (PSE) and set up your environment for development.
 
 ## Standard Installation
 
