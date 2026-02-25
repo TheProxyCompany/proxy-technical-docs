@@ -2,3 +2,5 @@ site/
 pse-docs/site/
 pba-docs/site/
 .vercel
+node_modules/
+package-lock.json
