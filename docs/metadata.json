@@ -1,21 +1,21 @@
 {
   "name": "The Proxy Company Documentation",
-  "description": "Technical Documentation for The Proxy Company's Technology",
+  "description": "Technical documentation for Eden and Orchard — Local Intelligence on Apple Silicon",
   "products": [
     {
-      "name": "Proxy State Engine",
-      "slug": "pse",
-      "description": "A state machine-based engine for structured LLM outputs",
-      "url": "/pse/"
+      "name": "Eden",
+      "slug": "eden",
+      "description": "A macOS AI cockpit — Life Map, multi-agent Party, local and cloud inference",
+      "url": "/eden/"
     },
     {
-      "name": "Proxy Base Agent",
-      "slug": "pba",
-      "description": "A foundation agent built with the Proxy State Engine",
-      "url": "/pba/"
+      "name": "Orchard",
+      "slug": "orchard",
+      "description": "Local Intelligence on Apple Silicon — brand new inference engine, custom GPU kernels, continuous batching, multi-model generation, error-free tool calling",
+      "url": "/orchard/"
     }
   ],
   "githubOrg": "TheProxyCompany",
-  "twitterHandle": "@ProxyCompany",
+  "twitterHandle": "@theproxycompany",
   "websiteUrl": "https://theproxycompany.com"
 }

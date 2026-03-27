@@ -1,7 +1,7 @@
 site_name: The Proxy Company Documentation
-site_description: Technical Documentation for The Proxy Company's Technology
+site_description: Technical documentation for Eden and Orchard — Local Intelligence on Apple Silicon
 site_author: The Proxy Company
-copyright: Copyright &copy; 2025 The Proxy Company
+copyright: Copyright &copy; 2026 The Proxy Company
 
 site_url: https://docs.theproxycompany.com/
 repo_url: https://github.com/TheProxyCompany
@@ -80,29 +80,23 @@ extra_css:
 
 nav:
   - Home: index.md
-  - Proxy State Engine: /pse/
-  - Proxy Base Agent: /pba/
+  - Eden:
+    - Overview: eden/index.md
+    - Life Map: eden/life-map.md
+    - Party: eden/party.md
+    - Moves: eden/moves.md
+    - Integrations: eden/integrations.md
+    - Credits: eden/credits.md
+    - CLI Reference: eden/cli.md
+  - Orchard:
+    - Overview: orchard/index.md
+    - Architecture: orchard/architecture.md
 
 plugins:
   - search
   - git-revision-date-localized:
       enable_creation_date: false
       type: date
-  - group:
-      enabled: !ENV [CI, false]
-      plugins:
-        - projects
-        - optimize
-        - privacy
-        - social:
-            cards_layout_dir: layouts
-            cards_layout: custom
-            cards_layout_options:
-              background_image: assets/docs-logo.png
-              background_color: transparent
-              title: The Proxy Company's Technical Documentation
-              description: Officially supported documentation for the Proxy State Engine and Proxy Base Agent
-              color: "#024645"
 
 # For Vercel deployment
 use_directory_urls: true
