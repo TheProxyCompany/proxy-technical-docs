@@ -49,8 +49,8 @@ theme:
     - content.tooltips
     - palette.toggle
     - toc.integrate
-  logo: assets/proxy-p.svg
-  favicon: assets/proxy-p.svg
+  logo: assets/proxy-p-vector.png
+  favicon: assets/proxy-logo.png
 
 markdown_extensions:
   - admonition

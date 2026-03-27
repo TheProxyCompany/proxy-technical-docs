@@ -61,6 +61,11 @@
   fill: var(--md-accent-fg-color);
 }
 
+/* Tint the header logo PNG to tan */
+.md-header__button.md-logo img {
+  filter: brightness(0) invert(85%) sepia(15%) saturate(400%) hue-rotate(10deg);
+}
+
 /* Tab navigation */
 .md-tabs__link {
   color: var(--md-accent-fg-color) !important;
