@@ -1,6 +1,6 @@
 # Party
 
-The Party is Eden's multi-agent deliberation system. Multiple AI agents — local and cloud — join a shared conversation, each with their own role, tools, and private reasoning thread.
+The Party is Proxy's multi-agent deliberation system. Multiple AI agents — local and cloud — join a shared conversation, each with their own role, tools, and private reasoning thread.
 
 ## How It Works
 
@@ -76,5 +76,5 @@ External agent runtimes connect to the Party through **harnesses**:
 | **Codex** | WebSocket |
 | **OpenClaw** | WebSocket |
 
-Harnesses let agents that run outside Eden participate in Party sessions with full tool access.
+Harnesses let agents that run outside Proxy participate in Party sessions with full tool access.
 

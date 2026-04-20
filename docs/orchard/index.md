@@ -1,6 +1,6 @@
 # Orchard
 
-Orchard is the Local Intelligence compute platform for Apple Silicon. It's the engine that powers Eden's local inference — running open models natively on your Mac with no cloud dependency.
+Orchard is the Local Intelligence compute platform for Apple Silicon. It's the engine that powers Proxy's local inference — running open models natively on your Mac with no cloud dependency.
 
 ## What Orchard Is
 
@@ -30,12 +30,12 @@ Orchard exists because local inference on consumer hardware is a fundamentally d
 
 The bet: local gives velocity to outrun cloud. No server farm reconfiguration. No distributed KV cache coordination. Everything on one device means faster iteration.
 
-## How Eden Uses Orchard
+## How Proxy Uses Orchard
 
-Eden connects to Orchard through **orchard-rs**, the Rust client library. The connection flows:
+Proxy connects to Orchard through **orchard-rs**, the Rust client library. The connection flows:
 
 ```
-Eden (SwiftUI)
+Proxy (SwiftUI)
   └── Glue (Rust FFI)
       └── Grand Central
           └── orchard-rs ──→ PIE (IPC) ──→ Model inference

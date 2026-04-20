@@ -14,7 +14,7 @@ Technical documentation for The Proxy Company's products and infrastructure.
 
     A macOS AI cockpit. Multiple agents deliberate together, then do the work. Life Map, Party system, local and cloud inference — one app.
 
-    [:octicons-book-24: Eden Documentation](eden/){ .md-button .md-button--primary }
+    [:octicons-book-24: Proxy Documentation](proxy/){ .md-button .md-button--primary }
 
 -   :material-tree-outline: __Orchard__
 
@@ -27,7 +27,7 @@ Technical documentation for The Proxy Company's products and infrastructure.
 ## The Stack
 
 ```
-Eden (SwiftUI macOS app)
+Proxy (SwiftUI macOS app)
   └── Glue (Rust FFI)
       └── Grand Central (coordination layer)
           ├── Trellis (graph database)
@@ -42,7 +42,7 @@ Orchard (compute platform)
       └── Carbon (private MLX fork)
 ```
 
-Eden is the product. Orchard is the engine. Eden consumes Orchard for local inference and brings cloud models alongside it.
+Proxy is the product. Orchard is the engine. Proxy consumes Orchard for local inference and brings cloud models alongside it.
 
 ## Additional Resources
 

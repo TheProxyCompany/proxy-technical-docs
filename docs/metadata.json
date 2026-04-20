@@ -1,12 +1,12 @@
 {
   "name": "The Proxy Company Documentation",
-  "description": "Technical documentation for Eden and Orchard — Local Intelligence on Apple Silicon",
+  "description": "Technical documentation for Proxy and Orchard — Local Intelligence on Apple Silicon",
   "products": [
     {
-      "name": "Eden",
-      "slug": "eden",
+      "name": "Proxy",
+      "slug": "proxy",
       "description": "A macOS AI cockpit — Life Map, multi-agent Party, local and cloud inference",
-      "url": "/eden/"
+      "url": "/proxy/"
     },
     {
       "name": "Orchard",

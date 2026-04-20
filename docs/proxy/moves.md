@@ -1,6 +1,6 @@
 # Moves
 
-Moves are structured deliverables in Eden. They're block-based documents that agents execute on your behalf — research briefs, onboarding flows, analysis reports, action plans.
+Moves are structured deliverables in Proxy. They're block-based documents that agents execute on your behalf — research briefs, onboarding flows, analysis reports, action plans.
 
 ## What a Move Is
 
@@ -32,7 +32,7 @@ Executable blocks are the bridge between documentation and action. An agent can 
 ## How Moves Work
 
 1. An agent (or you) creates a Move with a set of blocks
-2. The Move appears in Eden's UI as a structured document
+2. The Move appears in Proxy's UI as a structured document
 3. You can review, edit, approve, or reject blocks
 4. Executable blocks can be run individually or as a batch
 5. Progress is tracked — completed blocks, pending actions, overall status

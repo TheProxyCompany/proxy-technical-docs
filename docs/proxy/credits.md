@@ -1,16 +1,16 @@
 # Credits
 
-Eden uses a **gas pump model** for cloud inference billing. Credits are displayed in dollars — what you see is what you spend.
+Proxy uses a **gas pump model** for cloud inference billing. Credits are displayed in dollars — what you see is what you spend.
 
 ## How It Works
 
-Eden supports three inference paths:
+Proxy supports three inference paths:
 
 | Path | Cost | How |
 |------|------|-----|
 | **Local (Orchard)** | Free | Models run on your Mac via PIE |
 | **BYOK (Bring Your Own Key)** | Your API bill | You provide API keys for Anthropic, OpenAI, Google, or xAI |
-| **Proxy Credits** | Pay-as-you-go | Eden routes through OpenRouter, you pay per token in dollars |
+| **Proxy Credits** | Pay-as-you-go | Proxy routes through OpenRouter, you pay per token in dollars |
 
 ## Proxy Credits
 
@@ -24,18 +24,18 @@ When you don't have API keys and don't want to run locally, Proxy Credits provid
 ### Architecture
 
 ```
-Eden → OpenRouter (inference) → Model Provider
+Proxy → OpenRouter (inference) → Model Provider
   ↕
 Stripe (payments) → Proxy billing
 ```
 
-OpenRouter acts as the inference ledger. Stripe handles payments. Eden is the middleman — it provisions credits, tracks spend, and shows you the cost.
+OpenRouter acts as the inference ledger. Stripe handles payments. Proxy is the middleman — it provisions credits, tracks spend, and shows you the cost.
 
 There is no balance database. OpenRouter is the source of truth for credit balance. Stripe is the source of truth for payments.
 
 ### Per-Conversation Cost
 
-Eden shows per-conversation cost in the UI — how much each conversation has cost across all messages. This helps you understand which conversations and models are expensive.
+Proxy shows per-conversation cost in the UI — how much each conversation has cost across all messages. This helps you understand which conversations and models are expensive.
 
 ## API Key Management
 
@@ -43,15 +43,15 @@ API keys are stored in the macOS Keychain:
 
 ```bash
 # Set a provider key
-eden provider key set anthropic sk-ant-...
+proxy provider key set anthropic sk-ant-...
 
 # Check key status
-eden provider key status anthropic
+proxy provider key status anthropic
 
 # Test a key
-eden provider key test anthropic
+proxy provider key test anthropic
 ```
 
 ## Routing Priority
 
-When multiple inference paths are available, Eden routes based on your configuration. A single toggle in settings controls whether local or cloud models take priority.
+When multiple inference paths are available, Proxy routes based on your configuration. A single toggle in settings controls whether local or cloud models take priority.

@@ -1,5 +1,5 @@
 site_name: The Proxy Company Documentation
-site_description: Technical documentation for Eden and Orchard — Local Intelligence on Apple Silicon
+site_description: Technical documentation for Proxy and Orchard — Local Intelligence on Apple Silicon
 site_author: The Proxy Company
 copyright: Copyright &copy; 2026 The Proxy Company
 
@@ -80,14 +80,14 @@ extra_css:
 
 nav:
   - Home: index.md
-  - Eden:
-    - Overview: eden/index.md
-    - Life Map: eden/life-map.md
-    - Party: eden/party.md
-    - Moves: eden/moves.md
-    - Integrations: eden/integrations.md
-    - Credits: eden/credits.md
-    - CLI Reference: eden/cli.md
+  - Proxy:
+    - Overview: proxy/index.md
+    - Life Map: proxy/life-map.md
+    - Party: proxy/party.md
+    - Moves: proxy/moves.md
+    - Integrations: proxy/integrations.md
+    - Credits: proxy/credits.md
+    - CLI Reference: proxy/cli.md
   - Orchard:
     - Overview: orchard/index.md
     - Architecture: orchard/architecture.md
