@@ -1,78 +1,72 @@
 # Proxy
 
-Proxy is a macOS application that gives you a spatial representation of your own trajectory through time. It combines structural reasoning, multi-agent deliberation, and local intelligence into a single cockpit.
+Proxy is the app layer for The Proxy Company. It is a Mac app plus a mobile
+companion for working with your Life Map, agents, Party chats, Moves, tools,
+models, and integrations.
 
-## What Proxy Is
+Proxy is local-first. Your data lives on your machine, and cloud calls happen
+only when you choose a cloud model, a connected service, or a public proxy.ing
+route.
 
-- A map of your life — the Life Map
-- A multi-agent deliberation system — the Party
-- A daily driver for AI — local models, cloud models, bring your own keys, or use Proxy credits
-- A console — models are the games, agents are the leverage, the Life Map is the mini map
+## App Surfaces
 
-## What Proxy Is Not
+| Surface | What it does |
+| --- | --- |
+| Proxy desktop | Main workspace for Parties, Moves, Life Map context, roster setup, models, integrations, and harnesses |
+| Proxy Mobile | Companion app for Timeline, Roster, Proxy chat, Moves, and Party chats connected back to a running desktop instance |
+| Proxy CLI | Command-line control plane for a running Proxy instance |
+| proxy.ing | Public address layer for chat, client routes, inference, and MCP access to an approved local device |
 
-- Not another chat app glued on top of models
-- Not an attention farm, feed, or timeline
-- Not an "AI front-end" where the selling point is which logo is in the corner
+## Core Concepts
 
-## Architecture
+| Concept | Meaning |
+| --- | --- |
+| [Roster](roster.md) | The agents available to work inside Proxy |
+| [Integrations](integrations.md) | MCP servers, CLI tools, HTTP APIs, skills, and services Proxy can use |
+| [Harnesses](harnesses.md) | External agent runtimes, such as Codex or Claude Code, that can join Party sessions |
+| [Timeline](timeline.md) | A chronological feed of Life Map entries and activity |
+| [Life Map](life-map.md) | Proxy's context layer for projects, people, commitments, files, decisions, and active work |
+| [Moves](moves.md) | Reviewable cards and documents that ask for a decision or present structured work |
+| [Party Chat](party.md) | Shared chats where you and selected agents work together |
 
-```
-Proxy (SwiftUI)
-  └── Glue (Rust FFI bridge)
-      └── Grand Central (coordination)
-          ├── Trellis (Life Map database)
-          ├── Party (multi-agent deliberation)
-          ├── Roster (agent configuration)
-          ├── Content (blob storage)
-          ├── Harnesses (external agent runtimes)
-          ├── Integrations (MCP servers)
-          └── Skills (structured deliverables)
-```
+## Model Routes
 
-**Proxy** is the SwiftUI interface — the cockpit, the Life Map visualization, the Party chat, the settings drawer (Attic).
+Proxy can mix model routes in the same product surface.
 
-**Glue** is a Rust FFI layer that bridges Swift and the Rust coordination layer. It exposes C-compatible functions that Swift calls directly.
+| Route | Use it for |
+| --- | --- |
+| Local Orchard models | Private Apple Silicon inference through Orchard |
+| Bring Your Own Key | Cloud providers you configure with your own API keys |
+| Proxy Credits | Pay-as-you-go cloud inference through Proxy |
+| Harnesses | External agent CLIs and runtimes that run work outside the model router |
 
-**Grand Central** is the coordination layer. It manages agents, content, the Party system, MCP servers, harness connections, and the database. Grand Central also runs an MCP server on `localhost:51711`, which external tools (Claude Code, Codex, or any MCP client) use to interact with Proxy.
+## Local Storage
 
-**Trellis** is the graph database that stores the Life Map. It's a fork of GraphLite (Apache 2.0), extended with PageRank2 leverage computation and the 8-8-7 type system.
+Proxy stores its working state locally:
 
-## Storage
-
-Proxy stores all data locally:
-
-```
+```text
 ~/Proxy/
-├── proxy.db          # SQLite database (agents, models, conversations, party, roster, skills)
-├── config.json      # Device identity and settings
-├── graph/           # Trellis graph database
-├── content/         # Content-addressed blob storage (SHA-256)
-├── skills/          # Installed skills
-├── snapshots/       # Point-in-time backups (.proxy files)
-├── changesets/      # Sync units
-├── events/          # Event logs
-├── exports/         # User exports
-└── mcp.json         # MCP server runtime state
+├── proxy.db
+├── config.json
+├── graph/
+├── content/
+├── skills/
+├── snapshots/
+├── changesets/
+├── events/
+├── exports/
+└── mcp.json
 ```
 
-Everything runs on your machine. Cloud calls happen only when you explicitly use cloud models.
-
-## Inference
-
-Proxy supports three inference modes:
-
-| Mode | How it works |
-|------|-------------|
-| **Local** | Orchard runs models directly on Apple Silicon via PIE |
-| **Bring Your Own Key (BYOK)** | Use your own API keys for Anthropic, OpenAI, Google, or xAI |
-| **Proxy Credits** | Pay-as-you-go cloud inference through OpenRouter, displayed in dollars |
-
-All three modes work through the same interface. You can mix local and cloud models in the same Party session.
+The desktop app owns the local source of truth. Proxy Mobile connects to it
+through Grand Central's client API and keeps a small local cache for responsive
+views.
 
 ## MCP Server
 
-When Proxy is running, it exposes an MCP server on `localhost:51711`. This server provides tools for reading and writing the Life Map, managing agents, running Party sessions, and more.
+When Proxy is running, it exposes a local MCP server on `localhost:51711`.
+External clients can use it to query context, send Party messages, inspect
+Moves, and operate through Proxy's local runtime.
 
-Any MCP-compatible client can connect — Claude Code, Codex, or custom tooling.
-
+See [proxy.ing](../proxy-ing/index.md) for the public address layer that can
+route approved traffic back to a local Proxy device.

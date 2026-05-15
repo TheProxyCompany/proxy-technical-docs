@@ -1,6 +1,7 @@
 # Credits
 
-Proxy uses a **gas pump model** for cloud inference billing. Credits are displayed in dollars — what you see is what you spend.
+Proxy uses a **gas pump model** for cloud inference billing. Credits are
+displayed in dollars, so what you see is what you spend.
 
 ## How It Works
 
@@ -18,8 +19,8 @@ When you don't have API keys and don't want to run locally, Proxy Credits provid
 
 - **Displayed in dollars**, not abstract credit units
 - **Charged per token** at the model's rate plus a small margin
-- **Starter credits** are provisioned during onboarding — enough to try the product
-- **Top up via Stripe** — standard payment flow, billed in real dollars
+- **Starter credits** are provisioned during onboarding, enough to try the product
+- **Top up via Stripe** with the standard payment flow, billed in real dollars
 
 ### Architecture
 
@@ -29,13 +30,16 @@ Proxy → OpenRouter (inference) → Model Provider
 Stripe (payments) → Proxy billing
 ```
 
-OpenRouter acts as the inference ledger. Stripe handles payments. Proxy is the middleman — it provisions credits, tracks spend, and shows you the cost.
+OpenRouter acts as the inference ledger. Stripe handles payments. Proxy
+provisions credits, tracks spend, and shows you the cost.
 
 There is no balance database. OpenRouter is the source of truth for credit balance. Stripe is the source of truth for payments.
 
 ### Per-Conversation Cost
 
-Proxy shows per-conversation cost in the UI — how much each conversation has cost across all messages. This helps you understand which conversations and models are expensive.
+Proxy shows per-conversation cost in the UI, including how much each
+conversation has cost across all messages. This helps you understand which
+conversations and models are expensive.
 
 ## API Key Management
 

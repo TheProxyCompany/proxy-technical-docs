@@ -1,108 +1,56 @@
 # Integrations
 
-Proxy connects to external tools and services through a **tri-modal integration system** — three transport types unified under one interface.
+Integrations are the tools and services Proxy can use on your behalf. They live
+on the Mac-side Proxy instance and are equipped to agents through loadouts.
 
-## Transport Types
+## Integration Types
 
-### 1. MCP Servers
-
-Persistent connections using the Model Context Protocol. Proxy discovers tools automatically via the MCP protocol handshake.
-
-```
-Proxy ←→ MCP Server (stdio or HTTP/SSE)
-         ↓
-    Tool discovery
-    Tool execution
-    Resource access
-```
-
-Examples: GitHub, Slack, Proxy's own MCP server, custom MCP servers.
-
-### 2. CLI Tools
-
-Subprocess invocation with structured JSON output. Proxy calls the tool as a child process and parses the result.
-
-Examples: `gh` (GitHub CLI), `gws` (Google Workspace CLI), `aws`.
-
-### 3. Direct HTTP APIs
-
-REST calls with stored credentials. Proxy makes HTTP requests directly to external APIs.
-
-Examples: OpenRouter, Stripe, custom webhooks.
-
-## Managing Integrations
-
-Integrations are managed through the Proxy CLI or the Attic (settings) UI:
-
-```bash
-# List connected integrations
-proxy integration list --connected
-
-# Add a new integration
-proxy integration add my-server
-
-# Connect via stdio
-proxy integration connect stdio my-server '{"command":"node","args":["server.js","--stdio"]}'
-
-# Connect via HTTP
-proxy integration connect http my-server '{"url":"http://localhost:3000/mcp"}'
-
-# See available tools
-proxy integration tools my-server
-
-# Import from Claude Desktop config
-proxy integration import
-```
-
-## Harnesses
-
-Harnesses are a special class of integration for **agent runtimes** — external programs that can participate in Party sessions as full agents.
-
-| Harness | Transport | What it is |
-|---------|-----------|-----------|
-| **Claude Code** | Process (stdin/stdout JSONL) | Anthropic's CLI agent |
-| **Codex** | WebSocket | OpenAI's coding agent |
-| **OpenClaw** | WebSocket | Open-source agent runtime |
-
-Harnesses differ from regular integrations because they're bidirectional — Proxy sends prompts to the harness, and the harness sends tool calls and responses back.
-
-```bash
-# List available harnesses
-proxy harness list
-
-# Connect a harness
-proxy harness connect claude-code
-
-# Configure
-proxy harness set-path claude-code /usr/local/bin/claude
-
-# Check status
-proxy harness status
-```
+| Type | What it is | Examples |
+| --- | --- | --- |
+| MCP server | A Model Context Protocol server that exposes tools and resources | GitHub, Slack, local Proxy MCP, custom MCP servers |
+| CLI tool | A command-line tool Proxy can run with structured inputs and outputs | `gh`, `gws`, `aws` |
+| HTTP API | A direct web API with stored credentials | OpenRouter, Stripe, custom internal APIs |
+| Skill | Local instructions and scripts an agent can use | repo workflows, app-specific operating guides |
 
 ## Loadouts
 
-A **loadout** is a saved configuration of integrations and skills for an agent. Each agent can have multiple loadouts that define what tools and MCP servers are available to them.
+Agents experience integrations through loadouts. A loadout can define:
 
-```bash
-# List loadouts
-proxy loadout list
+- model provider and model
+- system prompt
+- enabled skills
+- equipped integrations
+- working directory
+- harness selection
+- reasoning and sampling settings
+- display name, avatar, and accent color
 
-# Equip an integration to a loadout
-proxy loadout integration equip <loadout_id> <integration_id>
+Changing a loadout changes what that agent can do. This is the right place to
+decide whether an agent can read GitHub, use Google Workspace, talk to Proxy
+MCP, or operate in a specific repo.
 
-# Equip a skill
-proxy loadout skill equip <loadout_id> <skill_id>
+## Desktop And Mobile
+
+The desktop app owns integration setup and credentials. Proxy Mobile can inspect
+agents and loadouts, and it can equip or unequip integrations that are already
+available on the Mac. Credential setup, OAuth, and local binary paths stay on
+the desktop device.
+
+## Proxy MCP
+
+Proxy itself exposes an MCP server on `localhost:51711` when the app is
+running. External clients can use it to work with Proxy context, Moves, agents,
+and Party sessions.
+
+Through proxy.ing, the public MCP docs currently expose:
+
+```text
+https://username.proxy.ing/mcp/proxy
+https://username.proxy.ing/mcp/party
 ```
 
-## Proxy MCP Server
+## Related
 
-Proxy itself runs an MCP server on `localhost:51711` when the app is open. This lets external tools interact with Proxy:
-
-- Read and write the Life Map
-- Manage agents and teams
-- Send messages to Party sessions
-- Take screenshots
-- Navigate the UI
-
-Any MCP client can connect. This is how Claude Code and other tools integrate with Proxy for AI-assisted development.
+- [Roster](roster.md)
+- [Harnesses](harnesses.md)
+- [Party Chat](party.md)

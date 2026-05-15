@@ -1,18 +1,24 @@
 {
   "name": "The Proxy Company Documentation",
-  "description": "Technical documentation for Proxy and Orchard — Local Intelligence on Apple Silicon",
+  "description": "Public documentation for Proxy, Orchard, and proxy.ing",
   "products": [
     {
       "name": "Proxy",
       "slug": "proxy",
-      "description": "A macOS AI cockpit — Life Map, multi-agent Party, local and cloud inference",
+      "description": "The Apple app layer for local and cloud AI work",
       "url": "/proxy/"
     },
     {
       "name": "Orchard",
       "slug": "orchard",
-      "description": "Local Intelligence on Apple Silicon — brand new inference engine, custom GPU kernels, continuous batching, multi-model generation, error-free tool calling",
+      "description": "Production local inference for Apple Silicon, with batching, streaming, Python, and Rust",
       "url": "/orchard/"
+    },
+    {
+      "name": "proxy.ing",
+      "slug": "proxy-ing",
+      "description": "Public addresses, device approval, web chat, OpenAI-compatible traffic, and Grand Central client, inference, and MCP routes",
+      "url": "/proxy-ing/"
     }
   ],
   "githubOrg": "TheProxyCompany",

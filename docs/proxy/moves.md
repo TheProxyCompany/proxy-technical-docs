@@ -1,39 +1,64 @@
 # Moves
 
-Moves are structured deliverables in Proxy. They're block-based documents that agents execute on your behalf — research briefs, onboarding flows, analysis reports, action plans.
+Moves are how Proxy hands you decisions and structured work. They keep important
+agent output out of the churn of chat and turn it into something you can review,
+accept, reject, defer, or complete.
 
-## What a Move Is
+## What A Move Contains
 
-A Move is a structured document made of **blocks**. Each block has a type (text, heading, checklist, code, image, executable) and content. Moves are stored as files and tracked in the Life Map.
+| Field | Meaning |
+| --- | --- |
+| Title | Short name for the decision or deliverable |
+| Lede | One-sentence summary |
+| Context | Why the Move exists |
+| Blocks | Structured content such as text, choices, images, diffs, code, warnings, or progress |
+| Status | Current review state |
+| Response | Your answer, selection, or approval data |
 
-Think of Moves as the output artifacts of agent work — not chat messages, but real deliverables.
+## Move Statuses
+
+| Status | Meaning |
+| --- | --- |
+| `pending` | Waiting for review |
+| `active` | In progress or currently presented |
+| `made` | Approved |
+| `completed` | Finished after approval or execution |
+| `rejected` | Declined |
+| `later` | Deferred |
+| `failed` | Could not complete |
+
+Proxy Mobile counts `pending` and `active` Moves as waiting for you. Deferred
+Moves stay visible in the pending stack until they are handled.
 
 ## Block Types
 
-| Block Type | What it is |
-|-----------|-----------|
-| **Text** | Markdown text content |
-| **Heading** | Section headers |
-| **Checklist** | Actionable items with completion state |
-| **Code** | Code blocks with language annotation |
-| **Image** | Embedded images |
-| **Executable** | Blocks that agents can run — shell commands, API calls, or other actions |
+Move blocks are typed so the UI can render the right control.
 
-## Executable Blocks
+| Block type | Typical use |
+| --- | --- |
+| `text` | Markdown or explanatory text |
+| `image` | One image or image groups |
+| `code`, `terminal`, `snippet` | Code or command output |
+| `warning` | Risk, caveat, or attention marker |
+| `progress` | Progress indicator |
+| `choice`, `multi_choice` | User decision controls |
+| `diff`, `before_after`, `side_by_side` | Comparison views |
 
-Executable blocks are the bridge between documentation and action. An agent can define a block that, when executed:
+## Review Flow
 
-- Runs a shell command
-- Calls an API
-- Mutates the Life Map
-- Triggers another agent
+1. An agent or workflow creates a Move.
+2. Proxy shows it in the Move stack.
+3. You inspect the content and any requested choices.
+4. You approve, reject, or defer it.
+5. Proxy records the response and sends the result back to the agent or workflow.
 
+On mobile, the basic actions are `Yes`, `No`, and `Later`. Detailed Moves can
+open full screen, render their blocks, collect responses, and require local
+confirmation before approval.
 
-## How Moves Work
+## How Moves Relate To Party Chat
 
-1. An agent (or you) creates a Move with a set of blocks
-2. The Move appears in Proxy's UI as a structured document
-3. You can review, edit, approve, or reject blocks
-4. Executable blocks can be run individually or as a batch
-5. Progress is tracked — completed blocks, pending actions, overall status
-
+Party chats are good for conversation and iteration. Moves are better when an
+agent needs a durable answer or wants to present work for review. A Party can
+create a Move, and the Move response can flow back into the Party or the
+underlying workflow.

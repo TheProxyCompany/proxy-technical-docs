@@ -1,91 +1,62 @@
-# Architecture
+# How Orchard Runs
 
-Orchard's inference stack is built from the bottom up for Apple Silicon.
-
-## The Stack
-
-```
-┌─────────────────────────────────────────────────┐
-│  Client Libraries (orchard-py, orchard-rs)       │
-│  OpenAI-compatible API, streaming, tool calling  │
-├─────────────────────────────────────────────────┤
-│  PIE (Proxy Inference Engine)                    │
-│  C++23 — core execution, batching, scheduling    │
-├─────────────────────────────────────────────────┤
-│  PSE (Proxy State Engine)                        │
-│  Structured generation — grammars, JSON schemas  │
-├─────────────────────────────────────────────────┤
-│  PAL (Proxy Attention Lab)                       │
-│  Custom Metal kernels — paged attention, RoPE    │
-├─────────────────────────────────────────────────┤
-│  Carbon (MLX fork)                               │
-│  Array operations, JIT Metal compilation         │
-└─────────────────────────────────────────────────┘
-```
-
-## PIE — Proxy Inference Engine
-
-The core inference server, built from scratch for Apple Silicon.
-
-### Key Capabilities
-
-- **Continuous batching** — dynamically packs prefill and decode sequences into batches each step, so multiple agents can share one model
-- **Paged KV cache** — fixed-size pages (16 tokens), managed by a page allocator, supports multi-tier layouts for architectures like Gemma 3
-- **Prompt caching** — reuses KV cache pages across requests with shared prefixes
-- **Streaming** — token-by-token streaming with structured events
-- **Multimodal** — vision model support (image preprocessing, embedding)
-- **Tool calling** — native function calling with structured output
-- **Carbon JIT** — Metal kernels embedded as string literals at build time, JIT-compiled at runtime
-
-### Execution Flow
+Most users do not need to know Orchard's internal project layout. The useful
+mental model is simple:
 
 ```
-Request (IPC)
-  → Tokenize
-  → Schedule (ARScheduler)
-  → Batch pack (prefill + decode sequences)
-  → Forward pass (model layers + Metal compute)
-  → Logit processing (repetition, bias, temperature, top_k, top_p, min_p)
-  → Sampling
-  → PSE constraint check
-  → Stream token back
-  → Repeat until done
+Your Python code
+  -> Orchard client
+  -> Local engine process
+  -> Model weights on your Mac
+  -> Streamed response
 ```
 
+The Python client starts or reuses a local engine process, loads the model you
+request, submits prompts, and streams results back into your process. The same
+engine can serve multiple requests and models during a session.
 
-## PSE — Proxy State Engine
+## Direct Python Client
 
-The structured generation engine. PSE augments language models at runtime, steering token generation to produce valid output without sacrificing creative capability.
+Use this path for Python apps:
 
-### What PSE Does
+```python
+from orchard.engine.inference_engine import InferenceEngine
 
-- **JSON schema enforcement** — guarantees model output conforms to a JSON schema
-- **Grammar constraints** — arbitrary context-free grammars
-- **Tool call formatting** — ensures function calls have valid names and arguments
-- **State tracking** — tracks where the model is in a behavioral graph (thinking states, answering states, coordinate generation)
+MODEL = "google/gemma-4-E2B-it"
 
-### How It Works
+with InferenceEngine(load_models=[MODEL]) as engine:
+    client = engine.client()
+    response = client.chat(
+        MODEL,
+        [{"role": "user", "content": "Hello."}],
+        max_generated_tokens=32,
+    )
+    print(response.text)
+```
 
-PSE builds a hierarchical state machine from the constraint specification. At each token generation step, it produces a **bitmask** of valid next tokens. The bitmask is applied to the logits before sampling — invalid tokens get negative infinity, valid tokens pass through unchanged.
+## HTTP Server
 
-This is alignment through architecture, not fine-tuning. The model is structurally incapable of producing invalid output for the constrained portions.
+Use this path when another process needs an HTTP API:
 
-## PAL — Proxy Attention Lab
+```bash
+orchard serve --model google/gemma-4-E2B-it
+```
 
-Custom Metal GPU kernels for attention computation. PAL implements paged attention directly on Apple Silicon's GPU, bypassing the generic compute paths.
+That exposes OpenAI-compatible routes under `http://localhost:8000/v1`.
 
-Key kernels:
+## Local Files
 
-- **Paged attention** — efficient attention over non-contiguous KV cache pages
-- **RoPE** — rotary position embedding computation
-- **Memory management** — GPU-side page table operations
+| File or cache | Purpose |
+| --- | --- |
+| `~/.orchard/` | Cached Orchard engine binary |
+| Hugging Face cache | Model weights |
+| Process logs | Engine and client diagnostics |
 
-## Carbon
+## Shutdown
 
-A private fork of Apple's MLX framework. Carbon extends MLX with:
+The engine is reference-counted by Orchard clients. To stop a background engine
+manually:
 
-- **Multi-stream concurrency** — multiple compute streams for overlapping operations
-- **`compile_with_stream`** — JIT compilation scoped to specific compute streams
-- **Epoch-based buffer safety** — prevents use-after-free in concurrent execution
-
-Carbon is the foundation — all array operations, Metal compilation, and GPU scheduling flow through it.
+```bash
+orchard engine stop
+```

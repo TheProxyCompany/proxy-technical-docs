@@ -1,8 +1,8 @@
 # The Proxy Company Documentation
 
-Technical documentation for The Proxy Company's products and technology.
+Public documentation for Proxy, Orchard, and proxy.ing.
 
-This repository contains a comprehensive documentation system built with Material MkDocs.
+This repository uses Material MkDocs.
 
 ### Local Development Setup
 
@@ -12,21 +12,20 @@ git clone https://github.com/TheProxyCompany/proxy-technical-docs.git
 cd proxy-technical-docs
 
 # Install dependencies
-pip install -r requirements.txt
+uv venv
+uv pip install -r requirements.txt
 ```
 
 ### Serve the Documentation
 
 ```bash
-# Serve all documentation with proper subpath routing
+# Serve the docs site
 ./serve.sh
 ```
 
-This will build the entire documentation site and serve it at http://localhost:8000 with:
-- Main docs at `/`
-- PSE docs at `/pse/`
-- PBA docs at `/pba/`
+This builds and serves the public documentation site at http://localhost:8000.
+The build script creates a local `.venv` when needed.
 
 ## Deployment
 
-The documentation is automatically deployed via Vercel when changes are pushed to the main branch.
+The documentation is deployed when changes land on the main branch.

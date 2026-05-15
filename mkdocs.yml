@@ -1,5 +1,5 @@
 site_name: The Proxy Company Documentation
-site_description: Technical documentation for Proxy and Orchard — Local Intelligence on Apple Silicon
+site_description: Technical documentation for Proxy and Orchard, local intelligence on Apple Silicon
 site_author: The Proxy Company
 copyright: Copyright &copy; 2026 The Proxy Company
 
@@ -49,7 +49,7 @@ theme:
     - content.tooltips
     - palette.toggle
     - toc.integrate
-  logo: assets/proxy-p-vector.png
+  logo: assets/proxy-p-vector-tan.png
   favicon: assets/proxy-logo.png
 
 markdown_extensions:
@@ -82,15 +82,36 @@ nav:
   - Home: index.md
   - Proxy:
     - Overview: proxy/index.md
+    - Getting Started: proxy/getting-started.md
+    - Roster: proxy/roster.md
     - Life Map: proxy/life-map.md
+    - Timeline: proxy/timeline.md
     - Party: proxy/party.md
     - Moves: proxy/moves.md
     - Integrations: proxy/integrations.md
+    - Harnesses: proxy/harnesses.md
     - Credits: proxy/credits.md
     - CLI Reference: proxy/cli.md
   - Orchard:
     - Overview: orchard/index.md
-    - Architecture: orchard/architecture.md
+    - Production Use: orchard/production.md
+    - Getting Started: orchard/getting-started.md
+    - Client Example: orchard/client.md
+    - Server Example: orchard/server.md
+    - Streaming: orchard/streaming.md
+    - Batching: orchard/batching.md
+    - Multimodal Input: orchard/multimodal.md
+    - Structured Output: orchard/structured-output.md
+    - Tool Use: orchard/tool-use.md
+    - Reasoning Levels: orchard/reasoning.md
+    - Rust Client: orchard/rust.md
+    - How It Runs: orchard/architecture.md
+  - proxy.ing:
+    - Overview: proxy-ing/index.md
+    - Getting Started: proxy-ing/getting-started.md
+    - Routes: proxy-ing/routes.md
+    - Device Approval: proxy-ing/device-approval.md
+    - Client API: proxy-ing/client-api.md
 
 plugins:
   - search

@@ -61,9 +61,9 @@
   fill: var(--md-accent-fg-color);
 }
 
-/* Tint the header logo PNG to tan */
+/* The header logo asset is pre-tinted to the docs accent color. */
 .md-header__button.md-logo img {
-  filter: brightness(0) invert(85%) sepia(15%) saturate(400%) hue-rotate(10deg);
+  filter: none;
 }
 
 /* Tab navigation */
@@ -135,6 +135,21 @@
 .md-typeset .grid.cards > :is(ul, ol) > li:hover {
   box-shadow: 0 0 0.2rem rgba(218, 208, 175, 0.3);
   border-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .grid.cards > :is(ul, ol) > li > p:has(.md-button) {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.md-typeset .grid.cards > :is(ul, ol) > li > p:has(.md-button) .md-button {
+  display: inline-flex;
+  margin: 0;
+  padding-left: 0.85rem;
+  padding-right: 0.85rem;
+  white-space: nowrap;
 }
 
 /* Admonition styling */

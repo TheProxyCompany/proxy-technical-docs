@@ -1,108 +1,70 @@
 # Life Map
 
-The Life Map is Proxy's knowledge graph — your life, mapped as a graph — a structured representation of everything you're working on, tracking, and thinking about. It's stored in Trellis, a graph database built on sled (an embedded key-value store).
+The Life Map is Proxy's context layer. It keeps track of the projects, people,
+files, commitments, decisions, events, and open loops that should shape how
+your agents help you.
 
-## The 8-8-7 System
+The visible product goal is simple: Proxy should know what you have going on
+right now, what is blocked, what is stale, and what deserves attention next.
 
-The Life Map uses a unified type system: **8 node types, 8 edge types, 7 entry types.**
+## What It Contains
 
-### Node Types
+| Kind | What it captures |
+| --- | --- |
+| Categories | Broad areas such as work, health, money, family, or creative projects |
+| Actions | Work that can move through planned, doing, done, or stopped |
+| Entities | People, companies, products, repos, places, and other named things |
+| Events | Dated moments, deadlines, meetings, launches, or milestones |
+| Conditions | States that can be true or false, such as a blocker being cleared |
+| Concepts | Ideas, principles, preferences, and mental models |
+| Files | References to stored documents, images, screenshots, or other content |
+| Entries | Notes, updates, issues, decisions, references, takeaways, and metrics |
 
-Nodes are things that exist in the graph.
+## Relationships
 
-| Node Type | What it is | Key Fields | Examples |
-|-----------|-----------|------------|----------|
-| **Category** | A grouping or domain | `color`, `icon` | Work, Health, Finance |
-| **Action** | Work with defined scope | `phase` | "Ship v1", "Fix CI" |
-| **Entity** | A thing, person, or object | — | "PIE", "Proxy", a person's name |
-| **Event** | Something that happens at a time | `occurs_at` | "v1 Launch", "Board Meeting" |
-| **Condition** | A state that can be true or false | — | "Runway > 12mo", "CI Green" |
-| **Concept** | An idea or principle | — | "Local Intelligence", "PageRank2" |
-| **File** | Reference to content-addressed storage | `content_hash`, `filename`, `mime_type`, `size`, `uri` | "prd.pdf", "mockup.png" |
-| **Entry** | A log-like record attached to any node | `entry_type`, `title`, `content`, `author` | Progress notes, decisions, metrics |
+Life Map items are connected by relationships such as:
 
-All non-Entry nodes share: `id`, `name`, `description` (optional), `created_at`, `updated_at`.
+| Relationship | Meaning |
+| --- | --- |
+| `HAS` | One thing contains or owns another |
+| `ABOUT` | An entry is about a node |
+| `NEEDS` | One thing depends on another |
+| `WANTS` | Softer desire or pull |
+| `MAKES` | One thing creates or produces another |
+| `FOR` | Purpose or beneficiary |
+| `IMPACTS` | Weighted influence |
+| `DYNAMIC` | Custom relationship with a description |
 
-**Action phases:** `planned` → `doing` → `done` or `stopped`.
+These relationships let Proxy see more than a flat task list. A Move can be
+connected to the project it advances, the file it reviews, the condition it
+unblocks, and the person it is for.
 
-### Edge Types
+## Timeline Entries
 
-Edges connect nodes with semantic meaning.
+Entries are the Life Map's activity records. They are what power the Timeline.
 
-| Edge Type | Meaning | Extra Fields | Example |
-|-----------|---------|-------------|---------|
-| **HAS** | Containment or ownership | — | "Work HAS Ship-v1" |
-| **ABOUT** | Entry relates to a node | — | "progress-note ABOUT ship-v1" |
-| **NEEDS** | Dependency or prerequisite | `met` (bool) | "v1-launch NEEDS ci-green" |
-| **WANTS** | Aspirational pull (softer than NEEDS) | — | "proxy WANTS semantic-search" |
-| **MAKES** | Production or creation | — | "PIE MAKES embeddings" |
-| **FOR** | Purpose or beneficiary | — | "protocol FOR body-recomp" |
-| **IMPACTS** | Weighted influence | `weight` (f64) | "sleep-quality IMPACTS focus" |
-| **DYNAMIC** | Freeform relationship | `weight` (f64), `description` | Any user-defined relationship |
+| Entry type | Use it for |
+| --- | --- |
+| `update` | Progress on work |
+| `note` | General context |
+| `issue` | Something that needs attention |
+| `decision` | A choice and why it was made |
+| `reference` | External context |
+| `takeaway` | A lesson or synthesis |
+| `metric` | A measured value |
 
-### Entry Types
+## Agent Context
 
-Entries are log-like records attached to nodes via `ABOUT` edges.
+Agents use the Life Map to understand the current situation before acting. For
+example, a coding agent can see the active project, relevant files, recent
+decisions, and unresolved blockers instead of only seeing the last chat message.
 
-| Entry Type | What it captures |
-|-----------|------------------|
-| **update** | Progress on an action or entity |
-| **note** | General observations |
-| **issue** | A problem to address |
-| **decision** | A choice that was made and why |
-| **reference** | A pointer to external information |
-| **takeaway** | A lesson learned |
-| **metric** | A measurement |
+Life Map context can be injected into an agent's active loadout. It can also be
+queried through Proxy's MCP tools when an external client needs current context.
 
-## Structure
+## Under The Hood
 
-The graph is **flat nodes connected by edges.** There is no enforced hierarchy. Structure emerges from edge relationships:
-
-- A `Category` can `HAS` Actions, Entities, or other nodes to create groupings
-- An `Action` can `NEEDS` a `Condition` to express a blocker
-- An `Entity` can `IMPACTS` an `Action` with a weight
-
-## Leverage
-
-PageRank2 runs over the graph to compute which nodes have the highest **leverage** — completing them unblocks the most downstream progress.
-
-Key outputs:
-
-- **Leverage score** — how structurally important completing this node is
-- **Transitive unlocks** — how many downstream nodes it frees
-- **Direct blockers** — what `NEEDS` edges point at this node with `met = false`
-
-The `NEEDS` edges (with their `met` boolean) are the primary input to leverage computation. `IMPACTS` edges with weights provide secondary signal. The algorithm uses a Laplacian voltage solve — two-stage centrality then voltage — to propagate value through the graph topology.
-
-## Mutations
-
-Both humans and agents mutate the graph through the same pipeline:
-
-```
-Human (Proxy UI)  ──┐
-                   ├──→ Glue FFI → Trellis → graph/
-Agent (MCP tool) ──┘
-```
-
-Every mutation goes to the undo stack (for Cmd+Z) and gets batched into changesets (for sync). The graph doesn't know or care whether a human or agent made the change.
-
-## MCP Access
-
-When Proxy is running, the Life Map is queryable via MCP tools on `localhost:51711`:
-
-```bash
-# List all actions in progress
-proxy_list entity_type=action filters={"phase": "doing"}
-
-# Get a specific node
-proxy_get entity_type=action id="ship-v1"
-
-# See the structural overview
-proxy_overview limit=10 depth=2
-
-# Recent activity
-proxy_recent limit=20
-
-# Add an edge
-proxy_add_edge from_id="a" to_id="b" edge_type="NEEDS"
-```
+Internally, the Life Map is stored as nodes and edges in the local graph store.
+That implementation detail matters for sync, undo, references, and agent tools,
+but the user-facing purpose is context: what matters, how it connects, and what
+should happen next.

@@ -1,55 +1,97 @@
 # Orchard
 
-Orchard is the Local Intelligence compute platform for Apple Silicon. It's the engine that powers Proxy's local inference — running open models natively on your Mac with no cloud dependency.
+Orchard is the production local inference layer for Apple Silicon.
 
-## What Orchard Is
+Use `orchard-py` when you want to run a model from Python. Use `orchard-rs`
+when you are embedding Orchard in a Rust app or service. Use the HTTP server
+when another process needs an OpenAI-compatible endpoint.
 
-Orchard is a vertically integrated inference stack:
+Orchard is meant to stay running. The production path is a long-lived engine
+process with one or more loaded models, batched requests, streaming deltas,
+structured output, tool use, multimodal input, and OpenAI-compatible server
+routes.
 
-```
-orchard-py (Python SDK) ──┐
-                          ├──→ PIE (C++ inference engine)
-orchard-rs (Rust SDK) ────┘       ├── PAL (Metal GPU kernels)
-                                  ├── PSE (structured generation)
-                                  └── Carbon (private MLX fork)
-```
+## Quick Example
 
-- **PIE** (Proxy Inference Engine) — C++23 inference server optimized for Apple Silicon
-- **PAL** (Proxy Attention Lab) — Custom Metal GPU kernels for paged attention
-- **PSE** (Proxy State Engine) — Grammar and structured generation engine
-- **Carbon** — Private fork of Apple's MLX framework with multi-stream concurrency and epoch-based buffer safety
-
-## Design Philosophy
-
-Orchard exists because local inference on consumer hardware is a fundamentally different problem than cloud inference on GPU clusters.
-
-- **Single device** — no distributed coordination, no fleet management, no network hops
-- **Apple Silicon** — unified memory, Metal compute, exceptional performance-per-watt
-- **Continuous batching** — multiple agents can share the same model simultaneously
-- **Structured generation** — PSE guarantees models produce valid output (JSON, function calls, schema-constrained responses) without sacrificing creative capability
-
-The bet: local gives velocity to outrun cloud. No server farm reconfiguration. No distributed KV cache coordination. Everything on one device means faster iteration.
-
-## How Proxy Uses Orchard
-
-Proxy connects to Orchard through **orchard-rs**, the Rust client library. The connection flows:
-
-```
-Proxy (SwiftUI)
-  └── Glue (Rust FFI)
-      └── Grand Central
-          └── orchard-rs ──→ PIE (IPC) ──→ Model inference
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install orchard
 ```
 
-PIE runs as a separate process. orchard-rs communicates with it over IPC (nanomsg). Grand Central manages the lifecycle — starting PIE when needed, routing inference requests, handling streaming responses.
+```python
+from orchard.engine.inference_engine import InferenceEngine
 
-## Client Libraries
+MODEL = "google/gemma-4-E2B-it"
 
-| Library | Language | Distribution | Purpose |
-|---------|----------|-------------|---------|
-| **orchard-py** | Python | [PyPI](https://pypi.org/project/orchard-ai/) | Python SDK, FastAPI server, OpenAI-compatible API |
-| **orchard-rs** | Rust | [crates.io](https://crates.io/crates/orchard-rs) | Rust SDK, IPC client, used by Grand Central |
-| **orchard-swift** | Swift | SPM | Telemetry only (not inference) |
+with InferenceEngine(load_models=[MODEL]) as engine:
+    client = engine.client()
+    response = client.chat(
+        MODEL,
+        [{"role": "user", "content": "Write one sentence about local AI."}],
+        temperature=0.0,
+        max_generated_tokens=64,
+    )
+    print(response.text)
+```
 
-Both orchard-py and orchard-rs expose an OpenAI-compatible API surface — chat completions, streaming, tool calling, structured output.
+See the [getting started guide](getting-started.md) for the shortest path, then
+use the focused guides for client calls, server calls, streaming, tools, and
+structured output.
 
+## What You Get
+
+- Local inference on Apple Silicon
+- Python sync and async clients
+- Production batching for higher throughput
+- Multiple loaded models in one server process
+- Streaming token deltas
+- OpenAI Responses-style output objects
+- Tool calls and structured output
+- Optional OpenAI-compatible HTTP server
+- Rust client for app and service integrations
+- On-demand model downloads from Hugging Face
+
+## When To Use Each Interface
+
+| Interface | Use it when |
+| --- | --- |
+| Python client | Your app is written in Python and can call Orchard directly |
+| Responses API client | You want typed response objects, event streams, tools, or structured output |
+| HTTP server | You need `curl`, the OpenAI SDK, batched HTTP requests, model status, or another process to connect over HTTP |
+| Rust client | You are embedding Orchard in a Rust app or service |
+
+## Production Starting Points
+
+| Need | Start with |
+| --- | --- |
+| Keep a local inference runtime alive | [Production use](production.md) |
+| Send many prompts to the same model | [Batching](batching.md) |
+| Serve another process over HTTP | [Server example](server.md) |
+| Stream tokens or batched deltas | [Streaming](streaming.md) |
+| Use typed output or tools | [Structured output](structured-output.md) and [tool use](tool-use.md) |
+
+## Model Starting Points
+
+| Mac | Start with |
+| --- | --- |
+| 8 GB unified memory | `google/gemma-4-E2B-it` |
+| 16-32 GB unified memory | `google/gemma-4-E4B-it` or `Qwen/Qwen3.5-4B` |
+| 32 GB+ unified memory | `meta-llama/Llama-3.1-8B-Instruct` |
+
+## Links
+
+- [Getting started](getting-started.md)
+- [Production use](production.md)
+- [Client example](client.md)
+- [Server example](server.md)
+- [Streaming](streaming.md)
+- [Batching](batching.md)
+- [Multimodal input](multimodal.md)
+- [Structured output](structured-output.md)
+- [Tool use](tool-use.md)
+- [Reasoning levels](reasoning.md)
+- [Orchard for Rust](rust.md)
+- [orchard on PyPI](https://pypi.org/project/orchard/)
+- [orchard-py source](https://github.com/TheProxyCompany/orchard-py)
+- [orchard-rs source](https://github.com/TheProxyCompany/orchard-rs)

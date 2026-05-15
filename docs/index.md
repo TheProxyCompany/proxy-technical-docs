@@ -4,49 +4,66 @@ hide:
 ---
 # The Proxy Company Documentation
 
-Technical documentation for The Proxy Company's products and infrastructure.
+Public documentation for Proxy, Orchard, and proxy.ing.
 
-## Our Products
+## Products
 
 <div class="grid cards" markdown>
 
--   :material-apple: __Eden__
+-   :material-apple: __Proxy__
 
-    A macOS AI cockpit. Multiple agents deliberate together, then do the work. Life Map, Party system, local and cloud inference — one app.
+    The desktop and mobile app layer. Proxy brings together the Life Map, Party
+    sessions, agents, tools, local models, cloud models, and companion mobile
+    workflows.
 
-    [:octicons-book-24: Proxy Documentation](proxy/){ .md-button .md-button--primary }
+    [Docs](proxy/index.md){ .md-button .md-button--primary }
+    [Getting Started](proxy/getting-started.md){ .md-button }
 
--   :material-tree-outline: __Orchard__
+-   :material-leaf: __Orchard__
 
-    Local Intelligence on Apple Silicon. A brand new inference engine, custom GPU kernels, continuous batching, multi-model generation, and error-free tool calling.
+    Production local inference for Apple Silicon. Orchard is built for batched
+    requests, streaming, high-throughput local serving, multiple loaded models,
+    structured output, and Python or Rust clients.
 
-    [:octicons-book-24: Orchard Documentation](orchard/){ .md-button .md-button--primary }
+    [Docs](orchard/index.md){ .md-button .md-button--primary }
+    [Getting Started](orchard/getting-started.md){ .md-button }
+
+-   :material-web: __proxy.ing__
+
+    The public address layer for Proxy and Orchard. A `username.proxy.ing`
+    address can serve web chat, an OpenAI-compatible route, and the Grand
+    Central client, inference, and MCP routes from a local machine.
+
+    [Docs](proxy-ing/index.md){ .md-button .md-button--primary }
+    [Getting Started](proxy-ing/getting-started.md){ .md-button }
 
 </div>
 
-## The Stack
+## The Three Layers
 
-```
-Proxy (SwiftUI macOS app)
-  └── Glue (Rust FFI)
-      └── Grand Central (coordination layer)
-          ├── Trellis (graph database)
-          ├── Pane (GPU rendering)
-          ├── orchard-rs (local inference client)
-          └── Cloud inference (Anthropic, OpenAI, Google, xAI)
+| Layer | What it is |
+| --- | --- |
+| Proxy | Desktop and mobile apps for Life Map, Party sessions, Moves, agents, and model routing |
+| Orchard | Production local inference clients and servers for Python and Rust on Apple Silicon |
+| proxy.ing | Public addresses that route web, API, Grand Central client, inference, and MCP traffic to a user's local machine |
 
-Orchard (compute platform)
-  └── PIE (C++ inference engine)
-      ├── PAL (Metal GPU kernels)
-      ├── PSE (structured generation)
-      └── Carbon (private MLX fork)
-```
+## Start Here
 
-Proxy is the product. Orchard is the engine. Proxy consumes Orchard for local inference and brings cloud models alongside it.
+| I want to... | Go to |
+| --- | --- |
+| Run a local model from Python | [Orchard getting started](orchard/getting-started.md) |
+| Embed Orchard from Rust | [Orchard for Rust](orchard/rust.md) |
+| Learn what Orchard is | [Orchard overview](orchard/index.md) |
+| Run Orchard as a production local inference server | [Orchard production use](orchard/production.md) |
+| Use Proxy on desktop or mobile | [Proxy overview](proxy/index.md) |
+| Manage Proxy from the command line | [Proxy CLI reference](proxy/cli.md) |
+| Understand `username.proxy.ing` addresses | [proxy.ing overview](proxy-ing/index.md) |
 
-## Additional Resources
+## Resources
 
-- [Company Website](https://theproxycompany.com)
-- [GitHub Organization](https://github.com/TheProxyCompany)
-- [orchard-py on PyPI](https://pypi.org/project/orchard-ai/)
+- [Company website](https://theproxycompany.com)
+- [Orchard website](https://orchard.md)
+- [proxy.ing](https://proxy.ing)
+- [GitHub organization](https://github.com/TheProxyCompany)
+- [orchard on PyPI](https://pypi.org/project/orchard/)
 - [orchard-rs on crates.io](https://crates.io/crates/orchard-rs)

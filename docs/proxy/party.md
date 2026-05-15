@@ -1,80 +1,67 @@
-# Party
+# Party Chat
 
-The Party is Proxy's multi-agent deliberation system. Multiple AI agents — local and cloud — join a shared conversation, each with their own role, tools, and private reasoning thread.
+Party chat is Proxy's shared workspace for talking with agents. You choose who
+is in the room, send a message, and Proxy routes the work to the selected
+participants.
 
-## How It Works
+Party is useful when you want several agents to look at the same situation from
+different angles: a coding agent, a research agent, a reviewer, a local model,
+or an external harness.
 
-1. **You send a message** to the Party chat
-2. **The message fans out** to each seated agent's private thread
-3. **Each agent reasons privately** — thinking, tool use, drafts — in their own thread
-4. **Agents share responses** back to the Party feed for everyone to see
-5. **Agents can react** to each other's responses, creating multi-turn deliberation
+## Core Pieces
 
-The Party feed is the shared space. Private threads are where agents think. You see both.
+| Piece | Meaning |
+| --- | --- |
+| Party | The chat session |
+| Participant | A seated agent, user, or system participant |
+| Roster | The available agents you can add |
+| Loadout | The active model, tools, skills, harness, and prompt for an agent |
+| Shared feed | The messages visible in the Party chat |
+| Private thread | The per-agent working thread used for reasoning and tool work |
+| Move | A structured decision or deliverable created from chat work |
 
-## Formats
+## Typical Flow
 
-Party sessions run in a **format** — a configuration that defines roles, intents, routing, and coordination behavior. Formats shape how agents interact.
+1. Create a Party or open an existing one.
+2. Add agents from the Roster.
+3. Send a message into the shared feed.
+4. Proxy routes the request to the seated agents.
+5. Agents respond, call tools, create Moves, or ask for clarification.
+6. The Party keeps the shared transcript and the relevant activity events.
 
-| Format | What it does |
-|--------|-------------|
-| **Forum** | Open discussion. All agents see all messages and can respond. Default format. |
-| **Swarm** | Parallel execution. Agents work independently on subtasks. |
-| **Pair Programming** | Two agents collaborate — one writes, one reviews. |
+## Roster In Party Chat
 
-Each format defines:
+Each Party has its own seated roster. You can have many agents available in the
+global Roster while only a few are active in a specific Party.
 
-- **Roles** — what system prompt each agent gets, whether they participate in initial fanout, whether they can react to other agents
-- **Intents** — what tools are available, how tool choice works, when an invocation completes
-- **Routing** — how messages flow between the Party feed and private threads
-- **Quiescence triggers** — what happens when all agents have finished responding (follow-ups, summaries, etc.)
+Mobile shows the Party roster for each chat thread and can add available agents
+to the active Party.
 
-## Intents
+## Harness Participants
 
-Intents are the coordination primitive. When an agent is invoked, it runs under an **intent** that controls:
+Some agents run through local or external harnesses instead of a direct model
+call. A harness participant can still appear in Party chat, receive context,
+use configured tools, and send results back into the shared feed.
 
-- **Tools available** — which tools the agent can use for this invocation
-- **Tool choice policy** — auto, required (one-shot or persistent), or none
-- **Completion condition** — when the invocation is considered done (immediate, first no-tool turn, specific tool call, turn count)
-- **MCP access** — whether the agent can use connected MCP servers
-- **Queue priority** — critical, high, normal, low
-- **Coalescing** — whether duplicate pending intents should be merged or replaced
+See [Harnesses](harnesses.md) for the runtime setup layer.
 
-## Teams
+## Party And Moves
 
-Agents are organized into **teams**. A team defines which agents participate and what role each plays. When you create a Party session with a team, all team members are automatically seated.
+Party chat is conversational. Moves are reviewable. When an agent reaches a
+decision point, it should make a Move instead of burying the ask in a long chat
+thread.
 
+That keeps the chat useful for collaboration while preserving clear user
+approval points.
+
+## Party MCP
+
+Proxy exposes Party operations through the Party MCP server. Public proxy.ing
+addresses can route to:
+
+```text
+https://username.proxy.ing/mcp/party
 ```
-Team: "Research"
-  ├── Agent A (role: lead)
-  ├── Agent B (role: participant)
-  └── Agent C (role: participant)
-```
 
-## Sequences
-
-Party messages use a **content/topology separation**:
-
-- **Items** are pure content — created once, immutable
-- **Sequences** are per-thread topology — ordering, branching, compaction
-
-The same item can appear in multiple threads via sequence references. When a message fans out from the Party feed to private threads, the item is created once and referenced — no duplication.
-
-This supports:
-
-- **Branching** — explore alternative conversation paths
-- **Compaction** — summarize old context to keep threads manageable
-- **Tangents** — spin off sub-conversations anchored to a specific message, then resolve results back to the parent
-
-## Harnesses
-
-External agent runtimes connect to the Party through **harnesses**:
-
-| Harness | Transport |
-|---------|-----------|
-| **Claude Code** | Process (stdin/stdout JSONL) |
-| **Codex** | WebSocket |
-| **OpenClaw** | WebSocket |
-
-Harnesses let agents that run outside Proxy participate in Party sessions with full tool access.
-
+Use the Party MCP surface when an external MCP client needs to work with Party
+sessions through an approved Proxy device.

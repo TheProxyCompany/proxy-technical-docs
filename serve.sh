@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# Set default project to all
-PROJECT=${1:-all}
+# Set default project
+PROJECT=${1:-main}
 
 # Determine Python command
 if command -v python3 &> /dev/null; then
@@ -17,28 +17,14 @@ case $PROJECT in
     main)
         PORT=8000
         PROJECT_DIR="."
-        PROJECT_NAME="Main Documentation"
-        ;;
-    pse)
-        PORT=8001
-        PROJECT_DIR="pse-docs"
-        PROJECT_NAME="PSE Documentation"
-        ;;
-    pba)
-        PORT=8002
-        PROJECT_DIR="pba-docs"
-        PROJECT_NAME="PBA Documentation"
+        PROJECT_NAME="Public Documentation"
         ;;
     all)
         echo "=====================================================
-Building and serving the complete documentation site...
+Building and serving the public documentation site...
 =====================================================
 
-This will build all documentation sites and serve them as they would appear
-on the deployed Vercel site, with:
-- Main docs at http://localhost:8000/
-- PSE docs at http://localhost:8000/pse/
-- PBA docs at http://localhost:8000/pba/
+This serves the same public docs bundle that is deployed to docs.theproxycompany.com.
 "
 
         # First build everything to the combined site directory
@@ -66,7 +52,7 @@ Press Ctrl+C to stop the server
         ;;
     *)
         echo "Unknown project: $PROJECT"
-        echo "Usage: $0 [main|pse|pba|all]"
+        echo "Usage: $0 [main|all]"
         exit 1
         ;;
 esac
@@ -93,4 +79,8 @@ cd $PROJECT_DIR
 # Serve the documentation
 echo "Starting $PROJECT_NAME server at http://localhost:$PORT"
 echo "Press Ctrl+C to stop"
-mkdocs serve -a 0.0.0.0:$PORT
+if [ -x ".venv/bin/mkdocs" ]; then
+    .venv/bin/mkdocs serve -a 0.0.0.0:$PORT
+else
+    mkdocs serve -a 0.0.0.0:$PORT
+fi
