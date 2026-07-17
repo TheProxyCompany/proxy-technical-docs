@@ -153,8 +153,17 @@ Exactly one prompt source is required: the positional `PROMPT` or the
 | `--format-id <FORMAT_ID>` | Party format: `forum`, `swarm`, `pair_programming`, or a definition ID. Default: `forum` for multi-agent, `swarm` for one. Conflicts with `--flow` (the flow defines the format) |
 | `--prompt <TEXT>` | Flag alias of the positional `PROMPT` |
 | `--name <TITLE>` | Session title |
+| `--thread <THREAD_ID>` | Invoking thread recorded on the session as `invoking_thread`. Defaults from the environment when omitted |
 | `--timeout <SECS>` | Exit with code 124 if the party is not quiescent in time |
 | `--json` | Print the final transcript as JSON |
+
+The invoking thread ties a headless run back to the agent session that
+launched it: the `--thread` flag wins, then `$CLAUDE_SESSION_ID`, then
+`$PROXY_INVOKING_THREAD`. Blank values fall through, and when nothing
+resolves the run carries no invoking thread. The resolved value is exported
+back into the session's participants as `$PROXY_INVOKING_THREAD` (see
+[Party Workspaces](#party-workspaces)), so a party launched from inside a
+party inherits the chain.
 
 ### Stream and Transcript Contract
 
@@ -278,6 +287,61 @@ a folder at `$PROXY_DATA_ROOT/parties/<id>/`:
 
 Definitions with an enabled cron schedule fire automatically; any definition
 can be fired manually with `proxy party fire <id>`.
+
+### Saving a Live Session
+
+```bash
+proxy party save <SESSION_ID>
+```
+
+`party save` promotes a live party session into a standing party: it
+dispatches `POST /client/v1/party/<id>/save`, which serializes the session
+into a standing-party folder and runs the standing-folder import, so the
+definition materializes through the same path as a hand-authored folder. On
+success it prints the resulting `party_id` and `folder_path`.
+
+The session's title becomes the party name, its seating becomes the team
+block, and its flow is derived from the session when the manifest has none.
+Saving an already-standing party re-serializes it: the existing manifest
+keeps its flow, schedule, roles, outputs, and goal file, while the name and
+team block refresh from the live session.
+
+## Party Workspaces
+
+Every party session gets a shared workspace directory at
+`$PROXY_DATA_ROOT/party-workspaces/<party_id>/`, created at session creation
+with a best-effort `.venv` bootstrap (`uv venv` when `uv` is on `PATH`, else
+`python3 -m venv`; bootstrap failures never block the session). Harness seats
+without an explicit working directory run inside the workspace, so
+participants in the same session share files by default.
+
+Every harness/transport participant process receives the session's identity
+as environment variables:
+
+| Variable | Value |
+|----------|-------|
+| `PROXY_PARTY_ID` | Stable party ID (shared across re-runs of a standing party) |
+| `PROXY_CONVERSATION_ID` | This session's conversation ID |
+| `PROXY_PARTY_WORKSPACE` | Absolute path to the shared workspace |
+| `PROXY_INVOKING_THREAD` | The session's invoking thread, when one was recorded |
+
+### The `run_python` Party Tool
+
+Alongside the workspace, every party participant gets a `run_python` tool
+backed by one persistent, sandboxed Python interpreter per session:
+variables and functions defined in one call persist across calls — and
+across participants — until the session ends, and other sessions never see
+them. Results carry captured stdout plus the final expression's value;
+exceptions come back as the Python traceback without ending the turn, so
+agents can fix the code and call again. Each call has a 60-second execution
+budget. It is plain Python for computation, parsing, and data shaping: there
+is no filesystem, network, or module import access, so no pip packages or C
+extensions.
+
+Known issue: on a directly-addressed turn the participant carries a pinned
+share obligation, and tool choice is forced to `share_to_party` until it is
+resolved — so `run_python` (or any other tool) cannot run before the reply
+is shared on those turns. A fix is pending a design decision.
 
 ## Command Reference
 
