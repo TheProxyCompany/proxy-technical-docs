@@ -40,10 +40,17 @@ of these words, each one family of paths at the address:
 | `mail` | `/mcp/mail` | read and send your mail |
 | `messages` | `/mcp/messages` | read and send your messages |
 | `inference` | `/inference` | run your models |
-| `moves` | `/client/v1/moves`, resolving one | see and resolve your Moves |
+| `moves` | `/client/v1/moves`, resolving one | see your Moves, and resolve one with a device signature |
 
 Ask for what your app needs and no more; the person sees the list on the
-ask, in those words, and decides on it. An ask that names no scope gets
+ask, in those words, and decides on it. Making a Move is the person's
+gesture: `POST /client/v1/moves/<id>/resolve` and the `proxy_make_move`
+tool answer `403` to a bearer alone, the person's own account bearer
+included, with `This Move can only be made from Proxy`. Proxy on their Mac
+resolves locally, and their phone signs its resolve with the device key it
+enrolled with (`x-proxy-device-signature` over the method, the path, the
+minute and the body, verified against the keys the Mac trusts). A token
+with the `moves` scope sees Moves; it does not make them. An ask that names no scope gets
 `threads`, which is what a dashboard needs to ask the person's Proxy a
 question. Everything else at the address (the person's own app routes,
 their parties, their shares, their calendar) stays closed to every token; a
@@ -250,13 +257,20 @@ it asks with a scope that says what it is for:
 scope=party:<party id>;title=<party title>;host=<host address>;agents=proxy;loadout=default
 ```
 
-The person's Move reads **The Proxy Company at official.proxy.ing wants to
-add your Proxy to the party The Proxy Company**, with a Who goes block naming
-the agent and the loadout the host asked for and what the connection opens.
-They tap **Let it** on their Mac or phone. The token the host gets carries
-that scope, and the address holds it to the scope. It lasts thirty days like
-any token; after that the host's next call answers `401` and the seat is
-asked for again.
+The person's Move names the host by where the ask is sent back to, never
+by the `host` word in the scope: an ask whose `host` is not its redirect
+origin gets no Move at all. It reads **Alice wants your Proxy in a party**
+when the host's name is one its origin would give it (`Alice` at
+`alice.proxy.ing`), and **official.proxy.ing wants your Proxy in a party**
+otherwise, with a Who is asking block that says what it calls itself, and
+a Who goes block naming the agent and the loadout the host asked for and
+what the connection opens. They tap **Let it** on their Mac or phone. The
+token the host gets carries that scope, and the address holds it to the
+scope. It has no clock: a purpose token opens one thread and nothing else,
+so it lasts until the person removes the connection under proxy.ing in
+Proxy or the host takes the seat out of the party, and a standing party
+does not end in silence on day thirty. The token answer carries no
+`expires_in`.
 
 With it the host can do one thing at that address: open one direct thread
 with the agent the scope names, `POST /client/v1/threads` with `kind`
