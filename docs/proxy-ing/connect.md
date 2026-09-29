@@ -1,12 +1,12 @@
 # Connect a Proxy Address to Your App
 
-Your users bring their own compute. A person with a Proxy address —
-`https://alice.proxy.ing` — runs their own agent, tools and models on their
+Your users bring their own compute. A person with a Proxy address,
+`https://alice.proxy.ing`, runs their own agent, tools and models on their
 own Macs, and that address is its own OAuth 2.1 authorization server. Your
 app asks for the username, sends the person to their address, and they let
 your app in from Proxy on their Mac or phone: one tap, nothing to paste.
-From then on your app calls their inference and their tools with the bearer
-their address issued, and they can take it back whenever they like.
+From then on your app calls what it asked for with the bearer their address
+issued, for thirty days, and they can take it back whenever they like.
 
 There is nothing to register with The Proxy Company. Every address speaks
 the same protocol, so one client implementation reaches every person.
@@ -15,14 +15,53 @@ the same protocol, so one client implementation reaches every person.
 
 | Surface | At | Speaks |
 | --- | --- | --- |
+| Threads | `https://<username>.proxy.ing/client/v1/threads` | The client API: open a thread with one of the person's agents, read it, post in it |
 | Inference | `https://<username>.proxy.ing/inference/v1/...` | The OpenAI API: `/models`, `/chat/completions`, `/responses` |
 | Tools | `https://<username>.proxy.ing/mcp/proxy` | MCP over HTTP: the person's Life Map, Moves, parties, integrations |
 
-Both take `Authorization: Bearer <token>`. A request without one answers
-`401` with a `WWW-Authenticate` header that names the address's metadata,
-which is how MCP clients such as Claude, Claude Code and Cursor find the flow
-on their own: add `https://<username>.proxy.ing/mcp/proxy` and the person is
-asked to let them in.
+All take `Authorization: Bearer <token>`. A request without one answers
+`401` with a `WWW-Authenticate` header that names the address's metadata and
+the scope that surface needs, which is how MCP clients such as Claude,
+Claude Code and Cursor find the flow on their own: add
+`https://<username>.proxy.ing/mcp/proxy` and the person is asked to let them
+in.
+
+## What Your App Asks For
+
+A token opens only what its scope names. The scope is a space-separated set
+of these words, each one family of paths at the address:
+
+| Scope | Opens | The person reads |
+| --- | --- | --- |
+| `threads` | `/client/v1/threads`, the agents to pick one, the content that rides in a message | open threads with your agents and read and post in them |
+| `life-map-read` | `/client/v1/graph/map`, `/client/v1/timeline` | read your Life Map |
+| `life-map-write` | `/client/v1/graph/nodes`, and `/mcp/proxy`, the tools that write it | change your Life Map, and use your Proxy's tools |
+| `computer` | `/mcp/computer`, `/mcp/phone` | control your computer and phone |
+| `mail` | `/mcp/mail` | read and send your mail |
+| `messages` | `/mcp/messages` | read and send your messages |
+| `inference` | `/inference` | run your models |
+| `moves` | `/client/v1/moves`, resolving one | see and resolve your Moves |
+
+Ask for what your app needs and no more; the person sees the list on the
+ask, in those words, and decides on it. An ask that names no scope gets
+`threads`, which is what a dashboard needs to ask the person's Proxy a
+question. Everything else at the address (the person's own app routes,
+their parties, their shares, their calendar) stays closed to every token; a
+word that is not in the table is refused as `invalid_scope` on your
+redirect. The metadata lists them under `scopes_supported`.
+
+A request outside the scope answers `403` with
+`WWW-Authenticate: Bearer error="insufficient_scope", scope="<what it needs>"`
+and a body that says so in words; the token itself is still good. Ask again
+with the wider scope and the person decides again.
+
+A token lasts thirty days from issue, and the answer says so
+(`expires_in`). After that it answers `401` like any bad bearer, and your
+app sends the person to their address again: the same ask, the same tap.
+There is no refresh token, on purpose. A refresh token is a second secret
+that extends access with nobody in the loop, and the point of the expiry is
+that the person is in the loop: every thirty days they see who is connected,
+what it asks for, and say yes or no.
 
 ## The Flow
 
@@ -52,8 +91,8 @@ curl https://alice.proxy.ing/.well-known/oauth-authorization-server
 
 ### 2. Register your app, once per address
 
-Say what you are called — the person is asked whether to let you in by that
-name — and where the person comes back to. Clients are public: there is no
+Say what you are called (the person is asked whether to let you in by that
+name) and where the person comes back to. Clients are public: there is no
 client secret, because holding the PKCE verifier is the proof.
 
 ```bash
@@ -86,18 +125,26 @@ https://alice.proxy.ing/oauth/authorize
   &state=<your nonce>
 ```
 
-The person sees a page at their address — **Acme wants to connect to
-alice.proxy.ing. Let it in from Proxy on your Mac or phone, or reject it
-there.** — and Proxy shows the ask on every one of their devices. They tap
-**Let it**, and the page sends them back to you, naming the address that
-let you in (`iss`, RFC 9207) and your client id there:
+Add `&scope=threads%20inference` for what your app needs (see above); left
+out, it is `threads`.
+
+The person sees a page at their address: **Acme wants to connect to
+alice.proxy.ing and be sent back to acme.com. It asks to open threads with
+your agents and read and post in them, and run your models, for thirty days.
+Let it in from Proxy on your Mac or phone, or reject it there.** Proxy
+shows the ask on every one of their devices as a Move that names you, where
+you send them back to, and what you asked for. When your name is not one
+your origin would give you (`Claude` sent back to `evil.example`), the Move
+leads with the origin, because the name is yours to choose and the origin is
+not. They tap **Let it**, and the page sends them back to you, naming the
+address that let you in (`iss`, RFC 9207) and your client id there:
 
 ```text
 https://acme.com/proxy/callback?code=…&state=<your nonce>&iss=https://alice.proxy.ing&client_id=3f9c…
 ```
 
-So a client that reached the person some other way — a deep link into
-Proxy, which asks the person's own node on your behalf — learns where to
+So a client that reached the person some other way, a deep link into
+Proxy, which asks the person's own node on your behalf, learns where to
 redeem its code from the answer itself.
 
 If they do not, you get `?error=access_denied&state=…`. An ask nobody answers
@@ -117,13 +164,15 @@ curl -X POST https://alice.proxy.ing/oauth/token \
 ```
 
 ```json
-{ "access_token": "…", "token_type": "Bearer" }
+{ "access_token": "…", "token_type": "Bearer", "expires_in": 2592000, "scope": "threads inference" }
 ```
 
-The token does not expire. Keep it the way you keep any credential, sealed
-at rest, and never show it to the browser. (A Proxy holding one for a party
-seat keeps it in its own database on the Mac that asked, out of every
-snapshot; that database is device local, not sealed.)
+The token lasts thirty days (`expires_in`, in seconds) and opens the scope
+it names. Keep it the way you keep any credential, sealed at rest, and
+never show it to the browser. (A Proxy holding one for a party seat keeps it
+in its own database on the Mac that asked, out of every snapshot; that
+database is device local, not sealed.) When it runs out, start again from
+step 3.
 
 ### 5. Use their Proxy
 
@@ -138,8 +187,8 @@ reply = proxy.chat.completions.create(
 )
 ```
 
-Their models are whatever their Proxy serves — local models on their own
-hardware, or the cloud providers they connected — so read `/models` rather
+Their models are whatever their Proxy serves, local models on their own
+hardware or the cloud providers they connected, so read `/models` rather
 than assuming one.
 
 ### 6. Let go
@@ -149,7 +198,15 @@ curl -X POST https://alice.proxy.ing/oauth/revoke -d token=…
 ```
 
 The person can also remove you in Proxy, under proxy.ing → MCP access →
-Connected. From the next request on, the token answers `401`.
+Connected, where each connection shows what it opens and until when. From
+the next request on, the token answers `401`.
+
+## Limits
+
+One source (one address at the edge) may register ten clients and open
+thirty asks in ten minutes; past that the address answers `429` with
+`Retry-After`. Every registration is written to the person's Proxy log with
+the source and the origin it sends the person back to.
 
 ## A Proxy at another address as your client
 
@@ -197,7 +254,9 @@ The person's Move reads **The Proxy Company at official.proxy.ing wants to
 add your Proxy to the party The Proxy Company**, with a Who goes block naming
 the agent and the loadout the host asked for and what the connection opens.
 They tap **Let it** on their Mac or phone. The token the host gets carries
-that scope, and the address holds it to the scope.
+that scope, and the address holds it to the scope. It lasts thirty days like
+any token; after that the host's next call answers `401` and the seat is
+asked for again.
 
 With it the host can do one thing at that address: open one direct thread
 with the agent the scope names, `POST /client/v1/threads` with `kind`
@@ -236,19 +295,19 @@ phone, then land back here.* When they are back, show the address you are
 connected to and a way to disconnect.
 
 A person's Macs may be asleep: an address that does not answer is a `502`
-or `503` at the edge, not a refusal. Say so — *alice.proxy.ing did not
-answer; is Proxy running on one of your Macs?* — and let them try again.
+or `503` at the edge, not a refusal. Say so, *alice.proxy.ing did not
+answer; is Proxy running on one of your Macs?*, and let them try again.
 
 ## Reference
 
 | Endpoint | Method | Body | Answers |
 | --- | --- | --- | --- |
-| `/.well-known/oauth-authorization-server` | GET | — | RFC 8414 metadata |
-| `/.well-known/oauth-protected-resource` | GET | — | RFC 9728 metadata: the address is its own authorization server |
-| `/oauth/register` | POST | JSON `client_name`, `redirect_uris` | `201` and the client, or `400` `invalid_client_metadata` / `invalid_redirect_uri` |
-| `/oauth/authorize` | GET | query, as above | The page the person answers from; a refusal a client can hear rides back on the redirect |
-| `/oauth/authorize` with `Accept: application/json` | GET | query, as above | JSON `ask`, `client_name`, `poll` |
-| `/oauth/token` | POST | form `grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, `code_verifier` | `200` and the token, or `400` `invalid_grant` / `invalid_request`, `401` `invalid_client` |
+| `/.well-known/oauth-authorization-server` | GET | none | RFC 8414 metadata |
+| `/.well-known/oauth-protected-resource` | GET | none | RFC 9728 metadata: the address is its own authorization server, and `scopes_supported` |
+| `/oauth/register` | POST | JSON `client_name`, `redirect_uris` | `201` and the client, or `400` `invalid_client_metadata` / `invalid_redirect_uri`, `429` past the limit |
+| `/oauth/authorize` | GET | query, as above, with `scope` | The page the person answers from; a refusal a client can hear rides back on the redirect, `invalid_scope` among them; `429` past the limit |
+| `/oauth/authorize` with `Accept: application/json` | GET | query, as above | JSON `ask`, `client_name`, `origin`, `scope`, `poll` |
+| `/oauth/token` | POST | form `grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, `code_verifier` | `200` and the token with `expires_in` and `scope`, or `400` `invalid_grant` / `invalid_request`, `401` `invalid_client` |
 | `/oauth/revoke` | POST | form `token` | `200` |
 
 Every endpoint answers CORS, so a browser-side client works too, though the
