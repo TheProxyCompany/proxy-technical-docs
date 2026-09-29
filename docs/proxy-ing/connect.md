@@ -121,7 +121,9 @@ curl -X POST https://alice.proxy.ing/oauth/token \
 ```
 
 The token does not expire. Keep it the way you keep any credential, sealed
-at rest, and never show it to the browser.
+at rest, and never show it to the browser. (A Proxy holding one for a party
+seat keeps it in its own database on the Mac that asked, out of every
+snapshot; that database is device local, not sealed.)
 
 ### 5. Use their Proxy
 
@@ -191,27 +193,40 @@ it asks with a scope that says what it is for:
 scope=party:<party id>;title=<party title>;host=<host address>;agents=proxy;loadout=default
 ```
 
-The person's Move reads **The Proxy Company wants to add your Proxy to the
-party The Proxy Company**, with a Who goes block naming the agent and the
-loadout the host asked for. They tap **Let it** on their Mac or phone. The
-token the host gets carries that scope and nothing more.
+The person's Move reads **The Proxy Company at official.proxy.ing wants to
+add your Proxy to the party The Proxy Company**, with a Who goes block naming
+the agent and the loadout the host asked for and what the connection opens.
+They tap **Let it** on their Mac or phone. The token the host gets carries
+that scope, and the address holds it to the scope.
 
-With it the host can do one thing at that address: open a thread with the
-person's Proxy at `/client/v1/threads`, titled `Party: <title>`, and keep
-posting to it. Every message the host delivers to that seat lands in this
-thread, and every reply comes back from it. The host cannot read the
-person's other threads, call their inference, or reach their tools.
+With it the host can do one thing at that address: open one direct thread
+with the agent the scope names, `POST /client/v1/threads` with `kind`
+`direct` and that one `participant`, titled `Party: <title>`, and then read
+and post in that thread: `GET` and `POST` on its `/messages`, `GET` on its
+`/queue-idle` and `/events`. Every message the host delivers to that seat
+lands in this thread, and every reply comes back from it. Any other request
+with that token answers `403` with `this connection opens one party thread
+and nothing else`: the person's thread list, any other thread of theirs,
+their inference, their tools, a thread with another of their agents. A
+`401` means the token itself is gone.
 
-On the person's side, that thread is their own private thread with the party
-on their node: their Proxy answers from what it knows of their work, and the
-person can read and steer it like any thread of theirs. Nobody else can open
-it.
+On the person's side, that thread is a direct thread of their own with their
+Proxy, titled `Party: <title>`, that they can read and steer like any thread
+of theirs. It is not a party in their sidebar and it carries no shared feed;
+that comes with the reverse credential, in a later root.
 
-### How the person ends it
+### How either side ends it
 
-They remove the connection in Proxy, under proxy.ing, the same place as any
-connected client. The host's next call answers `401`, and the host marks the
-seat gone. The host can also let go with `/oauth/revoke`, as in step 6.
+The person removes the connection in Proxy, under proxy.ing, the same place
+as any connected client. The host's next call answers `401`, the host drops
+the bearer and marks the seat gone with one line in the party. The host ends
+it by taking the seat out of the party: it revokes the connection on its own
+side at once and hands the bearer back with `/oauth/revoke`, as in step 6,
+trying again until the address confirms, so the person's list of connections
+never shows a host that already dropped them. An address that does not
+answer (the edge's `502` or `503` for a Mac that is asleep) is said once in
+the party, `could not reach alice`, and the seat waits: the messages go as
+one send when the address is back.
 
 ## What to Show Your Users
 
