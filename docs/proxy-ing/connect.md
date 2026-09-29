@@ -149,6 +149,70 @@ curl -X POST https://alice.proxy.ing/oauth/revoke -d token=…
 The person can also remove you in Proxy, under proxy.ing → MCP access →
 Connected. From the next request on, the token answers `401`.
 
+## A Proxy at another address as your client
+
+Not every client has a browser. A Proxy at another address, one that wants
+to seat the person's Proxy in a party it hosts, is a client like any other:
+it registers, it asks, it redeems a code, it holds a bearer. It only cannot
+send anyone anywhere. So it asks for the answer in JSON instead of the page.
+
+### Ask without a browser
+
+Send the same `/oauth/authorize` query with one header:
+
+```bash
+curl 'https://alice.proxy.ing/oauth/authorize?response_type=code&client_id=3f9c…&redirect_uri=…&code_challenge=…&code_challenge_method=S256&state=…' \
+  -H 'accept: application/json'
+```
+
+```json
+{ "ask": "ask_7d1e…", "client_name": "The Proxy Company at official.proxy.ing", "poll": "/oauth/ask/ask_7d1e…" }
+```
+
+The ask is the same ask the page would have made, and Proxy shows it on the
+person's devices the same way. Poll `poll` every few seconds. It answers
+`{"status":"waiting"}` until the person decides, then
+`{"status":"let_in","redirect":"…"}`, where `redirect` is the link the browser
+would have been sent to: read `code` and `state` from its query and redeem
+the code at `/oauth/token` exactly as in step 4. A refusal is
+`{"status":"refused","redirect":"…"}` with `error=access_denied` in that
+query. An ask nobody answers goes away after fifteen minutes, and the poll
+answers `404` `{"status":"gone"}`.
+
+### A party host
+
+A party host registers once at each member's address as
+`"<host name> at <host>.proxy.ing"`, with the redirect
+`https://<host>.proxy.ing/oauth/party-callback`. It never serves that page:
+the redirect is nominal, because the code comes back through the poll. Then
+it asks with a scope that says what it is for:
+
+```text
+scope=party:<party id>;title=<party title>;host=<host address>;agents=proxy;loadout=default
+```
+
+The person's Move reads **The Proxy Company wants to add your Proxy to the
+party The Proxy Company**, with a Who goes block naming the agent and the
+loadout the host asked for. They tap **Let it** on their Mac or phone. The
+token the host gets carries that scope and nothing more.
+
+With it the host can do one thing at that address: open a thread with the
+person's Proxy at `/client/v1/threads`, titled `Party: <title>`, and keep
+posting to it. Every message the host delivers to that seat lands in this
+thread, and every reply comes back from it. The host cannot read the
+person's other threads, call their inference, or reach their tools.
+
+On the person's side, that thread is their own private thread with the party
+on their node: their Proxy answers from what it knows of their work, and the
+person can read and steer it like any thread of theirs. Nobody else can open
+it.
+
+### How the person ends it
+
+They remove the connection in Proxy, under proxy.ing, the same place as any
+connected client. The host's next call answers `401`, and the host marks the
+seat gone. The host can also let go with `/oauth/revoke`, as in step 6.
+
 ## What to Show Your Users
 
 Call the button **Connect your Proxy**. Ask for one thing, the username, and
@@ -168,6 +232,7 @@ answer; is Proxy running on one of your Macs?* — and let them try again.
 | `/.well-known/oauth-protected-resource` | GET | — | RFC 9728 metadata: the address is its own authorization server |
 | `/oauth/register` | POST | JSON `client_name`, `redirect_uris` | `201` and the client, or `400` `invalid_client_metadata` / `invalid_redirect_uri` |
 | `/oauth/authorize` | GET | query, as above | The page the person answers from; a refusal a client can hear rides back on the redirect |
+| `/oauth/authorize` with `Accept: application/json` | GET | query, as above | JSON `ask`, `client_name`, `poll` |
 | `/oauth/token` | POST | form `grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, `code_verifier` | `200` and the token, or `400` `invalid_grant` / `invalid_request`, `401` `invalid_client` |
 | `/oauth/revoke` | POST | form `token` | `200` |
 
