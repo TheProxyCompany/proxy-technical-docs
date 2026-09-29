@@ -14,6 +14,7 @@ the user's local Grand Central server through a Cloudflare Tunnel.
 | `https://username.proxy.ing/v1/*` | An OpenAI-compatible route on the user's tunnel origin |
 | `https://username.proxy.ing/client/*` | Grand Central's client API |
 | `https://username.proxy.ing/inference/*` | Grand Central's inference API |
+| `https://username.proxy.ing/inference/pod/*` | The same inference API, served by the person's pod of accounts |
 | `https://username.proxy.ing/mcp/proxy` | Proxy MCP server |
 | `https://username.proxy.ing/mcp/party` | Party MCP server |
 
@@ -27,6 +28,7 @@ Reserved names and unknown usernames redirect to `https://proxy.ing`.
 | Understand public and private route prefixes | [Routes](routes.md) |
 | Understand passkeys, approval links, and recovery | [Device approval](device-approval.md) |
 | Build against the Grand Central client API | [Client API](client-api.md) |
+| Put a person's whole compute behind one path | [The Pod](pod.md) |
 
 ## Ownership Model
 
