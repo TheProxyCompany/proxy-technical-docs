@@ -3070,7 +3070,8 @@ no account is involved.
 
 Every attempt writes one line to the person's ledger: which account took
 the request, and whether it served or refused it. The person reads it in
-Proxy; a client reads it at `/client/v1/pod/ledger`.
+Proxy, under Providers on the Your pod card, as Recent requests; a client
+reads it at `/client/v1/pod/ledger`.
 
 ## What Rotates and What Does Not
 
