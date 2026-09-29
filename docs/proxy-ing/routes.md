@@ -90,6 +90,11 @@ For browser clients that need broad CORS, use the top-level `/v1/*` route class.
 For app and device clients that carry the expected bearer token, use
 `/inference/v1/*`.
 
+The same routes live under `https://username.proxy.ing/inference/pod/v1`,
+served by the person's pod: the first of their accounts that can serve the
+model takes the request, and the next one takes it when that account is out
+of credit or rate limited. See [The Pod](pod.md).
+
 ## MCP Routes
 
 proxy.ing currently documents two MCP endpoints:
