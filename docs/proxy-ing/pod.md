@@ -120,3 +120,8 @@ local. A synced key alone does not configure another Mac's pod, so configure
 the accounts on each Mac that may serve the address. Adding an
 account through the client API records a credential name; it does not upload
 the corresponding secret.
+
+Removing an account changes that Mac's pod. Automatic cleanup removes only
+unused local credentials; iCloud-synchronized keys are retained because another
+Mac may still use them. Removing a pod account does not automatically delete
+its synchronized credential.
