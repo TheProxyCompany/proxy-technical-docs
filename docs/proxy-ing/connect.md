@@ -8,8 +8,14 @@ your app in from Proxy on their Mac or phone: one tap, nothing to paste.
 From then on your app calls what it asked for with the bearer their address
 issued, for thirty days, and they can take it back whenever they like.
 
-There is nothing to register with The Proxy Company. Every address speaks
-the same protocol, so one client implementation reaches every person.
+There is nothing to register with The Proxy Company. Addresses running a
+compatible Proxy version expose the protocol below. Before offering a connection,
+check the address's authorization-server metadata for the endpoints and
+capabilities your app needs. If metadata is unavailable, say that the address
+could not offer this connection: ask the person to check that Proxy is running
+and up to date, then let them retry. Do not treat a missing or unreachable
+metadata endpoint as a refusal. This guide does not establish which version
+every live address is running.
 
 ## What Your App Gets
 
@@ -55,14 +61,15 @@ with the `moves` scope sees Moves; it does not make them. An ask that names no s
 question. Everything else at the address (the person's own app routes,
 their parties, their shares, their calendar) stays closed to every token; a
 word that is not in the table is refused as `invalid_scope` on your
-redirect. The metadata lists them under `scopes_supported`.
+redirect. The separate party connection described below uses a purpose-specific
+scope. The metadata lists the general-purpose scopes under `scopes_supported`.
 
 A request outside the scope answers `403` with
 `WWW-Authenticate: Bearer error="insufficient_scope", scope="<what it needs>"`
 and a body that says so in words; the token itself is still good. Ask again
 with the wider scope and the person decides again.
 
-A token lasts thirty days from issue, and the answer says so
+A general-purpose token lasts thirty days from issue, and the answer says so
 (`expires_in`). After that it answers `401` like any bad bearer, and your
 app sends the person to their address again: the same ask, the same tap.
 There is no refresh token, on purpose. A refresh token is a second secret
@@ -96,6 +103,10 @@ curl https://alice.proxy.ing/.well-known/oauth-authorization-server
 }
 ```
 
+Check that the returned `issuer` exactly matches the Proxy address the person
+chose. Keep that issuer and its metadata associated with this connection; do
+not replace them with values from a later callback.
+
 ### 2. Register your app, once per address
 
 Say what you are called (the person is asked whether to let you in by that
@@ -120,7 +131,10 @@ register again.
 ### 3. Send the person to their address
 
 Make a PKCE verifier (43–128 characters of `[A-Za-z0-9-._~]`) and its S256
-challenge, keep the verifier with your `state`, and redirect the browser:
+challenge. Generate an unpredictable, one-use `state` and save it with the
+verifier, the expected issuer, registered client ID, exact redirect URI, and
+the trusted issuer's metadata. Bind this pending request to the user session
+that started it, then redirect the browser:
 
 ```text
 https://alice.proxy.ing/oauth/authorize
@@ -150,16 +164,26 @@ address that let you in (`iss`, RFC 9207) and your client id there:
 https://acme.com/proxy/callback?code=…&state=<your nonce>&iss=https://alice.proxy.ing&client_id=3f9c…
 ```
 
-So a client that reached the person some other way, a deep link into
-Proxy, which asks the person's own node on your behalf, learns where to
-redeem its code from the answer itself.
+Before accepting the callback, match `state` to the pending request in the
+same user session and require the returned `iss` and `client_id` to equal the
+saved issuer and client ID. Require the callback to arrive at the saved
+redirect URI. Reject missing, mismatched, expired, or already-used state,
+including on error callbacks. Consume the pending request once; do not redeem
+another code for it.
+
+Use the token endpoint from the metadata you already associated with that
+trusted issuer. Never choose a token host from the callback's `iss`, a returned
+URL, or an unverified deep link, and never send the PKCE verifier to such a
+host. A deep-link flow must establish the expected issuer and the same request
+bindings before it accepts an authorization result.
 
 If they do not, you get `?error=access_denied&state=…`. An ask nobody answers
 goes away after fifteen minutes.
 
 ### 4. Redeem the code
 
-Within ten minutes, once, from the client that asked:
+After those checks, redeem the code within ten minutes, once, using the saved
+client ID, exact redirect URI, and PKCE verifier:
 
 ```bash
 curl -X POST https://alice.proxy.ing/oauth/token \
@@ -174,9 +198,9 @@ curl -X POST https://alice.proxy.ing/oauth/token \
 { "access_token": "…", "token_type": "Bearer", "expires_in": 2592000, "scope": "threads inference" }
 ```
 
-The token lasts thirty days (`expires_in`, in seconds) and opens the scope
-it names. Keep it the way you keep any credential, sealed at rest, and
-never show it to the browser. (A Proxy holding one for a party seat keeps it
+For this general-purpose flow, the token lasts thirty days (`expires_in`,
+in seconds) and opens the scope it names. Keep it the way you keep any
+credential, sealed at rest, and never show it to the browser. (A Proxy holding one for a party seat keeps it
 in its own database on the Mac that asked, out of every snapshot; that
 database is device local, not sealed.) When it runs out, start again from
 step 3.
@@ -239,8 +263,10 @@ The ask is the same ask the page would have made, and Proxy shows it on the
 person's devices the same way. Poll `poll` every few seconds. It answers
 `{"status":"waiting"}` until the person decides, then
 `{"status":"let_in","redirect":"…"}`, where `redirect` is the link the browser
-would have been sent to: read `code` and `state` from its query and redeem
-the code at `/oauth/token` exactly as in step 4. A refusal is
+would have been sent to. Treat that URL as an authorization response, not as
+a trusted destination: apply the state, issuer, client, and redirect checks in
+step 3, then redeem `code` at the saved issuer's token endpoint as in step 4.
+A refusal is
 `{"status":"refused","redirect":"…"}` with `error=access_denied` in that
 query. An ask nobody answers goes away after fifteen minutes, and the poll
 answers `404` `{"status":"gone"}`.
@@ -321,7 +347,7 @@ answer; is Proxy running on one of your Macs?*, and let them try again.
 | `/oauth/register` | POST | JSON `client_name`, `redirect_uris` | `201` and the client, or `400` `invalid_client_metadata` / `invalid_redirect_uri`, `429` past the limit |
 | `/oauth/authorize` | GET | query, as above, with `scope` | The page the person answers from; a refusal a client can hear rides back on the redirect, `invalid_scope` among them; `429` past the limit |
 | `/oauth/authorize` with `Accept: application/json` | GET | query, as above | JSON `ask`, `client_name`, `origin`, `scope`, `poll` |
-| `/oauth/token` | POST | form `grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, `code_verifier` | `200` and the token with `expires_in` and `scope`, or `400` `invalid_grant` / `invalid_request`, `401` `invalid_client` |
+| `/oauth/token` | POST | form `grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, `code_verifier` | `200` and the token with `scope` (plus `expires_in` for general-purpose tokens); or `400` `invalid_grant` / `invalid_request`, `401` `invalid_client` |
 | `/oauth/revoke` | POST | form `token` | `200` |
 
 Every endpoint answers CORS, so a browser-side client works too, though the
