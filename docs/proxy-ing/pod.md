@@ -40,8 +40,8 @@ aggregator fallback, even if an aggregator appears earlier in the list.
 A model the person serves on their own Macs goes straight to those Macs;
 no account is involved.
 
-An account refusal is recorded immediately. An account that starts a
-response is recorded only when that response completes, fails or the caller
+Refused attempts are recorded once account selection finishes. An account
+that starts a response is recorded only when it completes, fails or the caller
 disconnects. `served` is true only for a completed response; a broken,
 incomplete or abandoned response is recorded as failed, with a reason.
 The person reads Recent requests on the Your pod card, or a client reads
