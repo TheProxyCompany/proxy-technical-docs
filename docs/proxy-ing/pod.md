@@ -11,7 +11,8 @@ https://<username>.proxy.ing/inference/pod/v1/...
 
 It takes the same bearer as `/inference/v1`. Account rotation applies to
 OpenAI-shaped generation requests: `/chat/completions`, `/responses` and
-`/completions`. `/models` lists the existing model catalog.
+`/completions`. `/models` lists the existing model catalog; a listed model
+may still have no eligible account in this pod.
 
 The `/embeddings` route also exists, but it delegates to the ordinary Orchard
 backend. It does not rotate through the pod's API accounts.
@@ -31,6 +32,11 @@ and the address works down the list:
 4. A request the provider says is wrong, a `400`, is returned as is. It
    would fail the same way everywhere, so it is not retried.
 
+Each request starts at the first eligible account again; a refusal does not
+move an account down the list or start a cooldown. The order applies within
+each provider group: direct-provider accounts come before the declared
+aggregator fallback, even if an aggregator appears earlier in the list.
+
 A model the person serves on their own Macs goes straight to those Macs;
 no account is involved.
 
@@ -43,7 +49,8 @@ The person reads Recent requests on the Your pod card, or a client reads
 
 Once a response starts, the pod does not try another account. A failed or
 abandoned response may still have incurred charges; the ledger is not a
-billing record.
+billing record. Recording is best effort: a database write failure or process
+termination can leave an attempt without a final ledger line.
 
 ## What Rotates and What Does Not
 
@@ -104,3 +111,12 @@ it through the client API:
 The `credential_key` names an entry in the person's keychain. The secret
 itself never passes through the address; Proxy puts it in the keychain on
 the Mac.
+
+Accounts, their order and the ledger belong to the Mac serving the request.
+This feature does not sync those account records or ledger entries across Macs.
+Credential storage keeps the existing Keychain behavior: released builds use
+iCloud-synchronizable credentials; isolated PR builds keep their credentials
+local. A synced key alone does not configure another Mac's pod, so configure
+the accounts on each Mac that may serve the address. Adding an
+account through the client API records a credential name; it does not upload
+the corresponding secret.
