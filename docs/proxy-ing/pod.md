@@ -1,17 +1,20 @@
-# The Pod: Their Whole Compute Behind One Path
+# The Pod: Backup API Accounts for Generation
 
 A person with a Proxy address has more than one way to run a model: the
 Macs they own, an API key at Anthropic, a second one for work, prepaid
-credits at OpenRouter or Fireworks. The pod puts all of it behind one
-path at their address:
+credits at OpenRouter or Fireworks. The pod lets generation requests try
+those API accounts behind one path at their address:
 
 ```text
 https://<username>.proxy.ing/inference/pod/v1/...
 ```
 
-It is the same API as `/inference/v1`, the OpenAI shape with `/models`,
-`/chat/completions`, `/responses`, `/completions` and `/embeddings`, and
-it takes the same bearer. The difference is who serves the request.
+It takes the same bearer as `/inference/v1`. Account rotation applies to
+OpenAI-shaped generation requests: `/chat/completions`, `/responses` and
+`/completions`. `/models` lists the existing model catalog.
+
+The `/embeddings` route also exists, but it delegates to the ordinary Orchard
+backend. It does not rotate through the pod's API accounts.
 
 ## Who Serves a Request
 
@@ -31,10 +34,16 @@ and the address works down the list:
 A model the person serves on their own Macs goes straight to those Macs;
 no account is involved.
 
-Every attempt writes one line to the person's ledger: which account took
-the request, and whether it served or refused it. The person reads it in
-Proxy, under Providers on the Your pod card, as Recent requests; a client
-reads it at `/client/v1/pod/ledger`.
+An account refusal is recorded immediately. An account that starts a
+response is recorded only when that response completes, fails or the caller
+disconnects. `served` is true only for a completed response; a broken,
+incomplete or abandoned response is recorded as failed, with a reason.
+The person reads Recent requests on the Your pod card, or a client reads
+`/client/v1/pod/ledger`.
+
+Once a response starts, the pod does not try another account. A failed or
+abandoned response may still have incurred charges; the ledger is not a
+billing record.
 
 ## What Rotates and What Does Not
 

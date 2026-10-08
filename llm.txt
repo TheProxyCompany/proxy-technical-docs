@@ -2997,7 +2997,7 @@ the user's local Grand Central server through a Cloudflare Tunnel.
 | `https://username.proxy.ing/v1/*` | An OpenAI-compatible route on the user's tunnel origin |
 | `https://username.proxy.ing/client/*` | Grand Central's client API |
 | `https://username.proxy.ing/inference/*` | Grand Central's inference API |
-| `https://username.proxy.ing/inference/pod/*` | The same inference API, served by the person's pod of accounts |
+| `https://username.proxy.ing/inference/pod/*` | Generation requests can rotate through the person's API accounts; embeddings use the ordinary Orchard backend |
 | `https://username.proxy.ing/mcp/proxy` | Proxy MCP server |
 | `https://username.proxy.ing/mcp/party` | Party MCP server |
 
@@ -3011,7 +3011,7 @@ Reserved names and unknown usernames redirect to `https://proxy.ing`.
 | Understand public and private route prefixes | [Routes](routes.md) |
 | Understand passkeys, approval links, and recovery | [Device approval](device-approval.md) |
 | Build against the Grand Central client API | [Client API](client-api.md) |
-| Put a person's whole compute behind one path | [The Pod](pod.md) |
+| Use backup API accounts for generation requests | [The Pod](pod.md) |
 
 ## Ownership Model
 
@@ -3035,20 +3035,23 @@ The default Grand Central port is `51711`.
 ---
 docs/proxy-ing/pod.md
 ---
-# The Pod: Their Whole Compute Behind One Path
+# The Pod: Backup API Accounts for Generation
 
 A person with a Proxy address has more than one way to run a model: the
 Macs they own, an API key at Anthropic, a second one for work, prepaid
-credits at OpenRouter or Fireworks. The pod puts all of it behind one
-path at their address:
+credits at OpenRouter or Fireworks. The pod lets generation requests try
+those API accounts behind one path at their address:
 
 ```text
 https://<username>.proxy.ing/inference/pod/v1/...
 ```
 
-It is the same API as `/inference/v1`, the OpenAI shape with `/models`,
-`/chat/completions`, `/responses`, `/completions` and `/embeddings`, and
-it takes the same bearer. The difference is who serves the request.
+It takes the same bearer as `/inference/v1`. Account rotation applies to
+OpenAI-shaped generation requests: `/chat/completions`, `/responses` and
+`/completions`. `/models` lists the existing model catalog.
+
+The `/embeddings` route also exists, but it delegates to the ordinary Orchard
+backend. It does not rotate through the pod's API accounts.
 
 ## Who Serves a Request
 
@@ -3068,10 +3071,16 @@ and the address works down the list:
 A model the person serves on their own Macs goes straight to those Macs;
 no account is involved.
 
-Every attempt writes one line to the person's ledger: which account took
-the request, and whether it served or refused it. The person reads it in
-Proxy, under Providers on the Your pod card, as Recent requests; a client
-reads it at `/client/v1/pod/ledger`.
+An account refusal is recorded immediately. An account that starts a
+response is recorded only when that response completes, fails or the caller
+disconnects. `served` is true only for a completed response; a broken,
+incomplete or abandoned response is recorded as failed, with a reason.
+The person reads Recent requests on the Your pod card, or a client reads
+`/client/v1/pod/ledger`.
+
+Once a response starts, the pod does not try another account. A failed or
+abandoned response may still have incurred charges; the ledger is not a
+billing record.
 
 ## What Rotates and What Does Not
 
@@ -3229,10 +3238,10 @@ For browser clients that need broad CORS, use the top-level `/v1/*` route class.
 For app and device clients that carry the expected bearer token, use
 `/inference/v1/*`.
 
-The same routes live under `https://username.proxy.ing/inference/pod/v1`,
-served by the person's pod: the first of their accounts that can serve the
-model takes the request, and the next one takes it when that account is out
-of credit or rate limited. See [The Pod](pod.md).
+The same routes live under `https://username.proxy.ing/inference/pod/v1`.
+Generation requests try the person's eligible API accounts in order when
+an account refuses before the response starts. Embeddings still use the
+ordinary Orchard backend and do not rotate API accounts. See [The Pod](pod.md).
 
 ## MCP Routes
 
