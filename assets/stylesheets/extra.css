@@ -61,6 +61,13 @@
   fill: var(--md-accent-fg-color);
 }
 
+/* Keep the main-site link available beside the mobile menu. */
+@media screen and (max-width: 76.234375em) {
+  .md-header__button.md-logo {
+    display: inline-block;
+  }
+}
+
 /* Tab navigation */
 .md-tabs__link {
   color: var(--md-accent-fg-color) !important;
