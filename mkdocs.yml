@@ -78,6 +78,9 @@ extra:
 extra_css:
   - assets/stylesheets/extra.css
 
+hooks:
+  - hooks/preview_homepage.py
+
 nav:
   - Home: index.md
   - Proxy:
