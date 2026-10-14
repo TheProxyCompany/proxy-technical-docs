@@ -13,18 +13,9 @@ theme:
   custom_dir: overrides
   font: false
   palette:
-    - scheme: slate
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/white-balance-sunny
-        name: Switch to light reading mode
-    - scheme: default
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/moon-waning-crescent
-        name: Switch to dark reading mode
+    scheme: slate
+    primary: custom
+    accent: custom
 
   features:
     - navigation.sections
@@ -42,7 +33,6 @@ theme:
     - content.code.copy
     - content.tabs.link
     - content.tooltips
-    - palette.toggle
     - toc.follow
     - navigation.footer
   logo: assets/proxy-p-vector-tan.png

@@ -53,34 +53,7 @@
   --md-footer-fg-color--light: var(--docs-muted);
   --md-footer-fg-color--lighter: var(--docs-muted);
 }
-[data-md-color-scheme="default"] {
-  color-scheme: light;
-  --docs-bg: #f5f4ed;
-  --docs-surface: #eeefe7;
-  --docs-raised: #e3e8dc;
-  --docs-border: #193d2526;
-  --docs-text: #18332b;
-  --docs-muted: #54685c;
-  --docs-accent: #3b654d;
-  --docs-header: #f5f4eded;
-  --md-default-bg-color: var(--docs-bg);
-  --md-default-fg-color: var(--docs-text);
-  --md-default-fg-color--light: var(--docs-muted);
-  --md-default-fg-color--lighter: #6c7d70;
-  --md-default-fg-color--lightest: var(--docs-border);
-  --md-primary-fg-color: var(--docs-bg);
-  --md-primary-bg-color: var(--docs-text);
-  --md-accent-fg-color: var(--docs-accent);
-  --md-accent-fg-color--transparent: #3b654d14;
-  --md-typeset-a-color: #315d43;
-  --md-code-bg-color: #e9ede3;
-  --md-code-fg-color: #244433;
-  --md-footer-bg-color: var(--docs-bg);
-  --md-footer-bg-color--dark: var(--docs-bg);
-  --md-footer-fg-color: var(--docs-text);
-  --md-footer-fg-color--light: var(--docs-muted);
-  --md-footer-fg-color--lighter: var(--docs-muted);
-}
+
 html { scroll-behavior: smooth; scroll-padding-top: 8rem; }
 body { background: var(--docs-bg); -webkit-font-smoothing: antialiased; }
 ::selection { background: #a7bd804a; }
@@ -92,7 +65,6 @@ a:focus-visible, button:focus-visible, label:focus-visible { outline: 2px solid 
 .md-header__inner { min-height: 76px; padding: 0 28px; gap: 8px; }
 .md-header__button.md-logo { display: block; padding: 6px; margin: 0 8px 0 0; }
 .md-header__button.md-logo img { width: 36px; height: 36px; object-fit: contain; filter: none; }
-[data-md-color-scheme="default"] .md-header__button.md-logo img { filter: brightness(.27) sepia(.5); }
 .md-header__title { margin-left: 0; font-family: var(--docs-display); font-size: 26px; font-weight: 400; letter-spacing: -.025em; }
 .md-header__topic[data-md-component="header-topic"] { font: 500 16px/2.4rem var(--md-text-font); letter-spacing: 0; }
 .md-header__button { color: var(--docs-muted); }
