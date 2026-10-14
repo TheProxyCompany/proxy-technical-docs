@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <link rel="preload" href="{{ 'assets/fonts/LibreCaslonDisplay-Regular.ttf' | url }}" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="{{ 'assets/fonts/BerkeleyMono-Regular.woff2' | url }}" as="font" type="font/woff2" crossorigin>
+{% endblock %}
+
+{% block content %}
+  {% if not page.is_homepage %}
+    <nav class="docs-breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ nav.homepage.url | url }}">Documentation</a>
+      {% if page.parent %}<span aria-hidden="true">/</span><span>{{ page.parent.title }}</span>{% endif %}
+    </nav>
+  {% endif %}
+  {{ super() }}
+{% endblock %}

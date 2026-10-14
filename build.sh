@@ -44,7 +44,6 @@ cp -r assets/* site/assets/ || echo "Warning: Assets copy failed"
 # Build public documentation
 echo "Building public documentation..."
 $PYTHON_CMD -m mkdocs build
-cp -r assets/stylesheets/extra.css site/assets/stylesheets/ || echo "Warning: Assets copy failed"
 
 echo "Generating LLM-friendly documentation..."
 "$FILES_TO_PROMPT" docs -e md > llm.txt

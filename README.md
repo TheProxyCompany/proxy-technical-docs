@@ -29,3 +29,14 @@ The build script creates a local `.venv` when needed.
 ## Deployment
 
 The documentation is deployed when changes land on the main branch.
+
+## Visual theme
+
+The docs share the website’s deep green, Libre Caslon Display headings, and
+Berkeley Mono labels. Dark mode is the default; the header toggle switches to
+a light reading surface and remembers the choice.
+
+Styles live in `docs/assets/stylesheets/extra.css`. Both the development server
+and `build.sh` use this file. Fonts are served locally from `docs/assets/fonts/`.
+The `overrides/` directory adds font preloads, article breadcrumbs, and the
+website return link while retaining Material’s search and navigation controls.
