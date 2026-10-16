@@ -29,6 +29,7 @@ Reserved names and unknown usernames redirect to `https://proxy.ing`.
 | Understand passkeys, approval links, and recovery | [Device approval](device-approval.md) |
 | Build against the Grand Central client API | [Client API](client-api.md) |
 | Use backup API accounts for generation requests | [The Pod](pod.md) |
+| Let your users connect their Proxy to your app | [Connect Your App](connect.md) |
 
 ## Ownership Model
 
@@ -45,5 +46,6 @@ The default Grand Central port is `51711`.
 - [Routes](routes.md)
 - [Device approval](device-approval.md)
 - [Client API](client-api.md)
+- [Connect Your App](connect.md)
 - [Proxy overview](../proxy/index.md)
 - [Orchard overview](../orchard/index.md)

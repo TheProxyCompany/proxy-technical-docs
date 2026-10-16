@@ -1,69 +1,62 @@
 ---
+title: Documentation
 hide:
   - navigation
+  - toc
 ---
-# The Proxy Company Documentation
 
-Public documentation for Proxy, Orchard, and proxy.ing.
+<div class="docs-home" markdown>
 
-## Products
+<div class="docs-intro" markdown>
 
-<div class="grid cards" markdown>
+<p class="docs-eyebrow">The Proxy Company · Documentation</p>
 
--   :material-apple: __Proxy__
+# Make Proxy your own.
 
-    The desktop and mobile app layer. Proxy brings together the Life Map, Party
-    sessions, agents, tools, local models, cloud models, and companion mobile
-    workflows.
-
-    [Docs](proxy/index.md){ .md-button .md-button--primary }
-    [Getting Started](proxy/getting-started.md){ .md-button }
-
--   :material-leaf: __Orchard__
-
-    Production local inference for Apple Silicon. Orchard is built for batched
-    requests, streaming, high-throughput local serving, multiple loaded models,
-    structured output, and Python or Rust clients.
-
-    [Docs](orchard/index.md){ .md-button .md-button--primary }
-    [Getting Started](orchard/getting-started.md){ .md-button }
-
--   :material-web: __proxy.ing__
-
-    The public address layer for Proxy and Orchard. A `username.proxy.ing`
-    address can serve web chat, an OpenAI-compatible route, and the Grand
-    Central client, inference, and MCP routes from a local machine.
-
-    [Docs](proxy-ing/index.md){ .md-button .md-button--primary }
-    [Getting Started](proxy-ing/getting-started.md){ .md-button }
+<p class="docs-lead">Set up your agents, run models on your own hardware, and connect the tools you use every day.</p>
 
 </div>
 
-## The Three Layers
+<div class="docs-products">
+  <a class="docs-product" href="proxy/">
+    <span class="docs-product-label">01 / Your workspace</span>
+    <h2>Proxy</h2>
+    <p>Intelligence at home on your Mac. Get to know your agents, Parties, Moves, and Life Map.</p>
+    <span class="docs-product-action">Explore Proxy <span aria-hidden="true">↗</span></span>
+  </a>
+  <a class="docs-product" href="orchard/">
+    <span class="docs-product-label">02 / Local inference</span>
+    <h2>Orchard</h2>
+    <p>Run models on Apple Silicon. Stream responses, use tools, and serve your own inference API.</p>
+    <span class="docs-product-action">Explore Orchard <span aria-hidden="true">↗</span></span>
+  </a>
+  <a class="docs-product" href="proxy-ing/">
+    <span class="docs-product-label">03 / Your connection</span>
+    <h2>proxy.ing</h2>
+    <p>Reach the Proxy on your Mac from your other devices, and connect it to the apps you use.</p>
+    <span class="docs-product-action">Explore your address <span aria-hidden="true">↗</span></span>
+  </a>
+</div>
 
-| Layer | What it is |
-| --- | --- |
-| Proxy | Desktop and mobile apps for Life Map, Party sessions, Moves, agents, and model routing |
-| Orchard | Production local inference clients and servers for Python and Rust on Apple Silicon |
-| proxy.ing | Public addresses that route web, API, Grand Central client, inference, and MCP traffic to a user's local machine |
+<div class="docs-start" markdown>
 
-## Start Here
+## Start here
 
-| I want to... | Go to |
-| --- | --- |
-| Run a local model from Python | [Orchard getting started](orchard/getting-started.md) |
-| Embed Orchard from Rust | [Orchard for Rust](orchard/rust.md) |
-| Learn what Orchard is | [Orchard overview](orchard/index.md) |
-| Run Orchard as a production local inference server | [Orchard production use](orchard/production.md) |
-| Use Proxy on desktop or mobile | [Proxy overview](proxy/index.md) |
-| Manage Proxy from the command line | [Proxy CLI reference](proxy/cli.md) |
-| Understand `username.proxy.ing` addresses | [proxy.ing overview](proxy-ing/index.md) |
+<div class="docs-guide-grid">
+  <a href="proxy/getting-started/"><span><strong>Set up Proxy</strong><small>Your Mac, your first agents, your first Party.</small></span><span aria-hidden="true">↗</span></a>
+  <a href="orchard/getting-started/"><span><strong>Run a local model</strong><small>Start building with inference on your hardware.</small></span><span aria-hidden="true">↗</span></a>
+  <a href="proxy-ing/getting-started/"><span><strong>Connect your address</strong><small>Reach your Proxy from a browser or another device.</small></span><span aria-hidden="true">↗</span></a>
+  <a href="proxy-ing/connect/"><span><strong>Connect your app</strong><small>Let people bring their own agents and compute.</small></span><span aria-hidden="true">↗</span></a>
+</div>
 
-## Resources
+</div>
 
-- [Company website](https://theproxycompany.com)
-- [Orchard website](https://orchard.md)
-- [proxy.ing](https://proxy.ing)
-- [GitHub organization](https://github.com/TheProxyCompany)
-- [orchard on PyPI](https://pypi.org/project/orchard/)
-- [orchard-rs on crates.io](https://crates.io/crates/orchard-rs)
+<div class="docs-reference" markdown>
+
+<span>Go straight to the reference</span>
+
+[Proxy CLI](proxy/cli.md) · [Client API](proxy-ing/client-api.md) · [Python client](orchard/client.md) · [Rust client](orchard/rust.md) · [GitHub](https://github.com/TheProxyCompany)
+
+</div>
+
+</div>
