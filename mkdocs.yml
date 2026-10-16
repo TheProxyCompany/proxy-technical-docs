@@ -101,6 +101,7 @@ nav:
     - Routes: proxy-ing/routes.md
     - Device Approval: proxy-ing/device-approval.md
     - Client API: proxy-ing/client-api.md
+    - The Pod: proxy-ing/pod.md
     - Connect Your App: proxy-ing/connect.md
 
 plugins:

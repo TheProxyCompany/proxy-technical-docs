@@ -1,0 +1,127 @@
+# The Pod: Backup API Accounts for Generation
+
+A person with a Proxy address has more than one way to run a model: the
+Macs they own, an API key at Anthropic, a second one for work, prepaid
+credits at OpenRouter or Fireworks. The pod lets generation requests try
+those API accounts behind one path at their address:
+
+```text
+https://<username>.proxy.ing/inference/pod/v1/...
+```
+
+It takes the same bearer as `/inference/v1`. Account rotation applies to
+OpenAI-shaped generation requests: `/chat/completions`, `/responses` and
+`/completions`. `/models` lists the existing model catalog; a listed model
+may still have no eligible account in this pod.
+
+The `/embeddings` route also exists, but it delegates to the ordinary Orchard
+backend. It does not rotate through the pod's API accounts.
+
+## Who Serves a Request
+
+The person keeps a list of accounts in Proxy, under Providers, called
+their pod. Each account is one credential for one provider, with a label,
+and the list has an order. A request to `/inference/pod/v1` names a model,
+and the address works down the list:
+
+1. The first account whose provider serves that model takes the request.
+2. If that account has no key, no credit, is rate limited, or the provider
+   is unreachable or failing, the next account takes the request.
+3. When the model's own provider has no account left, an aggregator
+   account that also serves the model, such as OpenRouter, takes it.
+4. A request the provider says is wrong, a `400`, is returned as is. It
+   would fail the same way everywhere, so it is not retried.
+
+Each request starts at the first eligible account again; a refusal does not
+move an account down the list or start a cooldown. The order applies within
+each provider group: direct-provider accounts come before the declared
+aggregator fallback, even if an aggregator appears earlier in the list.
+
+A model the person serves on their own Macs goes straight to those Macs;
+no account is involved.
+
+Refused attempts are recorded once account selection finishes. An account
+that starts a response is recorded only when it completes, fails or the caller
+disconnects. `served` is true only for a completed response; a broken,
+incomplete or abandoned response is recorded as failed, with a reason.
+The person reads Recent requests on the Your pod card, or a client reads
+`/client/v1/pod/ledger`.
+
+Once a response starts, the pod does not try another account. A failed or
+abandoned response may still have incurred charges; the ledger is not a
+billing record. Recording is best effort: a database write failure or process
+termination can leave an attempt without a final ledger line.
+
+## What Rotates and What Does Not
+
+The pod rotates API keys and prepaid usage credits: a key at Anthropic,
+OpenAI, Google, xAI, Fireworks, Moonshot, OpenRouter or any provider in
+Proxy's catalog, and the credit balance behind it. Two keys at the same
+provider are two accounts in the pod, and the person sets which comes
+first.
+
+A consumer subscription the person signs in to, such as Claude Pro or
+Max or ChatGPT Plus or Pro, is not an account in the pod. Those
+subscriptions are for the vendor's own apps under the vendor's terms, and
+the pod does not put a login where an API key goes. When a person wants a
+subscription's model behind their address, they add that vendor's API key.
+
+## What a Client Gets
+
+Point an OpenAI client at the pod and read `/models` the way you would at
+`/inference/v1`:
+
+```python
+from openai import OpenAI
+
+proxy = OpenAI(base_url="https://alice.proxy.ing/inference/pod/v1", api_key=token)
+reply = proxy.chat.completions.create(
+    model="claude-sonnet-4",
+    messages=[{"role": "user", "content": "Summarise my week."}],
+)
+```
+
+The answer comes from whichever of the person's accounts served it. Your
+app does not hold a provider key, does not pick a provider, and does not
+find out when the person swaps one account for another.
+
+When nothing in the pod serves the model, the address answers `402` and
+says so:
+
+```json
+{ "detail": "No account in your pod serves 'claude-sonnet-4'. Add one in Proxy under Providers." }
+```
+
+When every account refused, the answer carries the last refusal's status
+and lists each account's reason, so the person can see which key ran dry.
+
+## Managing the Pod
+
+Proxy manages the pod on the Mac. A client the person let in can manage
+it through the client API:
+
+| Route | Purpose |
+| --- | --- |
+| `GET /client/v1/pod/accounts` | The pod, first to last |
+| `POST /client/v1/pod/accounts` | Add an account: `provider`, `label`, `credential_key` |
+| `PUT /client/v1/pod/accounts/order` | Set the order: `ids`, first to last |
+| `DELETE /client/v1/pod/accounts/:id` | Take an account out |
+| `GET /client/v1/pod/ledger` | The newest ledger lines first, `limit` up to 1000 |
+
+The `credential_key` names an entry in the person's keychain. The secret
+itself never passes through the address; Proxy puts it in the keychain on
+the Mac.
+
+Accounts, their order and the ledger belong to the Mac serving the request.
+This feature does not sync those account records or ledger entries across Macs.
+Credential storage keeps the existing Keychain behavior: released builds use
+iCloud-synchronizable credentials; isolated PR builds keep their credentials
+local. A synced key alone does not configure another Mac's pod, so configure
+the accounts on each Mac that may serve the address. Adding an
+account through the client API records a credential name; it does not upload
+the corresponding secret.
+
+Removing an account changes that Mac's pod. Automatic cleanup removes only
+unused local credentials; iCloud-synchronized keys are retained because another
+Mac may still use them. Removing a pod account does not automatically delete
+its synchronized credential.

@@ -90,6 +90,11 @@ For browser clients that need broad CORS, use the top-level `/v1/*` route class.
 For app and device clients that carry the expected bearer token, use
 `/inference/v1/*`.
 
+The same routes live under `https://username.proxy.ing/inference/pod/v1`.
+Generation requests try the person's eligible API accounts in order when
+an account refuses before the response starts. Embeddings still use the
+ordinary Orchard backend and do not rotate API accounts. See [The Pod](pod.md).
+
 ## MCP Routes
 
 proxy.ing currently documents two MCP endpoints:

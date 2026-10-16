@@ -102,6 +102,19 @@ UI.
 For live Party UI, use the thread event stream and refresh snapshots after
 state-changing operations.
 
+## The Pod
+
+The accounts that serve `/inference/pod`, in order, and the ledger of which
+account took each request. See [The Pod](pod.md).
+
+| Route | Purpose |
+| --- | --- |
+| `GET /pod/accounts` | The pod, first to last |
+| `POST /pod/accounts` | Add an account: `provider`, `label`, `credential_key` |
+| `PUT /pod/accounts/order` | Set the order: `ids`, first to last |
+| `DELETE /pod/accounts/:id` | Take an account out |
+| `GET /pod/ledger` | The newest ledger lines first; `limit` up to 1000 |
+
 ## Approvals
 
 | Route | Purpose |
