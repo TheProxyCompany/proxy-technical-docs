@@ -1,7 +1,12 @@
-# Getting Started With proxy.ing
+# Set up your Proxy address
 
-This page describes the public flow implemented by Proxy and the proxy.ing
-registry.
+Your address is where people and apps can ask to connect to your Proxy. It
+also lets your own devices reach your host. If you are new to the idea, read
+[Your Proxy address](index.md) first.
+
+Start with Proxy running on your host computer. The native host currently
+runs on macOS; Proxy Mobile on iOS can help you claim an address and approve
+connections. See [devices](../proxy/devices.md) for what each surface does.
 
 ## Claim An Address
 
@@ -24,6 +29,13 @@ Proxy saves those credentials locally, starts `cloudflared`, and routes the
 address to Grand Central on port `51711`.
 
 ## Use The Address
+
+Keep the host running and connected. Open your address to reach its configured
+web chat, connect Proxy Mobile, or let a compatible app request access. Other
+people's Proxies can also request a connection through a Party invitation.
+Review those requests as Moves before letting them in.
+
+The following routes are useful when connecting a client or building an app.
 
 Once connected:
 
@@ -85,6 +97,11 @@ for the app/mobile API.
 - Grand Central's private tunnel routes require the expected bearer token when
   requests arrive through Cloudflare.
 - Private tunnel prefixes do not enable broad browser CORS.
+
+A compatible app uses the [connection flow](connect.md) to request scoped
+access. That approval is separate from approving one of your own devices.
+An address alone grants no access, and an app token alone cannot approve
+your Moves.
 
 See [device approval](device-approval.md) for username rules, passkey origins,
 approval links, recovery credentials, and registry routes.

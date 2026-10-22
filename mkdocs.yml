@@ -1,5 +1,5 @@
 site_name: Proxy Docs
-site_description: Technical documentation for Proxy and Orchard, local intelligence on Apple Silicon
+site_description: Understand Proxy, Life Map, Moves, and your Proxy address. Start here, then explore the technical reference.
 site_author: The Proxy Company
 copyright: Copyright &copy; 2026 The Proxy Company
 
@@ -69,18 +69,27 @@ hooks:
 
 nav:
   - Start here: index.md
-  - Proxy:
-    - Overview: proxy/index.md
-    - Getting Started: proxy/getting-started.md
-    - Roster: proxy/roster.md
+  - Using Proxy:
+    - What is Proxy?: proxy/index.md
+    - Your first session: proxy/getting-started.md
     - Life Map: proxy/life-map.md
-    - Timeline: proxy/timeline.md
-    - Party: proxy/party.md
     - Moves: proxy/moves.md
+    - Party: proxy/party.md
+    - Across your devices: proxy/devices.md
+    - Roster: proxy/roster.md
+    - Timeline: proxy/timeline.md
     - Integrations: proxy/integrations.md
     - Harnesses: proxy/harnesses.md
-    - Credits: proxy/credits.md
-    - CLI Reference: proxy/cli.md
+    - Models and credits: proxy/credits.md
+  - Your Proxy address:
+    - Overview: proxy-ing/index.md
+    - Set up your address: proxy-ing/getting-started.md
+    - Device approval: proxy-ing/device-approval.md
+  - Developer reference:
+    - Connect your app: proxy-ing/connect.md
+    - Client API: proxy-ing/client-api.md
+    - Address routes: proxy-ing/routes.md
+    - Proxy CLI: proxy/cli.md
   - Orchard:
     - Overview: orchard/index.md
     - Production Use: orchard/production.md
@@ -95,14 +104,6 @@ nav:
     - Reasoning Levels: orchard/reasoning.md
     - Rust Client: orchard/rust.md
     - How It Runs: orchard/architecture.md
-  - proxy.ing:
-    - Overview: proxy-ing/index.md
-    - Getting Started: proxy-ing/getting-started.md
-    - Routes: proxy-ing/routes.md
-    - Device Approval: proxy-ing/device-approval.md
-    - Client API: proxy-ing/client-api.md
-    - Connect Your App: proxy-ing/connect.md
-
 plugins:
   - search
   - git-revision-date-localized:

@@ -48,8 +48,10 @@ Proxy Mobile exposes Roster as a first-class tab. It lists real agents from the
 desktop instance, opens agent profiles, and edits loadout-scoped fields through
 Grand Central's client API.
 
-The Mac remains the source of truth. Mobile mirrors enough data locally to keep
-the interface responsive and refreshes when the desktop emits relevant events.
+Your host remains the source of truth. Mobile keeps a local cache for a
+responsive interface and refreshes when the host emits relevant events.
+See [Proxy across your devices](devices.md) for the current platforms and
+which setup tasks stay on the host.
 
 ## Related
 

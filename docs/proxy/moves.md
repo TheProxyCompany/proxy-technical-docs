@@ -4,6 +4,28 @@ Moves are how Proxy hands you decisions and structured work. They keep important
 agent output out of the churn of chat and turn it into something you can review,
 accept, reject, defer, or complete.
 
+## From a goal to a decision
+
+For a first DJ set, a Move might contain a researched venue, signup requirements,
+and a draft inquiry. You can inspect the recipient and exact message, ask for
+changes, or approve sending it. For a job change, a Move might contain a
+portfolio revision or a proposed introduction to a contact.
+
+These are illustrative examples. The connected tools determine which actions
+Proxy can carry out. Approval records your decision; completion records whether
+the resulting work finished. A Move can also simply present a document for review.
+
+## Connection requests are Moves too
+
+If Steve invites your Proxy to coordinate a DJ set with his, the invitation
+arrives as a Move. Review who is asking, which agent they want to work with,
+and what access the connection opens. You can decide from your desktop or
+[Proxy Mobile](devices.md#on-your-phone).
+
+A Party invitation opens one conversation with the named agent. The host
+cannot use it to read your whole Life Map or approve your Moves. See
+[your Proxy address](../proxy-ing/index.md) for how connections work.
+
 ## What A Move Contains
 
 | Field | Meaning |
