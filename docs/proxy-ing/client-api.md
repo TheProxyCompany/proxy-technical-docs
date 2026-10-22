@@ -1,8 +1,9 @@
 # Client API
 
-The proxy.ing client API is the Grand Central API used by Proxy Mobile and
-remote clients. The Mac remains the source of truth. proxy.ing gives approved
-devices a stable public address for the local Grand Central server.
+The client API lets Proxy Mobile and connected apps work with a running Proxy
+host. The host keeps the source data, and the Proxy address routes authorized
+requests to it. If you are building a third-party app, start with
+[Connect your app](connect.md) to request the access it needs.
 
 ## Base URL
 
@@ -24,9 +25,15 @@ asking the user to type a second URL.
 
 ## Authentication
 
-The private tunnel routes require the expected bearer token when requests come
-through Cloudflare. Clients should also preserve the `Mcp-Session-Id` header
-when the server returns one.
+Private tunnel requests require authorization. An approved device can use the
+account bearer. A connected app uses the scoped token issued by the address's
+[authorization flow](connect.md). Its token only opens the permitted route
+families; the route list below is not a promise that every app can use every
+endpoint. A Party connection is further limited to one direct thread with
+the named agent.
+
+Clients should preserve the `Mcp-Session-Id` header when an MCP server returns
+one.
 
 Private tunnel prefixes do not enable broad browser CORS. Browser-facing
 OpenAI-compatible requests should use the top-level `/v1/*` route class.
@@ -52,6 +59,11 @@ changes, or Move updates.
 
 Moves are the app review surface for proposed agent work. A remote client
 should render them as reviewable actions, not plain chat text.
+
+An app with the `moves` scope can read Moves. Resolving a Move also requires
+proof from an approved owner device; a bearer token alone receives `403`.
+See [Move approval requirements](connect.md#what-your-app-asks-for). Connecting
+an app does not authorize it to make the person's decisions.
 
 ## Agents And Loadouts
 

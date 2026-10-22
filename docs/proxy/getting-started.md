@@ -1,56 +1,74 @@
-# Getting Started With Proxy
+# Your first session
 
-Proxy is the app layer for working with your Life Map, agents, Party chats,
-Moves, integrations, and local or cloud models.
+Start with one goal you care about. By the end of this session, you should have
+something you can review: a researched option, a draft, or a proposed next step.
 
-## Start On Desktop
+## 1. Open Proxy
 
-1. Open Proxy on your Mac.
-2. Complete the first-run setup.
-3. Choose the model routes you want available: local Orchard models, your own
-   provider keys, Proxy Credits, or harness-backed agents.
-4. Review the Roster and pick the agents you want to use.
-5. Start a Party chat or open Timeline to continue active work.
+[Request early access](https://theproxycompany.com/) if you do not have access
+yet. Open Proxy on your host computer and complete the first-run setup. The
+current native host app runs on macOS. Once it is connected, Proxy Mobile and
+web access let you continue on other devices; see [devices](devices.md).
 
-The desktop app owns the local source of truth. It stores your graph, content,
-settings, snapshots, events, and integration configuration on the Mac.
+You need one working agent to begin. Use an agent available in your Roster,
+the list of agents you can work with. If it needs a model or credentials, finish
+that setup first. [Models and credits](credits.md) explains the available
+options, and [Roster](roster.md) explains agent configuration.
 
-## Add Agents
+## 2. Tell it what you want to change
 
-Open Roster to inspect available agents. An agent uses an active loadout, which
-can define the model, harness, prompt, working directory, skills,
-integrations, and reasoning settings.
+Open a chat with your Proxy, or start a [Party](party.md) and add your chosen
+agent. Give it a goal and the constraints that matter. For example:
 
-Use loadouts when the same agent needs different operating modes, such as a
-local model mode, a cloud model mode, and a harness-backed coding mode.
+> I want to play my first DJ set in Brooklyn. I have a 30-minute mix, I am free
+> on Thursday evenings, and I can spend up to $50. Find suitable open-deck
+> nights and prepare a venue inquiry for me to review.
 
-## Connect Integrations
+Or start with a job change:
 
-Open Integrations when an agent needs access to a tool or service. Proxy can
-use MCP servers, CLI tools, HTTP APIs, skills, and local services.
+> I want to leave my current job. Help me compare possible roles, work out what
+> I need to prepare, and choose one useful step for this week.
 
-Credential setup stays on the Mac. Proxy Mobile can inspect and use available
-loadout configuration, but desktop remains the setup surface for OAuth, local
-binary paths, and private credentials.
+Connect a tool or service when the work needs it. For example, current venue
+research needs a web-capable tool. [Integrations](integrations.md) explains
+how to connect tools and give an agent access to them.
 
-## Use Proxy Mobile
+## 3. Keep the useful context
 
-Proxy Mobile connects back to a running desktop instance through Grand
-Central's client API. Use it for Timeline, Roster, Proxy chat, Moves, and Party
-chats while the Mac remains the source of truth.
+Ask your Proxy to record the goal and its constraints in your [Life Map](life-map.md).
+Relevant people, files, deadlines, and decisions can stay connected to that
+goal, so the next conversation can build on this one.
 
-If you use proxy.ing, pair mobile with an approved address such as:
+Review what was saved and correct anything that is wrong. A conversation and
+a saved Life Map entry are different things: check that the context you want
+to keep is actually in the map.
 
-```text
-https://username.proxy.ing/mcp/proxy
-```
+## 4. Review the Move
 
-Proxy Mobile rewrites that endpoint to the client API for app requests.
+Ask for the next step as a [Move](moves.md). For the DJ example, that could be
+a proposed venue, its signup requirements, and a draft inquiry. Review the
+sources, recipient, exact message, and any cost before approving a send.
 
-## Next
+You can approve, reject, defer, or ask for changes. Available actions depend
+on the tools you have connected. A Move can also present a draft for you to
+use yourself.
 
-- [Roster](roster.md)
-- [Party Chat](party.md)
-- [Moves](moves.md)
-- [Integrations](integrations.md)
-- [proxy.ing getting started](../proxy-ing/getting-started.md)
+## 5. Check what happened
+
+Approval records your decision. Completion records whether the work finished.
+Check the result, then keep the outcome and any new commitments with the goal
+in your Life Map. That gives your Proxy a useful starting point next time.
+
+## Continue from your phone
+
+Connect [Proxy Mobile](devices.md#on-your-phone) to review conversations and
+Moves away from your desk. Your host needs to remain running and connected.
+You can also [set up a Proxy address](../proxy-ing/getting-started.md) for
+remote access and approved connections with people and apps.
+
+## When you want to customize
+
+- [Roster](roster.md): choose agents and change their models, instructions, and tools.
+- [Party](party.md): bring agents and other people's Proxies into the work.
+- [Integrations](integrations.md): connect a service your agent needs.
+- [Harnesses](harnesses.md): connect an external runtime such as Codex or Claude Code.
