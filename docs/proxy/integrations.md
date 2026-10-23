@@ -1,12 +1,7 @@
 # Integrations
 
-Integrations are the tools and services Proxy can use on your behalf. An agent
-may need web access to research a venue, a calendar connection to find a date,
-or access to your files to prepare a portfolio.
-
-Set up the integration on your host, then make it available to the agent that
-needs it. An agent's **loadout** is its configuration: the model, instructions,
-and tools it uses for that work.
+Integrations are the tools and services Proxy can use on your behalf. They live
+on the Mac-side Proxy instance and are equipped to agents through loadouts.
 
 ## Integration Types
 
@@ -40,8 +35,6 @@ The desktop app owns integration setup and credentials. Proxy Mobile can inspect
 agents and loadouts, and it can equip or unequip integrations that are already
 available on the Mac. Credential setup, OAuth, and local binary paths stay on
 the desktop device.
-
-See [Proxy across your devices](devices.md) for hosting and remote access.
 
 ## Proxy MCP
 

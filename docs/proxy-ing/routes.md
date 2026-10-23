@@ -1,17 +1,11 @@
 # proxy.ing Routes
 
-`proxy.ing` separates web access, app connections, and host APIs:
+`proxy.ing` has three route classes:
 
 1. Web traffic for the shared public chat client.
 2. OpenAI-compatible `/v1/*` traffic for browser-safe API use.
 3. Authenticated private tunnel traffic for Grand Central client, inference,
    and MCP routes.
-4. Authorization metadata and OAuth routes for compatible connected apps.
-
-An address identifies the host. Permission comes from the approved device or
-the connection the owner approved. Start with [Connect your app](connect.md)
-when building a third-party client; do not assume that access to an address
-opens all of the routes below.
 
 ## Public Route Map
 
@@ -23,8 +17,6 @@ opens all of the routes below.
 | `https://username.proxy.ing/inference/*` | Grand Central inference API | No broad browser CORS |
 | `https://username.proxy.ing/mcp/proxy` | Proxy MCP server | No broad browser CORS |
 | `https://username.proxy.ing/mcp/party` | Party MCP server | No broad browser CORS |
-| `https://username.proxy.ing/.well-known/oauth-authorization-server` | Authorization metadata on a compatible host | Browser CORS enabled |
-| `https://username.proxy.ing/oauth/*` | App registration and owner-approved connection flow | Browser CORS enabled |
 
 Unknown usernames and reserved subdomains redirect to `https://proxy.ing`.
 
@@ -55,7 +47,7 @@ When accessed through proxy.ing, these routes live under
 | `GET /content/:reference` | Referenced content blobs |
 | `GET /events` | App event stream |
 | `GET /moves` | Moves for review |
-| `POST /moves/:id/resolve` | Resolve a Move with proof from an approved owner device |
+| `POST /moves/:id/resolve` | Resolve a Move |
 | `GET /agents` | Available agents |
 | `GET /agents/:id` | Agent detail |
 | `GET /agents/:id/loadouts` | Agent loadouts |

@@ -1,62 +1,11 @@
 # Life Map
 
-**Life Map is the connected context your Proxy uses to understand your life.**
-It links your people, projects, goals, files, commitments, and decisions on your
-computer, so each conversation can build on what already matters to you.
+The Life Map is Proxy's context layer. It keeps track of the projects, people,
+files, commitments, decisions, events, and open loops that should shape how
+your agents help you.
 
-## A concrete example
-
-Suppose you want to change jobs. Your Life Map can connect that goal to your
-target role, portfolio, people you want to contact, application deadlines, and
-the reasons you chose a particular direction. A draft introduction belongs to
-the person it is for and the goal it advances, rather than disappearing into a
-chat history.
-
-An agent can use those connections to prepare a relevant next step. A Move
-might ask you to review a portfolio update or an introduction before sending it.
-
-## Why it stays with you
-
-The Life Map is stored locally, separate from any one model provider. Supported
-agents can receive relevant context or query it through Proxy tools. You can
-change models while keeping the same underlying projects and decisions.
-This does not mean every model automatically sees everything: what it receives
-depends on the agent configuration and tools. Using a cloud model sends the
-context needed for that request to that provider.
-
-## Build it over time
-
-Start with one goal and the information needed to work on it. You can ask
-your Proxy to help organize that context:
-
-> Keep my job-change goal in my Life Map. Link it to my portfolio, the roles
-> I am considering, and the people I want to contact. Record why I chose the
-> first role to pursue.
-
-Review the saved items and their connections. Check names, dates, and whether
-an agent has mistaken a possibility for a commitment. Add or correct context
-as your plans change. A conversation is useful input, but do not assume that
-everything said in chat has been recorded in the Life Map.
-
-Before a new piece of work, ask your agent to use the relevant goal and its
-related context. After a decision, keep the outcome and its reasons with the
-project. The [Timeline](timeline.md) shows those entries over time, while the
-Life Map shows how the pieces relate.
-
-## Change the model, keep the context
-
-You might use one agent to research roles and another to edit your portfolio.
-The goal, files, and past decisions can stay in the same Life Map as you change
-models. Equip the agent with Life Map access or enable relevant context in
-its [loadout](roster.md#loadouts), the configuration that chooses its model,
-instructions, and tools.
-
-Sharing a Party conversation with someone else's Proxy does not automatically
-share your whole Life Map. Review what the connected agent will use and what
-it shares back into that conversation.
-
-The following reference describes the types of information and connections
-used by the Life Map.
+The visible product goal is simple: Proxy should know what you have going on
+right now, what is blocked, what is stale, and what deserves attention next.
 
 ## What It Contains
 

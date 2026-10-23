@@ -5,7 +5,7 @@
     {
       "name": "Proxy",
       "slug": "proxy",
-      "description": "Your personal AI representative: shared life context, models and agents, and prepared work you review as Moves",
+      "description": "The Apple app layer for local and cloud AI work",
       "url": "/proxy/"
     },
     {
@@ -17,7 +17,7 @@
     {
       "name": "proxy.ing",
       "slug": "proxy-ing",
-      "description": "Your Proxy address for approved connections with people, their Proxies, apps, and your own devices",
+      "description": "Public addresses, device approval, web chat, OpenAI-compatible traffic, and Grand Central client, inference, and MCP routes",
       "url": "/proxy-ing/"
     }
   ],
